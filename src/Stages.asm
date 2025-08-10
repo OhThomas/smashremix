@@ -5717,9 +5717,6 @@ scope Stages {
     bans_table:
     dw 0
     dw 0
-    shortcut_stored_screens:
-    db 0, 0
-    OS.align(4)
 }
 
 } // __STAGES__
