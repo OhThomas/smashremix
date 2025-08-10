@@ -2181,6 +2181,20 @@ scope Stages {
         beqz    v0, _end                    // if not pressed, skip
         nop
 
+        // checking if on RANDOM stage, don't ban if so
+        // Note: this doesn't take id into factor (some pages have extra RANDOM slots)
+        li      t0, row                     // t0 = ROW address
+        lli     t1, 0x0205                  // t1 = coordinates of bottom right square
+        lh      t0, 0x0000(t0)              // t0 = current column + row
+        beq     t1, t0, _end                // branch accordingly
+        nop
+        // alternate method of seeing if on RANDOM
+        //jal     get_stage_id_             // v0 = stage_id
+        //nop
+        //lli     t0, id.RANDOM             // t0 = id.RANDOM
+        //beq     v0, t0, _end              // if (stage_id = id.RANDOM), branch
+        //nop
+
         // getting X and Y position of stage_index to put black box for ban
         // t7 = X
         li      a1, column                  // a1 = COLUMN address
