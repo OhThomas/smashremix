@@ -2164,51 +2164,6 @@ scope Stages {
 
         // ban stage logic
         _ban_stage:
-        // Checking for start press to circumvent a banned stage being selected
-        // THIS NEEDS TO BE CHANGED AND PATCH THE ORIGINAL START BUTTON FUNCTIONALITY
-        lli     a0, Joypad.A | Joypad.START // a0 - button_mask
-        lli     a1, 0x0001                  // a1 - match any
-        lli      a2, Joypad.PRESSED          // a2 - type
-        jal     Joypad.check_buttons_all_   // v0 = START pressed
-        nop
-        beqz    v0, _no_start_press         // if not pressed, don't check if it's banned
-        nop
-
-        // checking if banned
-        jal     get_stage_id_               // v0 = stage_id
-        nop
-        li      t0, bans_table              // checking if in bans table
-        lw      t1, 0x0000(t0)              // t1 = first ban
-        beq     v0, t1, _banned_stage_picked// checking if cursor is on banned stage
-        nop                                 // skipping next instruction if so
-        lw      t1, 0x0004(t0)              // t1 = second ban
-        beq     v0, t1, _banned_stage_picked// checking if cursor is on banned stage
-        nop                                 // skipping next instruction if so
-        b       _no_start_press
-        nop
-
-        // if we're here a banned stage has been picked, reloading stage_select screen to circumvent stage loading
-        _banned_stage_picked:
-        // playing illegal sound
-        lli     a0, FGM.menu.ILLEGAL        // a0 - fgm_id
-        jal     FGM.play_                   // play menu sound
-        nop
-        
-        // going to stage_select
-        li      a0, Global.current_screen   // a0 = address of current_screen
-        lhu     a0, 0x0000(a0)              // a0 = current_screen + previous_screen
-        li      v0, shortcut_stored_screens // v0 = shortcut_stored_screens
-        sh      a0, 0x0000(v0)              // store current_screen + previous_screen id
-        li      v0, Toggles.normal_options  // v0 = normal_options flag
-        sb      r0, 0x0000(v0)              // normal_options = FALSE
-        lli     a0, Global.screen.STAGE_SELECT    // a0 = screen_id (options)
-        jal     Menu.change_screen_         // generate screen_interrupt
-        nop
-        jal     BGM.handle_sss_shortcut     // refresh song if using 64 menu music
-        nop
-        b       _end
-        lli     a0, OS.TRUE                 // a0 = true
-
         // checking for C-Up press to reset bans
         _no_start_press:
         li      a0, Joypad.CU               // a0 - C-Up button mask 
@@ -2267,8 +2222,8 @@ scope Stages {
         nop
 
         // playing ban sound
-        lli     a0, FGM.menu.TOGGLE          // a0 - fgm_id
-        jal     FGM.play_                    // play menu sound
+        lli     a0, FGM.menu.TOGGLE         // a0 - fgm_id
+        jal     FGM.play_                   // play menu sound
         nop
 
         // adding to bans_table
@@ -2303,7 +2258,7 @@ scope Stages {
         add     t0, t0, t3                  // t3 is the offset so we unban the right stage
         lli     t2, r0                      // t2 = 0
         sw      t2, 0x0000(t0)              // setting ban as 0 to reset
-        
+
         // removing icon
         li      t0, ban_icon                // t0 = pointer to ban icon
         add     t0, t0, t3                  // t3 is the offset so we unban the right stage
@@ -2538,6 +2493,43 @@ scope Stages {
         j       _return
         nop
     }
+
+    // start
+    scope start_: {
+        OS.patch_start(0x0014F9E4, 0x80133E74)
+        j       start_
+        nop
+        _return:
+        OS.patch_end()
+
+        // making sure we're not on a banned stage
+        start_check:
+        jal     get_stage_id_               // v0 = stage_id
+        nop
+        li      t3, 0x0000                  // t3 = 0
+        li      t0, bans_table              // checking if in bans table
+        lw      t1, 0x0000(t0)              // t1 = first ban
+        beq     v0, t1, banned_stage_picked // checking if cursor is on banned stage
+        nop      
+        li      t3, 0x0004                  // t3 = 4                        
+        lw      t1, 0x0004(t0)              // t1 = second ban
+        beq     v0, t1, banned_stage_picked // checking if cursor is on banned stage
+        nop         
+        jal     0x80133d60                  // continuing start press
+        nop
+        j       _return
+        nop
+
+        // if we're here a banned stage has been picked
+        banned_stage_picked:
+        // playing illegal sound
+        lli     a0, FGM.menu.ILLEGAL        // a0 - fgm_id
+        jal     FGM.play_                   // play menu sound
+        nop
+        jal     0x80133ed0                  // skipping start press because stage is banned
+        nop
+    }
+
 
     // @ Description
     // Random Stage Roulette (activated by pressing C-Down on 'RANDOM')
@@ -3097,7 +3089,7 @@ scope Stages {
         sw      v0, 0x0004(s1)            // saving the rectangle reference
 
         // resetting bans table        
-        li      t0, bans_table            // t0 = pointer to ban icon
+        li      t0, bans_table            // t0 = pointer to ban table
         lli     t2, r0                    // t2 = 0
         sw      t2, 0x0004(t0)            // setting second ban as 0 to reset
         sw      t2, 0x0000(t0)            // setting first ban as 0 to reset
