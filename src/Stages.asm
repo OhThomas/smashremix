@@ -1677,6 +1677,44 @@ scope Stages {
         jal     Render.toggle_group_display_
         lli     a0, 0xE                     // a0 = group
 
+        // checking if tournament layout to put bans text
+        li      t0, Toggles.entry_sss_layout
+        lw      t0, 0x0004(t0)              // t0 = stage table index
+        beqzl   t0, _tourney_ban            // if not tournament, then skip and don't draw ban strings
+        lli     a1, 0x0001                  // a1 = 1 (Display Off)
+
+        lli     a1, 0x0000                  // a1 = 0 (Display On)
+        // updating string depending if on a banned stage (need to make this a subroutine)
+        li      t2, MAX_BANS                // t2 = MAX_BANS
+        li      t3, r0                      // t3 = increment
+        li      t0, bans_table              // checking if in bans_table
+        _ban_check:
+        lw      t1, 0x0000(t0)              // t1 = ban stage in bans_table
+        beq     v0, t1, _unban_string       // checking if cursor is on banned stage
+        nop 
+        addiu   t0, t0, 4                   // incrementing bans_table
+        addiu   t3, t3, 4
+        ble     t3, t2, _ban_check          // looping through bans_table
+        nop
+        li      a2, string_ban              // a2 = string ban
+        b       _save_ban_string
+        nop
+
+        _unban_string:
+        li      a2, string_unban            // a2 = string unban
+
+        _save_ban_string:
+        li      a0, layout_pointer
+        sw      a2, 0x0000(a0)              // update pointer
+
+        // checking for random to not draw ban string
+        lli     t0, id.RANDOM               // t0 = id.RANDOM
+        beql    v0, t0, _tourney_ban        // if (stage_id = !id.RANDOM), hide
+        lli     a1, 0x0001                  // a1 = 1 (Display Off)
+        _tourney_ban:
+        jal     Render.toggle_group_display_
+        lli     a0, 0xB                     // a0 = group
+
         // show Layout text when there are alt layouts
         lli     a0, id.RANDOM               // a0 = random
         li      t0, original_stage_id
@@ -3158,6 +3196,13 @@ scope Stages {
         lw      t1, 0x0074(v0)              // t1 = image struct
         sw      t0, 0x0018(t1)              // set x scale
 
+        // Shown when tournament layout for ban indicator
+        Render.draw_string_pointer(2, 0xB, layout_pointer, Render.update_live_string_, 0x437C0000, 0x43470000, 0xFFFFFFFF, 0x3F400000, Render.alignment.RIGHT)
+        Render.draw_texture_at_offset(2, 0xB, Render.file_pointer_3, 0x0688, Render.NOOP, 0x43710000, 0x43468000, 0xC0CC00FF, 0x000000FF, 0x3F400000)
+        lui     t0, 0x3F38                  // t0 = x scale
+        lw      t1, 0x0074(v0)              // t1 = image struct
+        sw      t0, 0x0018(t1)              // set x scale
+
         // Conditionally draw L button images
         li      t1, Toggles.entry_sss_layout
         lw      t1, 0x0004(t1)              // t1 = stage table index
@@ -3182,6 +3227,8 @@ scope Stages {
     string_hazards:; String.insert("Hazards (  ):")
     string_movement:;  String.insert("Movement (  ):")
     string_layout:;  String.insert("Layout (  ):")
+    string_ban:;  String.insert("Ban (  )")
+    string_unban:;  String.insert("Unban (  )")
     string_random_roulette:;  String.insert("Roulette (  )")
 
     layout_pointer:; dw 0x00000000
