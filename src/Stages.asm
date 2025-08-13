@@ -535,7 +535,7 @@ scope Stages {
 
     constant ICON_WIDTH(40)
     constant ICON_HEIGHT(30)
-    constant MAX_BANS(0x10)
+    constant MAX_BANS(0x12)
 
     // Layout
     constant NUM_ROWS(3)
@@ -1685,16 +1685,12 @@ scope Stages {
 
         lli     a1, 0x0000                  // a1 = 0 (Display On)
         // updating string depending if on a banned stage (need to make this a subroutine)
-        li      t2, MAX_BANS                // t2 = MAX_BANS
-        li      t3, r0                      // t3 = increment
+        jal     get_index_                  // v0 = index
+        nop
         li      t0, bans_table              // checking if in bans_table
-        _ban_check:
-        lw      t1, 0x0000(t0)              // t1 = ban stage in bans_table
-        beq     v0, t1, _unban_string       // checking if cursor is on banned stage
-        nop 
-        addiu   t0, t0, 4                   // incrementing bans_table
-        addiu   t3, t3, 4
-        ble     t3, t2, _ban_check          // looping through bans_table
+        addu    t0, t0, v0                  // t0 = bans_table + index
+        lbu     t1, 0x0000(t0)              // t1 = stage index on ban table
+        bnez    t1, _unban_string           // if cursor isn't on banned stage skip
         nop
         li      a2, string_ban              // a2 = string ban
         b       _save_ban_string
@@ -1704,9 +1700,11 @@ scope Stages {
         li      a2, string_unban            // a2 = string unban
 
         _save_ban_string:
-        li      a0, layout_pointer
+        li      a0, layout_pointer          // a0 = layout_pointer
         sw      a2, 0x0000(a0)              // update pointer
-
+        jal     get_stage_id_               // v0 = stage_id
+        nop
+        
         // checking for random to not draw ban string
         lli     t0, id.RANDOM               // t0 = id.RANDOM
         beql    v0, t0, _tourney_ban        // if (stage_id = !id.RANDOM), hide
@@ -1800,23 +1798,15 @@ scope Stages {
 
         color_cursor:
         // checking if banned
-        jal     get_stage_id_               // v0 = stage_id
+        jal     get_index_                  // v0 = index
         nop
-        li      t2, MAX_BANS                // t2 = MAX_BANS
-        li      t3, r0                      // t3 = increment
         li      t0, bans_table              // checking if in bans_table
-        _cursor_ban_check:
-        lw      t1, 0x0000(t0)              // t1 = ban stage in bans_table
-        beq     v0, t1, _black_cursor       // checking if cursor is on banned stage
-        nop 
-        addiu   t0, t0, 4                   // incrementing bans_table
-        addiu   t3, t3, 4
-        ble     t3, t2, _cursor_ban_check   // looping through bans_table
-        nop
-        b       _done
+        addu    t0, t0, v0                  // t0 = bans_table + index
+        lbu     t1, 0x0000(t0)              // t1 = stage index on ban table
+        beqz    t1, _done                   // if cursor isn't on banned stage skip
         nop
 
-        _black_cursor:
+        // black cursor
         lli     a0, 0x0004
 
         _done:
@@ -2160,22 +2150,30 @@ scope Stages {
 
         _end_update:
         // resetting all ban values (table and icon)
-        lli     t4, 0x00FF                  // t4 = ban index
-        lli     t3, r0                      // t3 = increment
-        li      t2, MAX_BANS                // t2 = MAX_BANS
-
         // need to make this a subroutine (used below)
-        _reset_bans_loop_e:
         li      t0, bans_table              // t0 = pointer to bans_table
-        add     t0, t0, t3                  // moving t0 to next ban
-        sw      t4, 0x0000(t0)              // setting ban as 0xFF to reset
+        li      t1, r0                      // t1 = 0
+        sw      t1, 0x0000(t0)              // setting bans 1-4 as 0 to reset
+        sw      t1, 0x0004(t0)              // setting bans 5-8 as 0 to reset
+        sw      t1, 0x0008(t0)              // setting bans 9-12 as 0 to reset
+        sw      t1, 0x000C(t0)              // setting bans 13-16 as 0 to reset
+        sw      t1, 0x0010(t0)              // setting bans 17,18 as 0 to reset
+
+        // t4 = MAX_BANS * 4, (to go through ban_icon pointers)
+        li      t3, 4                       // t3 = 4
+        li      t4, MAX_BANS                // t4 = MAX_BANS
+        multu   t4, t3
+        mflo    t4                          // t4 = MAX_BANS * 4
+        li      t3, r0                      // t3 = increment
         li      t0, ban_icon                // t0 = pointer to ban_icon
-        add     t0, t0, t3                  // moving t0 to next ban
+
+        _reset_ban_icon_e:
         lw      t1, 0x0000(t0)              // t1 = ban icon
         sw      0xFF, 0x0030(t1)            // Set X Position
         sw      0xFF, 0x0034(t1)            // Set Y Position
-        addiu   t3, t3, 4                   // t3 = t3 + 4
-        ble     t3, t2, _reset_bans_loop_e  // if t3 <= MAX_BANS
+        addiu   t0, t0, 4                   // incrementing to next ban_icon
+        addiu   t3, t3, 4
+        blt     t3, t4, _reset_ban_icon_e   // if t3 <= MAX_BANS, make more ban icons
         nop
 
         // update the image_table_pointer so the icons update based on page
@@ -2244,6 +2242,25 @@ scope Stages {
         //beq     v0, t0, _end              // if (stage_id = id.RANDOM), branch
         //nop
 
+        // getting cursor index
+        jal     get_index_                  // v0 = index
+        nop
+
+        // t3 = cursor index * 4, (to go through ban_icon pointers)
+        li      t3, 1                       // t3 = 1
+        li      t4, 4                       // t3 = 4
+        multu   t3, v0                      // t3 = 1 * index
+        mflo    t3
+        multu   t3, t4                      // t3 = index * 4
+        mflo    t3 
+
+        // checking if already banned (unbanning if so)
+        li      t0, bans_table              // checking if in bans_table
+        addu    t0, t0, v0                  // t0 = bans_table + index
+        lbu     t1, 0x0000(t0)              // t1 = stage index on ban table
+        bnez    t1, _remove_ban             // checking if cursor is on banned stage
+        nop
+
         // getting X and Y position of stage_index to put black box for ban
         // t7 = X
         li      a1, column                  // a1 = COLUMN address
@@ -2260,53 +2277,19 @@ scope Stages {
         multu   t6, t9                      // t6 = ICON_HEIGHT * ROW
         mflo    t6                          // ~
         addiu   t8, t6, 0x0014              // t8 = Y position, adjusted for top padding
-        
-        // checking if already banned (unbanning if so)
-        jal     get_stage_id_               // v0 = stage_id
-        nop
-        li      t2, MAX_BANS                // t2 = MAX_BANS
-        li      t3, r0                      // t3 = 0
-        li      t0, bans_table              // checking if in bans_table
-        _remove_ban_loop:
-        lw      t1, 0x0000(t0)              // t1 = next ban in bans_table
-        beq     v0, t1, _remove_ban         // checking if cursor is on banned stage
-        nop      
-        addiu   t3, t3, 4                   // t3 = 4
-        addiu   t0, t0, 4                   // t3 is the offset
-        ble     t3, t2, _remove_ban_loop    // if t3 <= MAX_BANS
-        nop
-        
 
-        // checking if trying to ban past max (reset if so)
-        jal     get_stage_id_               // v0 = stage_id
-        nop
-        li      t2, MAX_BANS                // t2 = max bans
-        li      t3, r0                      // t3 = increment counter
-        li      t0, bans_table              // t0 = bans_table pointer
-        lli     t4, 0x00FF                  // t4 = ban stage index
-        _next_ban_loop:
-        lw      t1, 0x0000(t0)              // t1 = next ban in bans_table
-        beq     t1, t4, _ban                // checking if there's no ban here
-        nop
-        addiu   t3, t3, 4                   // t3 = t3 + 4
-        addiu   t0, t0, 4                   // t3 is the offset
-        ble     t3, t2, _next_ban_loop      // if t3 <= MAX_BANS
-        nop
-        b       _ban_reset                  // if none are 0xFF then we're going to reset
-        nop
+        // adding to bans_table
+        li      t1, 1                       // t1 = 1
+        sb      t1, 0x0000(t0)              // setting this index in bans_table to 1 (banned)
 
-        _ban:
         // playing ban sound
         lli     a0, FGM.menu.TOGGLE         // a0 - fgm_id
         jal     FGM.play_                   // play menu sound
         nop
 
-        // adding to bans_table
-        sw      v0, 0x0000(t0)              // storing as ban
-
-        // adding to icon
+        // adding to ban_icon
         li      t0, ban_icon                // t0 = pointer to ban_icon
-        add     t0, t0, t3                  // t3 is the offset so we ban the right stage
+        addu    t0, t0, t3                  // t3 is the offset so we ban the right stage
         lw      t1, 0x0000(t0)              // t1 = ban_icon rectangle object
         sw      t7, 0x0030(t1)              // Set X Position
         sw      t8, 0x0034(t1)              // Set Y Position
@@ -2320,33 +2303,32 @@ scope Stages {
         nop
 
         // removing from table
-        lli     t2, 0x00FF                  // t2 = ban stage index
-        sw      t2, 0x0000(t0)              // setting ban as 0xFF to reset
+        li      t1, r0                      // t1 = 0
+        sb      t1, 0x0000(t0)              // setting this index in bans_table to 0 (unbanned)
 
         // removing icon
         li      t0, ban_icon                // t0 = pointer to ban_icon
-        add     t0, t0, t3                  // t3 is the offset so we unban the right stage
+        addu    t0, t0, t3                  // t3 is the offset so we unban the right stage
         lw      t1, 0x0000(t0)              // t1 = ban icon
         sw      0xFF, 0x0030(t1)            // Set X Position
         sw      0xFF, 0x0034(t1)            // Set Y Position
         b       _end
         nop
 
+        // resetting all bans
         _ban_reset:
         // if there are no bans then skip (only checking to avoid CLOUD_FADE sound from C-Up)
         li      t0, bans_table              // checking if in bans_table
-        li      t3, r0                      // t3 = increment
-        li      t4, MAX_BANS                // t4 = max bans
-        lw      t1, 0x0000(t0)              // t1 = first ban in bans_table
-        _ban_reset_check:
-        add     t3, t3, 4                   // adding increment
-        add     t0, t0, 4                   // adding increment
-        lw      t2, 0x0000(t0)              // t2 = next ban in bans_table
-        and     t1, t1, t2                  // && together to see if any stage is banned
-        blt     t3, t4, _ban_reset_check    // t3 <= MAX_BANS, continue loop to OR(||) all stages together
-        nop
-        lli     t4, 0x00FF                  // t4 = ban index
-        beq     t1, t4, _end                // nothing in bans_table 
+        lw      t1, 0x0000(t0)              // loading ban stages 1-4
+        lw      t2, 0x0004(t0)              // loading ban stages 5-8 
+        or      t1, t1, t2                  // seeing if any are banned
+        lw      t2, 0x0008(t0)              // loading ban stages 9-12 
+        or      t1, t1, t2                  // seeing if any are banned
+        lw      t2, 0x000C(t0)              // loading ban stages 13-16 
+        or      t1, t1, t2                  // seeing if any are banned
+        lw      t2, 0x0010(t0)              // loading ban stages 17,18 
+        or      t1, t1, t2                  // seeing if any are banned
+        beqz    t1, _end                    // t1 = 0, no stages are banned so end
         nop
 
         // playing ban reset sound
@@ -2355,21 +2337,31 @@ scope Stages {
         nop
 
         // resetting all ban values (table and icon)
-        lli     t4, 0x00FF                  // t4 = ban index (not needed)
-        lli     t3, r0                      // t3 = increment
-        li      t2, MAX_BANS                // t2 = MAX_BANS
-
-        _reset_bans_loop:
+        // resetting ban table
         li      t0, bans_table              // t0 = pointer to bans_table
-        add     t0, t0, t3                  // moving t0 to next ban
-        sw      t4, 0x0000(t0)              // setting ban as 0xFF to reset
+        li      t1, r0                      // t1 = 0
+        sw      t1, 0x0000(t0)              // setting bans 1-4 as 0 to reset
+        sw      t1, 0x0004(t0)              // setting bans 5-8 as 0 to reset
+        sw      t1, 0x0008(t0)              // setting bans 9-12 as 0 to reset
+        sw      t1, 0x000C(t0)              // setting bans 13-16 as 0 to reset
+        sw      t1, 0x0010(t0)              // setting bans 17,18 as 0 to reset
+
+        // t3 = MAX_BANS * 4, (for dw pointers in ban_icon)
+        li      t3, 4                       // t3 = 4
+        li      t4, MAX_BANS                // t4 = MAX_BANS
+        multu   t4, t3
+        mflo    t4                          // t4 = MAX_BANS * 4
+        li      t3, r0                      // t3 = increment
         li      t0, ban_icon                // t0 = pointer to ban_icon
-        add     t0, t0, t3                  // moving t0 to next ban
-        lw      t1, 0x0000(t0)              // t1 = ban icon
+
+        // resetting ban icons
+        _reset_ban_icon:
+        lw      t1, 0x0000(t0)              // t1 = ban icon object
         sw      0xFF, 0x0030(t1)            // Set X Position
         sw      0xFF, 0x0034(t1)            // Set Y Position
-        addiu   t3, t3, 4                   // t3 = t3 + 4
-        ble     t3, t2, _reset_bans_loop    // if t3 <= MAX_BANS, keep resetting bans_table
+        addiu   t0, t0, 4                   // incrementing to next ban_icon
+        addiu   t3, t3, 4
+        blt     t3, t4, _reset_ban_icon     // if t3 <= MAX_BANS, reset more ban icons
         nop
 
         b       _end
@@ -2580,19 +2572,12 @@ scope Stages {
         OS.patch_end()
 
         // making sure we're not on a banned stage
-        jal     get_stage_id_               // v0 = stage_id
+        jal     get_index_                  // v0 = index
         nop
-        li      t4, MAX_BANS                // t4 = MAX_BANS
-        li      t3, 0x0000                  // t3 = 0
         li      t0, bans_table              // checking if in bans_table
-
-        _start_check:
-        lw      t1, 0x0000(t0)              // t1 = first ban
-        beq     v0, t1, banned_stage_picked // checking if cursor is on banned stage
-        nop
-        addiu   t3, t3, 4                   // t3 = t3 + 4
-        addiu   t0, t0, 4                   // incrementing bans_table
-        ble     t3, t4, _start_check        // looping through bans_table
+        addu    t0, t0, v0                  // t0 = bans_table + index
+        lbu     t1, 0x0000(t0)              // t1 = stage index on ban table
+        bnez    t1, banned_stage_picked     // checking if cursor is on banned stage
         nop
         jal     0x80133D60                  // continuing start press
         nop
@@ -2665,6 +2650,15 @@ scope Stages {
         or      t1, r0, v0                  // t1 = v0
         li      t0, row                     // t0 = ROW address
         sb      t1, 0x0000(t0)              // update row
+
+        // checking if banned (get row and column from above and use that instead of get_index_)
+        li      t2, bans_table              // t2 = bans_table pointer to see if banned
+        jal     get_index_                  // v0 = index
+        nop
+        addu    t2, t2, v0                  // t2 = bans_table + index
+        lbu     t1, 0x0000(t2)              // t1 = stage index on ban table
+        bnez    t1, randomize_coords        // checking if cursor is on banned stage
+        nop
 
         // check if the coordinates are that of the bottom right square 'RANDOM', and re-roll if so
         // Note: this doesn't take id into factor (some pages have extra RANDOM slots)
@@ -3149,8 +3143,11 @@ scope Stages {
         //sw      v0, 0x0000(s1)              // saving the rectangle reference
 
         // drawing rectangles
-        li      t3, r0                      // t3 = increment
+        li      t3, 4                       // t3 = 4
         li      t4, MAX_BANS                // t4 = MAX_BANS
+        multu   t4, t3
+        mflo    t4                          // t4 = MAX_BANS * 4
+        li      t3, r0                      // t3 = increment
         _draw_bans:
         lli     a0, 0x1                     // a0 = room
         lli     a1, 0x4                     // a1 = group
@@ -3162,22 +3159,21 @@ scope Stages {
         jal     Render.draw_rectangle_
         lli     s6, OS.FALSE                // s6 = enable_alpha
         li      t0, ban_icon                // t0 = ban_icon
-        add     t0, t0, t3                  // incrementing to next ban_icon
+        addu    t0, t0, t3                  // incrementing to next ban_icon
         addiu   t3, t3, 4
         sw      v0, 0x0000(t0)              // saving the rectangle reference
-        ble     t3, t4, _draw_bans          // if t3 <= MAX_BANS, make more ban icons
+        blt     t3, t4, _draw_bans          // if t3 <= MAX_BANS, make more ban icons
         nop
-
+        
         // resetting bans table        
         li      t0, bans_table              // t0 = pointer to bans_table
-        li      t3, r0                      // t3 = increment
-        lli     t2, 0x00FF                  // t2 = ban index
-        _reset_ban_table:
-        sw      t2, 0x0000(t0)              // setting ban as 0xFF to reset
-        addiu   t0, t0, 4                   // incrementing bans_table
-        addiu   t3, t3, 4
-        ble     t3, t4, _reset_ban_table    // if t3 <= t4 keep checking bans_table
-        nop
+        li      t1, r0                      // t1 = 0
+
+        sw      t1, 0x0000(t0)              // setting bans 1-4 as 0 to reset
+        sw      t1, 0x0004(t0)              // setting bans 5-8 as 0 to reset
+        sw      t1, 0x0008(t0)              // setting bans 9-12 as 0 to reset
+        sw      t1, 0x000C(t0)              // setting bans 13-16 as 0 to reset
+        sw      t1, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         Render.draw_string(2, 0xD, string_hazards, Render.NOOP, 0x43780000, 0x43350000, 0xFFFFFFFF, 0x3F400000, Render.alignment.RIGHT)
         Render.draw_string_pointer(2, 0xD, hazards_onoff, Render.update_live_string_, 0x437C0000, 0x43350000, 0xFFFFFFFF, 0x3F400000, Render.alignment.LEFT)
@@ -5803,12 +5799,40 @@ scope Stages {
     dw 0
     dw 0
     dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
+    dw 0
     bans_table:
-    dw 0x00FF
-    dw 0x00FF
-    dw 0x00FF
-    dw 0x00FF
-    dw 0x00FF
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0
+    db 0 // extra (all need to be dw otherwise)
+    db 0 // extra (all need to be dw otherwise)
 }
 
 } // __STAGES__
