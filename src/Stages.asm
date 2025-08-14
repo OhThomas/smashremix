@@ -2046,6 +2046,28 @@ scope Stages {
         beqz    v0, _stage_variant          // if not pressed, skip
         nop
 
+        // make sure there's at least 1 or 2 stages not banned
+        li      t1, bans_table              // t1 = bans_table
+        li      t3, -1                      // t3 = -1
+        lw      t4, 0x0000(t1)              // t4 = stages 1-4
+        bne     t4, t3, _start_roulette     // if any stage 1-4 isn't banned, start stage roulette
+        nop
+        lw      t4, 0x0004(t1)              // t4 = stages 5-8
+        bne     t4, t3, _start_roulette     // if any stage 5-8 isn't banned, start stage roulette
+        nop
+        lw      t4, 0x0008(t1)              // t4 = stages 9-12
+        bne     t4, t3, _start_roulette     // if any stage 9-12 isn't banned, start stage roulette
+        nop
+        lw      t4, 0x000C(t1)              // t4 = stages 13-16
+        bne     t4, t3, _start_roulette     // if any stage 13-16 isn't banned, start stage roulette
+        nop
+        lb      t4, 0x0010(t1)              // t4 = stage 17
+        bne     t4, t3, _start_roulette     // if stage 17 isn't banned, start stage roulette
+        nop
+        b       _end
+        nop
+        
+        _start_roulette:
         li      t1, roulette_cursor_timer         // t1 = roulette_cursor_timer
         lli     t0, random_stage_roulette.DELAY // start timer with value at target DELAY so it fires instantly
         sw      t0, 0x0000(t1)                    // update timer
@@ -2152,12 +2174,9 @@ scope Stages {
         // resetting all ban values (table and icon)
         // need to make this a subroutine (used below)
         li      t0, bans_table              // t0 = pointer to bans_table
-        li      t1, r0                      // t1 = 0
-        sw      t1, 0x0000(t0)              // setting bans 1-4 as 0 to reset
-        sw      t1, 0x0004(t0)              // setting bans 5-8 as 0 to reset
-        sw      t1, 0x0008(t0)              // setting bans 9-12 as 0 to reset
-        sw      t1, 0x000C(t0)              // setting bans 13-16 as 0 to reset
-        sw      t1, 0x0010(t0)              // setting bans 17,18 as 0 to reset
+        sd      r0, 0x0000(t0)              // setting bans 1-8 as 0 to reset
+        sd      r0, 0x0008(t0)              // setting bans 9-16 as 0 to reset
+        sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         // t4 = MAX_BANS * 4, (to go through ban_icon pointers)
         li      t3, 4                       // t3 = 4
@@ -2211,13 +2230,20 @@ scope Stages {
 
         // ban stage logic
         _ban_stage:
-        // checking for C-Up press to reset bans
-        _no_start_press:
+        // checking for L release to reset bans
+        li      a0, Joypad.L                // a0 - L button mask 
+        li      a2, Joypad.RELEASED         // a2 - type
+        jal     Joypad.check_buttons_all_   // v0 = L pressed
+        nop
+        bnez    v0, _ban_reset              // if pressed, reset bans
+        nop
+
+        // checking for C-Up press to ban non legal stages
         li      a0, Joypad.CU               // a0 - C-Up button mask 
         li      a2, Joypad.PRESSED          // a2 - type
         jal     Joypad.check_buttons_all_   // v0 = C-Up pressed
         nop
-        bnez    v0, _ban_reset              // if pressed, reset bans
+        bnez    v0, _non_legal_ban          // if pressed, ban non legal stages
         nop
         
         // checking for C-Down press to ban stage
@@ -2279,8 +2305,8 @@ scope Stages {
         addiu   t8, t6, 0x0014              // t8 = Y position, adjusted for top padding
 
         // adding to bans_table
-        li      t1, 1                       // t1 = 1
-        sb      t1, 0x0000(t0)              // setting this index in bans_table to 1 (banned)
+        li      t1, -1                      // t1 = -1
+        sb      t1, 0x0000(t0)              // setting this index in bans_table to -1 (banned)
 
         // playing ban sound
         lli     a0, FGM.menu.TOGGLE         // a0 - fgm_id
@@ -2303,8 +2329,7 @@ scope Stages {
         nop
 
         // removing from table
-        li      t1, r0                      // t1 = 0
-        sb      t1, 0x0000(t0)              // setting this index in bans_table to 0 (unbanned)
+        sb      r0, 0x0000(t0)              // setting this index in bans_table to 0 (unbanned)
 
         // removing icon
         li      t0, ban_icon                // t0 = pointer to ban_icon
@@ -2339,12 +2364,9 @@ scope Stages {
         // resetting all ban values (table and icon)
         // resetting ban table
         li      t0, bans_table              // t0 = pointer to bans_table
-        li      t1, r0                      // t1 = 0
-        sw      t1, 0x0000(t0)              // setting bans 1-4 as 0 to reset
-        sw      t1, 0x0004(t0)              // setting bans 5-8 as 0 to reset
-        sw      t1, 0x0008(t0)              // setting bans 9-12 as 0 to reset
-        sw      t1, 0x000C(t0)              // setting bans 13-16 as 0 to reset
-        sw      t1, 0x0010(t0)              // setting bans 17,18 as 0 to reset
+        sd      r0, 0x0000(t0)              // setting bans 1-8 as 0 to reset
+        sd      r0, 0x0008(t0)              // setting bans 9-16 as 0 to reset
+        sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         // t3 = MAX_BANS * 4, (for dw pointers in ban_icon)
         li      t3, 4                       // t3 = 4
@@ -2362,6 +2384,79 @@ scope Stages {
         addiu   t0, t0, 4                   // incrementing to next ban_icon
         addiu   t3, t3, 4
         blt     t3, t4, _reset_ban_icon     // if t3 <= MAX_BANS, reset more ban icons
+        nop
+
+        b       _end
+        nop
+
+        _non_legal_ban:
+        // checking to make sure something will be banned to trigger sound
+        li      t0, bans_table              // t0 = pointer to bans_table
+        li      t3, -1                      // t3 = -1 (banned)
+        lh      t1, 0x0006(t0)              // t1 = stage 7,8
+        lw      t2, 0x0008(t0)              // t2 = stage 9-12
+        and     t1, t1, t2
+        lw      t2, 0x000C(t0)              // t2 = stage 13-16
+        and     t1, t1, t2
+        lb      t2, 0x0010(t0)              // t2 = stage 17
+        and     t1, t1, t2
+        beq     t1, t3, _end                // if all non-legal stages are banned, end
+        nop
+
+        // playing banned sound
+        lli     a0, FGM.menu.TOGGLE         // a0 - fgm_id
+        jal     FGM.play_                   // play menu sound
+        nop
+
+        // banning non legal stages
+        li      t0, bans_table              // t0 = pointer to bans_table
+        li      t1, -1                      // t1 = -1 (banned)
+        sh      t1, 0x0006(t0)              // banning stage 7,8
+        sd      t1, 0x0008(t0)              // banning stages 9-16
+        sb      t1, 0x0010(t0)              // banning stage 17
+
+        // t8 = Y, setting up for first row to ban
+        li      t5, 1                       // t5 = 1 (for second row)
+        lli     t6, ICON_HEIGHT + 2         // t6 = ICON_HEIGHT
+        multu   t6, t5                      // t6 = ICON_HEIGHT * ROW
+        mflo    t6                          // ~
+        addiu   t8, t6, 0x0014              // t8 = Y position, adjusted for top padding
+
+        // setting up registers to iterate over ban_icon
+        li      t4, 6                       // t4 = amount to iterate over the column (6 times)
+        li      t3, 3                       // t3 = amount to iterate over the row (2 times)
+        li      a1, 18                      // a1 = amount to iterate over the ban_icon (18) [used to stop at RANDOM]
+        li      t9, 0                       // t9 = column tracker
+        li      t2, 7                       // t2 = index tracker (starting at stage index 7)
+        li      t0, ban_icon                // t0 = pointer to ban_icon
+        addiu   t0, t0, 24                  // going to 7th ban_icon
+
+        // loop to add ban icons to one row, then next
+        _legal_ban_loop:
+        ble     a1, t2, _end                // index < 18, stop drawing bans
+        nop
+
+        // t7 = X
+        lli     t6, ICON_WIDTH + 2          // t6 = ICON_WIDTH
+        multu   t6, t9                      // t6 = ICON_WIDTH * COLUMN
+        mflo    t6                          // ~
+        addiu   t7, t6, 0x001E              // t7 = X position, adjusted for left padding
+
+        // setting ban_icon position
+        lw      t1, 0x0000(t0)              // t1 = ban_icon rectangle object
+        sw      t7, 0x0030(t1)              // Set X Position
+        sw      t8, 0x0034(t1)              // Set Y Position
+        addiu   t0, t0, 4                   // incrementing to next ban_icon (pointer)
+        addiu   t9, t9, 1                   // incrementing column tracker
+        addiu   t2, t2, 1                   // incrementing index tracker
+        blt     t9, t4, _legal_ban_loop     // if t3 <= MAX_BANS, reset more ban icons
+        nop
+
+        // this keeps track of which row were on to continue banning non legal stages
+        li      t9, 0                       // t9 = increment
+        addiu   t5, t5, 1                   // increasing row
+        addiu   t8, t8, ICON_HEIGHT + 2     // increasing row
+        blt     t5, t3, _legal_ban_loop     // t5 < t3, then draw on the next row
         nop
 
         b       _end
@@ -3167,13 +3262,9 @@ scope Stages {
         
         // resetting bans table        
         li      t0, bans_table              // t0 = pointer to bans_table
-        li      t1, r0                      // t1 = 0
-
-        sw      t1, 0x0000(t0)              // setting bans 1-4 as 0 to reset
-        sw      t1, 0x0004(t0)              // setting bans 5-8 as 0 to reset
-        sw      t1, 0x0008(t0)              // setting bans 9-12 as 0 to reset
-        sw      t1, 0x000C(t0)              // setting bans 13-16 as 0 to reset
-        sw      t1, 0x0010(t0)              // setting bans 17,18 as 0 to reset
+        sd      r0, 0x0000(t0)              // setting bans 1-8 as 0 to reset
+        sd      r0, 0x0008(t0)              // setting bans 9-16 as 0 to reset
+        sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         Render.draw_string(2, 0xD, string_hazards, Render.NOOP, 0x43780000, 0x43350000, 0xFFFFFFFF, 0x3F400000, Render.alignment.RIGHT)
         Render.draw_string_pointer(2, 0xD, hazards_onoff, Render.update_live_string_, 0x437C0000, 0x43350000, 0xFFFFFFFF, 0x3F400000, Render.alignment.LEFT)
