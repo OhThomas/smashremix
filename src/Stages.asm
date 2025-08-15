@@ -2736,9 +2736,9 @@ scope Stages {
         randomize_coords:
         jal     Global.get_random_int_      // v0 = (0, N-1)
         lli     a0, 6                       // a0 = 6 (number of columns)
-        or      t1, r0, v0                  // t1 = v0
+        or      t2, r0, v0                  // t2 = v0
         li      t0, column                  // t0 = COLUMN address
-        sb      t1, 0x0000(t0)              // update column
+        sb      t2, 0x0000(t0)              // update column
 
         jal     Global.get_random_int_      // v0 = (0, N-1)
         lli     a0, 3                       // a0 = 3 (number of rows)
@@ -2746,13 +2746,19 @@ scope Stages {
         li      t0, row                     // t0 = ROW address
         sb      t1, 0x0000(t0)              // update row
 
-        // checking if banned (get row and column from above and use that instead of get_index_)
-        li      t2, bans_table              // t2 = bans_table pointer to see if banned
-        jal     get_index_                  // v0 = index
-        nop
-        addu    t2, t2, v0                  // t2 = bans_table + index
-        lbu     t1, 0x0000(t2)              // t1 = stage index on ban table
-        bnez    t1, randomize_coords        // checking if cursor is on banned stage
+        // checking if banned
+        li      t3, bans_table              // t3 = bans_table pointer to see if banned
+        lli     t4, NUM_COLUMNS             // t4 = NUM_COLUMNS
+
+        // getting stage index
+        multu   t1, t4                      // t5 = row * NUM_COLUMNS
+        mflo    t5
+        addu    t2, t2, t5                  // t2 = row * NUM_COLUMNS + column
+        addu    t3, t3, t2                  // t3 = bans_table + index
+
+        // using stage index in bans_table
+        lbu     t2, 0x0000(t3)              // t2 = stage index on ban table
+        bnez    t2, randomize_coords        // checking if cursor is on banned stage
         nop
 
         // check if the coordinates are that of the bottom right square 'RANDOM', and re-roll if so
@@ -3250,9 +3256,9 @@ scope Stages {
         lli     s2, 0xFF                    // s2 = uly
         lli     s3, ICON_WIDTH + 2          // s3 = width
         lli     s4, ICON_HEIGHT + 2         // s4 = height
-        li      s5, 0x0000                  // s5 = color
+        li      s5, 0x000000C0              // s5 = color
         jal     Render.draw_rectangle_
-        lli     s6, OS.FALSE                // s6 = enable_alpha
+        lli     s6, OS.TRUE                 // s6 = enable_alpha
         li      t0, ban_icon                // t0 = ban_icon
         addu    t0, t0, t3                  // incrementing to next ban_icon
         addiu   t3, t3, 4
