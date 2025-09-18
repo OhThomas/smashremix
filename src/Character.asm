@@ -2606,6 +2606,7 @@ scope Character {
         constant J(0x02)
         constant E(0x03)
         constant SPECIAL(0x04)
+        // constant CB(0x03)
         constant UNUSED(0xFF)
         OS.align(16)
         table:
@@ -3665,7 +3666,8 @@ scope Character {
     // 0x3F - MARINA
     define_character(MARINA, CAPTAIN, File.MARINA_MAIN, 0x0EB, 0, File.MARINA_CHARACTER, File.MARINA_SHIELD_POSE, 0, 0x15E, File.MARINA_GEM_HITBOX, File.MARINA_ENTRY_GFX, 0x560, 30, OS.TRUE, OS.TRUE, Stages.id.BTT_MARINA, Stages.id.BTP_MARINA, Stages.id.BTT_DRM, Stages.id.BTP_SONIC, sound_type.U, variant_type.NA)
     // 0x40 - DEDEDE
-    define_character(DEDEDE, CAPTAIN, File.DEDEDE_MAIN, 0x0EB, 0, File.DEDEDE_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.NA)
+    // define_character(DEDEDE, CAPTAIN, File.DEDEDE_MAIN, 0x0EB, 0, File.DEDEDE_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, File.DEDEDE_BALD_MAIN, File.DEDEDE_COWBOY_MAIN, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.NA) // both
+    define_character(DEDEDE, CAPTAIN, File.DEDEDE_MAIN, 0x0EB, 0, File.DEDEDE_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, File.DEDEDE_COWBOY_MAIN, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.NA) // just cowboy
     copy_gfx_parameters(DEDEDE, KIRBY)
     // 0x41 - GOEMON
     define_character(GOEMON, MARIO, File.GOEMON_MAIN, 0x0CA, 0, File.GOEMON_CHARACTER, File.GOEMON_SHIELD_POSE, File.GOEMON_RYO_HITBOX, File.GOEMON_CLOUD_INFO, File.GOEMON_RYO_GRAPHIC, File.GOEMON_ENTRY_GFX, 0x91C, 22, OS.TRUE, OS.TRUE, Stages.id.BTT_GOEMON, Stages.id.BTP_GOEMON, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF,sound_type.U, variant_type.NA)
@@ -3692,6 +3694,9 @@ scope Character {
     // 0x4C - LANKY
     define_character(LANKY, MARIO, File.LANKY_MAIN, 0x0CA, 0, File.LANKY_CHARACTER, File.LANKY_SHIELD_POSE,  File.LANKY_PROJECTILE_HITBOX, File.LANKY_ENTRY, File.LANKY_PROJECTILE_GRAPHIC, 0, 0x580, 21, OS.TRUE, OS.TRUE, Stages.id.BTT_DONKEY_KONG, Stages.id.BTP_DONKEY_KONG, Stages.id.BTT_DONKEY_KONG, Stages.id.BTP_DONKEY_KONG,sound_type.U, variant_type.SPECIAL)
     // ADD NEW CHARACTERS HERE
+
+    // DEDEDECB
+    // define_character(DEDEDECB, CAPTAIN,  File.DEDEDE_COWBOY_MAIN, 0x0EB, 0, File.DEDEDE_COWBOY_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
 
     // REMIX POLYGONS
     // NWARIO

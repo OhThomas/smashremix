@@ -85,12 +85,25 @@ scope Shield {
         lli     t3, Character.id.SONIC      // t2 = id.SONIC
         beq     t2, t3, _get_shield_color   // if not Sonic, skip
         lbu     t3, 0x0010(t0)              // t3 = costume_id
+        // beq     t2, t3, _ddd_check          // if not Sonic, skip
+        // nop 
 
         li      t2, Sonic.classic_table     // t2 = classic_table
         addu    t2, t2, t1                  // t2 = classic_table + port
         lbu     t2, 0x0000(t2)              // t2 = px is_classic
         bnezl   t2, _get_shield_color       // if classic Sonic, then adjust costume_id
         addiu   t3, t3, 0x0006              // t3 = adjusted costume_id
+
+        // _ddd_check:
+        // lli     t3, Character.id.DEDEDE      // t2 = id.DEDEDE
+        // beq     t2, t3, _get_shield_color   // if not Dedede, skip
+        // lbu     t3, 0x0010(t0)              // t3 = costume_id
+
+        // li      t2, Sonic.bald_table        // t2 = bald_table
+        // addu    t2, t2, t1                  // t2 = bald_table + port
+        // lbu     t2, 0x0000(t2)              // t2 = px is_bald
+        // bnezl   t2, _get_shield_color       // if bald Dedede, then adjust costume_id
+        // addiu   t3, t3, 0x0004              // t3 = adjusted costume_id
 
         _get_shield_color:
         addu    t8, t8, t3                  // t8 = address of shield color index

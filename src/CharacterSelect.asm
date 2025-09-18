@@ -263,7 +263,10 @@ scope CharacterSelect {
     dw  0xC900 + 0x200                      // 0x3D - SUPER SONIC
     dw  0x122E8 + 0x200                     // 0x3E - SHEIK
     dw  0x136E8 + 0x200                     // 0x3F - MARINA
-    dw  0x173C8 + 0x200                     // 0x40 - DEDEDE
+    // dw  0x173C8 + 0x200                     // 0x40 - DEDEDE
+    // dw  0x173C8 + 0x173C8 + 0x173C8 + 0x200 // 0x40 - DEDEDE w/ BALD
+    dw  0x173C8 + 0x223C8 + 0x12100 + 0x200 // 0x40 - DEDEDE w/ COWBOY
+    // dw  0x173C8 + 0x223C8 + 0x12100 + 0x173C8 + 0x200 // 0x40 - DEDEDE w/ BALD AND COWBOY
     dw  0x12EA0 + 0x1BE0 + 0x200            // 0x41 - GOEMON
     dw  0x5A50 + 0x200                      // 0x42 - PEPPY
     dw  0xA310 + 0x200                      // 0x43 - SLIPPY
@@ -277,6 +280,9 @@ scope CharacterSelect {
     dw  0x6510 + 0x200                      // 0x4B - DRL
     dw  0x1A7C0 + 0x200                     // 0x4C - LANKY
     // ADD NEW CHARACTERS HERE
+
+    // COSTUMES
+    // dw  0x173C8 + 0x223C8 + 0x12100 + 0x173C8 + 0x200                     // DEDEDE COWBOY
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -417,6 +423,9 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.ROY, req/ROY_MODEL)
     add_alt_req_list(Character.id.DRL, req/DRL_MODEL)
     add_alt_req_list(Character.id.LANKY, req/LANKY_MODEL)
+
+    //Costumes
+    // add_alt_req_list(Character.id.DEDEDECB, req/DEDEDECB_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -3057,6 +3066,7 @@ scope CharacterSelect {
         constant SHEIK(0x000206F8)
         constant MARINA(0x000217B8)
         constant DEDEDE(0x00022878)
+        // constant DEDEDECB(0x00022878)
         constant GOEMON(0x00023938)
         constant BANJO(0x00026B68 + 0x10)
         constant CRASH(0x0002AE58 + 0x10)
@@ -7077,6 +7087,7 @@ scope CharacterSelect {
     add_to_css(Character.id.ROY,    FGM.announcer.names.ROY,            1.50,         0x00010004, FIRE_EMBLEM,  name_texture.ROY,            portrait_offsets.ROY,            BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.DRL,    FGM.announcer.names.DRL,            1.50,         0x00010001, DR_MARIO,     name_texture.DRL,            portrait_offsets.DRL,            BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.LANKY,  FGM.announcer.names.LANKY,          2,            0x00010004, DONKEY_KONG,  name_texture.LANKY,          portrait_offsets.LANKY,          BOOKEND_BONUS_PORTRAIT)
+    // add_to_css(Character.id.DEDEDECB, FGM.announcer.names.DEDEDE,         2,            0x00010001, KIRBY,        name_texture.DEDEDE,         portrait_offsets.DEDEDE,         10)
     // ADD NEW CHARACTERS HERE
 
     // REMIX POLYGONS

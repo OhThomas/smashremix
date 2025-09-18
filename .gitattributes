@@ -7,3 +7,5 @@
 *.ia8 binary
 
 *.aifc binary
+
+* text=auto

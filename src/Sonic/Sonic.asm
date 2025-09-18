@@ -516,9 +516,25 @@ scope Sonic {
         lw      t5, 0x0084(a0)              // t5 = player struct
         lw      t6, 0x0008(t5)              // t6 = character id
         lli     at, Character.id.SONIC      // at = id.SONIC
-        bne     at, t6, _end                // end if character != SONIC
+        beq     at, t6, _change_anim        // change animation if character == SONIC
         nop
 
+        lli     at, Character.id.DEDEDE     // at = id.DEDEDE
+        bne     at, t6, _end                // end if character != DEDEDE
+        nop
+
+        // if the character is DDD
+        li      at, 0x00010001              // at = action id: menu selection (or 10001)
+        bne     at, a1, _end                // end if action != menu selection
+        lbu     at, 0x000D(t5)              // at = player port
+
+        // if Dedede is beginning the menu selection action
+        li      t6, bald_select_anim_frame  // t6 = bald_select_anim_frame
+        sll     at, at, 0x2                 // at = port * 4
+        addu    t6, t6, at                  // 6t = px bald_select_anim_frame address
+        lw      a2, 0x0000(t6)              // a2 = new frame to begin animation on
+
+        _change_anim:
         // if the character is Sonic
         li      at, 0x00010004              // at = action id: menu selection
         bne     at, a1, _end                // end if action != menu selection
@@ -842,6 +858,12 @@ scope Sonic {
         lw      t5, 0x0000(t5)              // t5 = current classic flags
         li      t6, classic_flags_vs        // t6 = classic_flags_vs
         sw      t5, 0x0000(t6)              // update classic_flags_vs
+
+        li      t5, bald_table              // ~
+        lw      t5, 0x0000(t5)              // t5 = current bald flags
+        li      t6, bald_flags_vs           // t6 = bald_flags_vs
+        sw      t5, 0x0000(t6)              // update bald_flags_vs
+
         lui     t6, 0x8014                  // original line 1
         j       _return                     // return
         lw      t6, 0xBD7C(t6)              // original line 2
@@ -859,6 +881,12 @@ scope Sonic {
         lw      t5, 0x0000(t5)              // t5 = classic_flags_vs
         li      t6, classic_table           // t6 = classic_table
         sw      t5, 0x0000(t6)              // update current classic flags
+
+        li      t5, bald_flags_vs           // ~
+        lw      t5, 0x0000(t5)              // t5 = bald_flags_vs
+        li      t6, bald_table              // t6 = bald_table
+        sw      t5, 0x0000(t6)              // update current classic flags
+
         jr      ra                          // original line 1
         sh      t4, 0xBDBC(at)              // original line 2
     }
@@ -923,26 +951,50 @@ scope Sonic {
 
         _vs_1:
         // a1 - port index
+
+        // CSONIC
         li      s2, classic_table           // s2 = classic_table
         addu    s2, s2, a1                  // t5 = classic_table + port
         sb      r0, 0x0000(s2)              // reset px is_classic
+
+        // DEDEDE_BALD
+        li      s2, bald_table              // s2 = bald_table
+        addu    s2, s2, a1                  // t5 = bald_table + port
+        sb      r0, 0x0000(s2)              // reset px is_bald
+
         j       _return_vs_1                // return
         or      s2, a1, r0                  // original line 2
 
         _vs_2:
         // a0 - port index
+
+        // CSONIC
         li      t9, classic_table           // t9 = classic_table
         addu    t9, t9, a0                  // t9 = classic_table + port
         sb      r0, 0x0000(t9)              // reset px is_classic
+
+        // DEDEDE_BALD
+        li      t9, bald_table              // t9 = bald_table
+        addu    t9, t9, a0                  // t9 = bald_table + port
+        sb      r0, 0x0000(t9)              // reset px is_bald
+
         j       _return_vs_2                // return
         sw      t8, 0x005C(v0)              // original line 2
 
         _vs_3:
         // 0x0020(sp) - port index
+
+        // CSONIC
         lw      t7, 0x0020(sp)              // t7 = port index
         li      t8, classic_table           // t8 = classic_table
         addu    t8, t8, t7                  // t8 = classic_table + port
         sb      r0, 0x0000(t8)              // reset px is_classic
+
+        // DEDEDE_BALD
+        li      t8, bald_table              // t8 = bald_table
+        addu    t8, t8, t7                  // t8 = bald_table + port
+        sb      r0, 0x0000(t8)              // reset px is_bald
+
         j       _return_vs_3                // return
         sw      t1, 0x0080(s0)              // original line 2
 
@@ -1011,18 +1063,42 @@ scope Sonic {
         sll     t4, t6, 0x2                 // t4 = port * 4
         addu    t5, t5, t4                  // t5 = px select_anim_frame address
         sw      r0, 0x0000(t5)              // reset px select_anim_frame
+
+        li      t5, bald_select_anim_frame  // t5 = bald_select_anim_frame
+        addu    t5, t5, t4                  // t5 = px bald_select_anim_frame address
+        sw      r0, 0x0000(t5)              // reset px bald_select_anim_frame
+
         li      t5, classic_table           // t5 = classic_table
         addu    t5, t5, t6                  // t5 = classic_table + port
         lw      t4, 0x0028(t3)              // original line 1
         lli     t6, Character.id.SONIC      // t6 = id.SONIC
         lw      t0, 0x0000(s6)              // t0 = character id
-        bnel    t6, t0, _end                // skip if character id != SONIC...
+        bnel    t6, t0, _bald_check         // skip if character id != SONIC...
         sb      r0, 0x0000(t5)              // ...and reset px is_classic to FALSE
 
         // if the character is Sonic
         lbu     t0, 0x0000(t5)              // t0 = px is_classic
         bnel    t0, r0, _end                // branch if px is_classic = TRUE...
         lw      t4, 0x0040(t3)              // ...and load Classic Sonic Main file pointer into t4
+
+        // DEDEDE_BALD check
+        _bald_check:
+        lbu     t6, 0x0015(s6)              // t6 = player port
+        li      t5, bald_table              // t5 = bald_table
+        addu    t5, t5, t6                  // t5 = bald_table + port
+        // lw      t4, 0x0028(t3)           // original line 1
+        lli     t6, Character.id.DEDEDE     // t6 = id.DEDEDE
+        lw      t0, 0x0000(s6)              // t0 = character id
+        bnel    t6, t0, _end                // skip if character id != DEDEDE...
+        sb      r0, 0x0000(t5)              // ...and reset px is_bald to FALSE
+
+        // if the character is Dedede
+        lbu     t0, 0x0000(t5)              // t0 = px is_bald
+        beql    t0, r0, _end                // branch if px is_bald = TRUE...
+        nop
+        // li      t4, 0x80599CD0//0x80599CC0//0x80594D80  // ...and load Bald DDD Main file pointer into t4
+        lw      t4, 0x0044(t3)              // ...and load Dedede Bald Main pointer into t4
+        // lw      t4, 0x0048(t3)              // ...and load Dedede Cowboy Main file pointer into t4
 
         _end:
         j       _return
@@ -1053,6 +1129,26 @@ scope Sonic {
         // s5 = character_id
         // s6 = port_id of other
         // 0x006C(sp) = port_id of self
+        lli     t1, Character.id.DEDEDE     // t1 = id.DEDEDE
+        bne     s5, t1, _sonic_check        // if not Dedede, skip
+        nop // change to lli t1, Character.id.SONIC
+
+        li      at, bald_table              // at = bald_table
+        lw      t1, 0x006C(sp)              // t1 = port_id for self
+        addu    t1, at, t1                  // t1 = bald_table + port for self
+        lbu     t1, 0x0000(t1)              // t1 = is_bald for self
+        bnezl   t1, pc() + 8                // if bald, increase costume_id for self
+        addiu   v0, v0, 0x0006              // t9 = fudged costume_id for self
+
+        addu    t1, at, s6                  // t1 = bald_table + port for other
+        lbu     t1, 0x0000(t1)              // t1 = is_bald for other
+        bnezl   t1, pc() + 8                // if bald, increase costume_id for other
+        addiu   t9, t9, 0x0006              // t9 = fudged costume_id for other
+
+        b       _end
+        nop
+
+        _sonic_check:
         lli     t1, Character.id.SONIC      // t1 = id.SONIC
         bne     s5, t1, _end                // if not Sonic, skip
         sll     t0, s0, 0x0002              // original line 2
@@ -1118,6 +1214,25 @@ scope Sonic {
     db 0x00; db 0x00; db 0x00; db 0x00      // p1, p2, p3, p4
 
     select_anim_frame:
+    float32 0                               // p1
+    float32 0                               // p2
+    float32 0                               // p3
+    float32 0                               // p4
+
+
+    bald_table:
+    db 0x00; db 0x00; db 0x00; db 0x00      // p1, p2, p3, p4
+
+    // bald_flag_1p:
+    // dw 0x00000000                           // hmn
+
+    // bald_flags_training:
+    // dh 0x0000; dh 0x0000                    // hmn, cpu
+
+    bald_flags_vs:
+    db 0x00; db 0x00; db 0x00; db 0x00      // p1, p2, p3, p4
+
+    bald_select_anim_frame:
     float32 0                               // p1
     float32 0                               // p2
     float32 0                               // p3

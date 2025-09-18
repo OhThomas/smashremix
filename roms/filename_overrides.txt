@@ -3324,6 +3324,10 @@
 153B Kirby Super Sonic NSP Move
 153C Dragon King Ending Image 1
 153D Dragon King Ending Image 2
+153E Dedede Bald Main
+153F Dedede Bald Character
+1540 Dedede Cowboy Main
+1541 Dedede Cowboy Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

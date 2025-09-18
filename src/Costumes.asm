@@ -761,13 +761,22 @@ scope Costumes {
         lw      a0, 0x0008(s0)              // a0 = player object
         addu    a1, v0, r0                  // a1 = costume_id
 
-        // if Sonic, may need to change model
+        // if Sonic or Dedede, may need to change model
         lw      at, 0x0084(a0)              // at = player struct
+        lw      t8, 0x0008(at)              // t8 = char_id
         lw      at, 0x0008(at)              // at = char_id
         lli     a2, Character.id.SONIC      // a2 = id.SONIC
-        bne     at, a2, _determine_screen   // if not Sonic, skip
+        beq     t8, a2, _costume_check      // if Sonic, check to see if we need to change model
+        nop
+        lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
+        beq     t8, a2, _costume_check      // if Dedede, check to see if we need to change model
+        nop
+
+        b       _determine_screen           // if not Sonic or Dedede, skip
         lw      at, 0x0018(sp)              // at = direction pressed (up = 0, right = 1, down = 2, left = 3)
 
+        _costume_check:
+        lw      at, 0x0018(sp)              // at = direction pressed (up = 0, right = 1, down = 2, left = 3)
         // if we're here, we need may need to update the costume
         andi    t0, at, 0x0001              // t0 = 0 if up/down, 1 if right/left
         beqz    t0, _determine_screen       // if shade was changed, skip
@@ -809,11 +818,35 @@ scope Costumes {
         _sonic:
         lbu     a0, 0x000D(a0)              // a0 = player port
         li      a1, Sonic.classic_table     // a1 = classic_table
+
+        // using classic_table if sonic
+        lli     a2, Character.id.SONIC      // a2 = id.SONIC
+        beq     t8, a2, _change_costume_table// if Sonic, set a1 to classic_table
+        nop
+
+        // if Dedede then use bald_table
+        li      a1, Sonic.bald_table        // a1 = bald_table
+
+        // lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
+        // beq     t8, a2, _change_costume_table// if Dedede, set a1 to bald_table
+        // nop
+        
+        _change_costume_table:
         addu    a1, a1, a0                  // a1 = classic_table + port
         lbu     at, 0x0000(a1)              // at = px is_classic
         xori    at, at, 0x0001              // ~
         sb      at, 0x0000(a1)              // flip px_is_classic
         li      a1, Sonic.select_anim_frame // a1 = select_anim_frame
+
+        // using select_anim_frame if Sonic
+        lli     a2, Character.id.SONIC      // a2 = id.SONIC
+        beq     t8, a2, _change_animation_frame// if Sonic, use a1 as select_anim_frame
+        nop
+
+        // if Dedede then set a1 to bald_select_anim_frame
+        li      a1, Sonic.bald_select_anim_frame// a1 = bald_select_anim_frame
+
+        _change_animation_frame:
         sll     at, a0, 0x2                 // at = port * 4
         addu    a1, a1, at                  // a1 = px select_anim_frame address
         lw      at, 0x0008(s0)              // at = player object
@@ -856,9 +889,22 @@ scope Costumes {
 
         _sonic_end:
         OS.restore_registers()
-        beqzl   at, pc() + 8                // if current animation frame = 0...
+        // beqzl   at, pc() + 8                // if current animation frame = 0...
+        // note: hard coded to length of selection animation
+        // lui     at, 0x4341                  // ...set current animation frame to 193 instead
+        bnezl   at, _player_frame           // if current animation frame isn't 0 then don't set to end of animation
+        nop
+
         // note: hard coded to length of selection animation
         lui     at, 0x4341                  // ...set current animation frame to 193 instead
+        lli     a2, Character.id.SONIC      // a2 = id.SONIC
+        beq     t8, a2, _player_frame       // if Sonic, set frame to 193
+        nop                                 // put lui at, 0x4341 here
+
+        // If Dedede, set at to end of DDD victory animation (0x4304) 
+        lui     at, 0x4304                  // ...set current animation frame to DDD end animation
+
+        _player_frame:
         sw      at, 0x0000(a1)              // update px select_anim_frame
         lw      a0, 0x0008(s0)              // a0 = player object
         sw      at, 0x0078(a0)              // set current animation frame
@@ -1014,6 +1060,7 @@ scope Costumes {
         db 0x05                             // Roy
         db 0x07                             // Dr. Luigi
         db 0x07                             // Lanky Kong
+        // db 0x01                             // DDDCB
         // Polygons
         db 0x05                             // Polygon Wario
         db 0x05                             // Polygon Lucas
