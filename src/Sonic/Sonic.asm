@@ -516,14 +516,33 @@ scope Sonic {
         lw      t5, 0x0084(a0)              // t5 = player struct
         lw      t6, 0x0008(t5)              // t6 = character id
         lli     at, Character.id.SONIC      // at = id.SONIC
-        beq     at, t6, _change_anim        // change animation if character == SONIC
+        beq     at, t6, _change_anim_sonic  // change animation if character == SONIC
+        nop
+        
+        lli     at, Character.id.DEDEDE     // at = id.DEDEDE
+        beq     at, t6, _change_anim_ddd    // change animation if character == DEDEDE
         nop
 
-        lli     at, Character.id.DEDEDE     // at = id.DEDEDE
-        bne     at, t6, _end                // end if character != DEDEDE
+        lli     at, Character.id.PIKACHU    // at = id.PIKACHU
+        bne     at, t6, _end                // end if character != PIKACHU
+        nop
+
+        // if the character is Pikachu
+        _change_anim_pika:
+        li      at, 0x00010001              // at = action id: menu selection (or 10001)
+        bne     at, a1, _end                // end if action != menu selection
+        lbu     at, 0x000D(t5)              // at = player port
+
+        // if Pikachu is beginning the menu selection action
+        li      t6, pika_headband_select_anim_frame// t6 = pika_headband_select_anim_frame
+        sll     at, at, 0x2                 // at = port * 4
+        addu    t6, t6, at                  // t6 = px pika_headband_select_anim_frame address
+        lw      a2, 0x0000(t6)              // a2 = new frame to begin animation on
+        b       _end
         nop
 
         // if the character is DDD
+        _change_anim_ddd:
         li      at, 0x00010001              // at = action id: menu selection (or 10001)
         bne     at, a1, _end                // end if action != menu selection
         lbu     at, 0x000D(t5)              // at = player port
@@ -531,11 +550,13 @@ scope Sonic {
         // if Dedede is beginning the menu selection action
         li      t6, bald_select_anim_frame  // t6 = bald_select_anim_frame
         sll     at, at, 0x2                 // at = port * 4
-        addu    t6, t6, at                  // 6t = px bald_select_anim_frame address
+        addu    t6, t6, at                  // t6 = px bald_select_anim_frame address
         lw      a2, 0x0000(t6)              // a2 = new frame to begin animation on
+        b       _end
+        nop
 
-        _change_anim:
         // if the character is Sonic
+        _change_anim_sonic:
         li      at, 0x00010004              // at = action id: menu selection
         bne     at, a1, _end                // end if action != menu selection
         lbu     at, 0x000D(t5)              // at = player port
@@ -543,7 +564,7 @@ scope Sonic {
         // if Sonic is beginning the menu selection action
         li      t6, select_anim_frame       // t6 = select_anim_frame
         sll     at, at, 0x2                 // at = port * 4
-        addu    t6, t6, at                  // 6t = px select_anim_frame address
+        addu    t6, t6, at                  // t6 = px select_anim_frame address
         lw      a2, 0x0000(t6)              // a2 = new frame to begin animation on
 
         _end:
@@ -864,6 +885,11 @@ scope Sonic {
         li      t6, bald_flags_vs           // t6 = bald_flags_vs
         sw      t5, 0x0000(t6)              // update bald_flags_vs
 
+        li      t5, pika_headband_table     // ~
+        lw      t5, 0x0000(t5)              // t5 = current pika headband flags
+        li      t6, pika_headband_flags_vs  // t6 = pika_headband_flags_vs
+        sw      t5, 0x0000(t6)              // update pika_headband_flags_vs
+
         lui     t6, 0x8014                  // original line 1
         j       _return                     // return
         lw      t6, 0xBD7C(t6)              // original line 2
@@ -885,7 +911,12 @@ scope Sonic {
         li      t5, bald_flags_vs           // ~
         lw      t5, 0x0000(t5)              // t5 = bald_flags_vs
         li      t6, bald_table              // t6 = bald_table
-        sw      t5, 0x0000(t6)              // update current classic flags
+        sw      t5, 0x0000(t6)              // update current bald flags
+
+        li      t5, pika_headband_flags_vs  // ~
+        lw      t5, 0x0000(t5)              // t5 = pika_headband_flags_vs
+        li      t6, pika_headband_table     // t6 = pika_headband
+        sw      t5, 0x0000(t6)              // update current pika headband flags
 
         jr      ra                          // original line 1
         sh      t4, 0xBDBC(at)              // original line 2
@@ -962,6 +993,11 @@ scope Sonic {
         addu    s2, s2, a1                  // t5 = bald_table + port
         sb      r0, 0x0000(s2)              // reset px is_bald
 
+        // PIKA_HEADBAND
+        li      s2, pika_headband_table     // s2 = pika_headband_table
+        addu    s2, s2, a1                  // t5 = pika_headband_table + port
+        sb      r0, 0x0000(s2)              // reset px is_pika_headband
+
         j       _return_vs_1                // return
         or      s2, a1, r0                  // original line 2
 
@@ -977,6 +1013,11 @@ scope Sonic {
         li      t9, bald_table              // t9 = bald_table
         addu    t9, t9, a0                  // t9 = bald_table + port
         sb      r0, 0x0000(t9)              // reset px is_bald
+
+        // PIKA_HEADBAND
+        li      t9, pika_headband_table     // t9 = pika_headband_table
+        addu    t9, t9, a0                  // t9 = pika_headband_table + port
+        sb      r0, 0x0000(t9)              // reset px is_pika_headband
 
         j       _return_vs_2                // return
         sw      t8, 0x005C(v0)              // original line 2
@@ -994,6 +1035,11 @@ scope Sonic {
         li      t8, bald_table              // t8 = bald_table
         addu    t8, t8, t7                  // t8 = bald_table + port
         sb      r0, 0x0000(t8)              // reset px is_bald
+
+        // PIKA_HEADBAND
+        li      t8, pika_headband_table     // t8 = pika_headband_table
+        addu    t8, t8, t7                  // t8 = pika_headband_table + port
+        sb      r0, 0x0000(t8)              // reset px is_pika_headband
 
         j       _return_vs_3                // return
         sw      t1, 0x0080(s0)              // original line 2
@@ -1068,6 +1114,10 @@ scope Sonic {
         addu    t5, t5, t4                  // t5 = px bald_select_anim_frame address
         sw      r0, 0x0000(t5)              // reset px bald_select_anim_frame
 
+        li      t5, pika_headband_select_anim_frame// t5 = pika_headband_select_anim_frame
+        addu    t5, t5, t4                  // t5 = px pika_headband_select_anim_frame address
+        sw      r0, 0x0000(t5)              // reset px pika_headband_select_anim_frame
+
         li      t5, classic_table           // t5 = classic_table
         addu    t5, t5, t6                  // t5 = classic_table + port
         lw      t4, 0x0028(t3)              // original line 1
@@ -1089,7 +1139,7 @@ scope Sonic {
         // lw      t4, 0x0028(t3)           // original line 1
         lli     t6, Character.id.DEDEDE     // t6 = id.DEDEDE
         lw      t0, 0x0000(s6)              // t0 = character id
-        bnel    t6, t0, _end                // skip if character id != DEDEDE...
+        bnel    t6, t0, _pika_headband_check// skip if character id != DEDEDE...
         sb      r0, 0x0000(t5)              // ...and reset px is_bald to FALSE
 
         // if the character is Dedede
@@ -1099,6 +1149,23 @@ scope Sonic {
         // li      t4, 0x80599CD0//0x80599CC0//0x80594D80  // ...and load Bald DDD Main file pointer into t4
         lw      t4, 0x0044(t3)              // ...and load Dedede Bald Main pointer into t4
         // lw      t4, 0x0048(t3)              // ...and load Dedede Cowboy Main file pointer into t4
+
+        // pika_headband check
+        _pika_headband_check:
+        lbu     t6, 0x0015(s6)              // t6 = player port
+        li      t5, pika_headband_table     // t5 = pika_headband_table
+        addu    t5, t5, t6                  // t5 = pika_headband_table + port
+        // lw      t4, 0x0028(t3)           // original line 1
+        lli     t6, Character.id.PIKACHU    // t6 = id.PIKACHU
+        lw      t0, 0x0000(s6)              // t0 = character id
+        bnel    t6, t0, _end                // skip if character id != PIKACHU...
+        sb      r0, 0x0000(t5)              // ...and reset px is_pika_headband to FALSE
+
+        // if the character is Pikachu
+        lbu     t0, 0x0000(t5)              // t0 = px is_pika_headband
+        beql    t0, r0, _end                // branch if px is_pika_headband = TRUE...
+        nop
+        lw      t4, 0x0048(t3)              // ...and load Pikachu Headband Main pointer into t4
 
         _end:
         j       _return
@@ -1130,7 +1197,7 @@ scope Sonic {
         // s6 = port_id of other
         // 0x006C(sp) = port_id of self
         lli     t1, Character.id.DEDEDE     // t1 = id.DEDEDE
-        bne     s5, t1, _sonic_check        // if not Dedede, skip
+        bne     s5, t1, _pikachu_check      // if not Dedede, skip
         nop // change to lli t1, Character.id.SONIC
 
         li      at, bald_table              // at = bald_table
@@ -1144,6 +1211,26 @@ scope Sonic {
         lbu     t1, 0x0000(t1)              // t1 = is_bald for other
         bnezl   t1, pc() + 8                // if bald, increase costume_id for other
         addiu   t9, t9, 0x0006              // t9 = fudged costume_id for other
+
+        b       _end
+        nop
+
+        _pikachu_check:
+        lli     t1, Character.id.PIKACHU    // t1 = id.Pikachu
+        bne     s5, t1, _sonic_check        // if not Pikachu, skip
+        nop // change to lli t1, Character.id.SONIC
+
+        li      at, pika_headband_table     // at = pika_headband_table
+        lw      t1, 0x006C(sp)              // t1 = port_id for self
+        addu    t1, at, t1                  // t1 = pika_headband_table + port for self
+        lbu     t1, 0x0000(t1)              // t1 = is_pika_headband for self
+        bnezl   t1, pc() + 8                // if pika_headband, increase costume_id for self
+        addiu   v0, v0, 0x0008              // t9 = fudged costume_id for self
+
+        addu    t1, at, s6                  // t1 = pika_headband_table + port for other
+        lbu     t1, 0x0000(t1)              // t1 = is_pika_headband for other
+        bnezl   t1, pc() + 8                // if pika_headband, increase costume_id for other
+        addiu   t9, t9, 0x0008              // t9 = fudged costume_id for other
 
         b       _end
         nop
@@ -1233,6 +1320,25 @@ scope Sonic {
     db 0x00; db 0x00; db 0x00; db 0x00      // p1, p2, p3, p4
 
     bald_select_anim_frame:
+    float32 0                               // p1
+    float32 0                               // p2
+    float32 0                               // p3
+    float32 0                               // p4
+
+    // Pikachu Headband
+    pika_headband_table:
+    db 0x00; db 0x00; db 0x00; db 0x00      // p1, p2, p3, p4
+
+    // bald_flag_1p:
+    // dw 0x00000000                           // hmn
+
+    // bald_flags_training:
+    // dh 0x0000; dh 0x0000                    // hmn, cpu
+
+    pika_headband_flags_vs:
+    db 0x00; db 0x00; db 0x00; db 0x00      // p1, p2, p3, p4
+
+    pika_headband_select_anim_frame:
     float32 0                               // p1
     float32 0                               // p2
     float32 0                               // p3

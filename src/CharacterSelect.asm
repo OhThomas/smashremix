@@ -208,7 +208,8 @@ scope CharacterSelect {
     dw  0xAEE0                              // 0x06 - YOSHI
     dw  0xCA90                              // 0x07 - CAPTAIN
     dw  0x1D8C0 + 0xC18 + 0x740 + 0xB50 + 0x400 + 0x3F980 + 0x30B0  // 0x08 - KIRBY
-    dw  0x9E30                              // 0x09 - PIKACHU
+    // dw  0x9E30                              // 0x09 - PIKACHU
+    dw  0x9E30 + 0x12000                    // 0x09 - PIKACHU w/ headband
     dw  0x7FE0                              // 0x0A - JIGGLY
     dw  0xC5C0                              // 0x0B - NESS
     dw  0x2D40 + 0x200                      // 0x0C - BOSS
