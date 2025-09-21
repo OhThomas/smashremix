@@ -3330,6 +3330,8 @@
 1541 Dedede Cowboy Character
 1542 Pikachu Headband Main
 1543 Pikachu Headband Character
+1544 Fox Headphones Main
+1545 Fox Headphones Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

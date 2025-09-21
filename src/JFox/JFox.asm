@@ -46,12 +46,12 @@ scope JFox {
     OS.patch_end()
 
     // Update variants with same model
-    Character.table_patch_start(variants_with_same_model, Character.id.JFOX, 0x4)
-    db      Character.id.FOX
-    db      Character.id.NONE
-    db      Character.id.NONE
-    db      Character.id.NONE
-    OS.patch_end()
+    // Character.table_patch_start(variants_with_same_model, Character.id.JFOX, 0x4)
+    // db      Character.id.FOX
+    // db      Character.id.NONE
+    // db      Character.id.NONE
+    // db      Character.id.NONE
+    // OS.patch_end()
 }
 
     // @ Description

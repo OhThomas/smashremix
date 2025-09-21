@@ -241,7 +241,8 @@ scope CharacterSelect {
     dw  0x18820 + 0x200                     // 0x26 - LUCAS
     dw  0x12170                             // 0x27 - JLINK
     dw  0x0                                 // 0x28 - JFALCON
-    dw  0x0                                 // 0x29 - JFOX
+    // dw  0x0                                 // 0x29 - JFOX
+    dw  0x89B0 + 0x200                      // 0x29 - JFOX w/ HEADPHONES
     dw  0x772C                              // 0x2A - JMARIO
     dw  0x8110                              // 0x2B - JLUIGI
     dw  0x0                                 // 0x2C - JDK
@@ -388,7 +389,8 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.LUCAS, req/LUCAS_MODEL)
     add_alt_req_list(Character.id.JLINK, req/JLINK_MODEL)
     add_alt_req_list(Character.id.JFALCON, req/CAPTAIN_MODEL)
-    add_alt_req_list(Character.id.JFOX, req/FOX_MODEL)
+    // add_alt_req_list(Character.id.JFOX, req/FOX_MODEL)
+    add_alt_req_list(Character.id.JFOX, req/FOX_HEADPHONES_MODEL)
     add_alt_req_list(Character.id.JMARIO, req/JMARIO_MODEL)
     add_alt_req_list(Character.id.JLUIGI, req/JLUIGI_MODEL)
     add_alt_req_list(Character.id.JDK, req/DONKEY_MODEL)

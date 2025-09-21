@@ -2568,7 +2568,8 @@ scope Character {
         table:
         constant TABLE_ORIGIN(origin())
         db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x00 - MARIO
-        db  id.JFOX;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x01 - FOX
+        // db  id.JFOX;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x01 - FOX
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x01 - FOX
         db  id.JDK;     db  id.GDONKEY;  db  id.NONE;   db  id.NONE        // 0x02 - DONKEY
         db  id.JSAMUS;  db  id.ESAMUS;   db  id.NONE;   db  id.NONE        // 0x03 - SAMUS
         db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x04 - LUIGI
@@ -3620,7 +3621,8 @@ scope Character {
     // 0x28 - JFALCON
     define_character(JFALCON, CAPTAIN, File.JFALCON_MAIN, 0x0EB, 0, 0x14C, 0x14E, 0, 0x15E, 0x14D, 0, 0x488, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FALCON, Stages.id.BTP_FALCON, Stages.id.BTT_GND, Stages.id.BTP_GND, sound_type.J, variant_type.J)
     // 0x29 - JFOX
-    define_character(JFOX, FOX, File.JFOX_MAIN, 0x0D0, 0, 0x139, 0x13A, File.JFOX_PROJECTILE, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.J, variant_type.J)
+    // define_character(JFOX, FOX, File.JFOX_MAIN, 0x0D0, 0, 0x139, 0x13A, File.JFOX_PROJECTILE, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.J, variant_type.J)
+    define_character(JFOX, FOX, File.JFOX_MAIN, 0x0D0, 0, File.FOX_HEADPHONES_CHARACTER, 0x13A, File.JFOX_PROJECTILE, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.J, variant_type.J)
     // 0x2A - JMARIO
     define_character(JMARIO, MARIO, File.JMARIO_MAIN, 0x0CA, 0, File.JMARIO_CHARACTER, 0x12A, File.JMARIO_PROJECTILE_HITBOX, 0x164, 0x129, 0, 0x428, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_MARIO, Stages.id.BTP_MARIO, Stages.id.BTT_DRM, Stages.id.BTP_DRM, sound_type.J, variant_type.J)
     // 0x2B - JLUIGI
