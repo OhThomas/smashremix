@@ -24,6 +24,10 @@ scope MarioShared {
     Character.table_patch_start(pipe_turn, Character.id.JLUIGI, 0x1)
     db      OS.TRUE;     OS.patch_end();
 
+    // Set pipe turn rotation for Dale Luigi
+    Character.table_patch_start(pipe_turn, Character.id.DLUIGI, 0x1)
+    db      OS.TRUE;     OS.patch_end();
+
     // Set pipe turn rotation for MLUIGI
     Character.table_patch_start(pipe_turn, Character.id.MLUIGI, 0x1)
     db      OS.TRUE;     OS.patch_end();

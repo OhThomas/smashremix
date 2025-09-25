@@ -7,7 +7,10 @@ ADD,,.\original\1542.bin,1,0330,0000,.\original\1542.txt,2
 ADD,,.\original\1543.bin,0,0004,6784,.\original\1543.txt,2
 ADD,,.\original\1544.bin,1,0140,0000,.\original\1544.txt,2
 ADD,,.\original\1545.bin,0,0004,6364,.\original\1545.txt,2
+ADD,,.\original\1546.bin,1,0114,0000,.\original\1546.txt,2
+ADD,,.\original\1547.bin,0,0008,5E94,.\original\1547.txt,2
 MODIFY,00F3,.\original\00F3.bin,1,0330,0000,.\original\00F3.txt,2
 MODIFY,0FFD,.\original\0FFD.bin,1,026C,0000,.\original\0FFD.txt,2
 MODIFY,096F,.\original\096F.bin,1,0140,0000,.\original\096F.txt,2
+MODIFY,0A06,.\original\0A06.bin,1,0210,3FFFC,,2
 END,,,,,,,

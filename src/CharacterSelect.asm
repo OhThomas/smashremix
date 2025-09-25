@@ -242,7 +242,7 @@ scope CharacterSelect {
     dw  0x12170                             // 0x27 - JLINK
     dw  0x0                                 // 0x28 - JFALCON
     // dw  0x0                                 // 0x29 - JFOX
-    dw  0x89B0 + 0x200                      // 0x29 - JFOX w/ HEADPHONES
+    dw  0x8C38 + 0x200                      // 0x29 - JFOX w/ HEADPHONES
     dw  0x772C                              // 0x2A - JMARIO
     dw  0x8110                              // 0x2B - JLUIGI
     dw  0x0                                 // 0x2C - JDK
@@ -285,6 +285,8 @@ scope CharacterSelect {
 
     // COSTUMES
     // dw  0x173C8 + 0x223C8 + 0x12100 + 0x173C8 + 0x200                     // DEDEDE COWBOY
+    // dw  0x12000                            // 0x4D - DLUIGI w/ DALE HAT
+    dw  0x8A90                              // 0x4D - DLUIGI w/ DALE HAT
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -427,8 +429,9 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.DRL, req/DRL_MODEL)
     add_alt_req_list(Character.id.LANKY, req/LANKY_MODEL)
 
-    //Costumes
+    // COSTUMES
     // add_alt_req_list(Character.id.DEDEDECB, req/DEDEDECB_MODEL)
+    add_alt_req_list(Character.id.DLUIGI, req/DLUIGI_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -3051,6 +3054,7 @@ scope CharacterSelect {
         constant EBI(0x00027C28 + 0x10)
         constant METALLUIGI(0x00028CE0 + 0x10)
         constant DRAGONKING(0x00029D98 + 0x10)
+        constant DLUIGI(0x00005378)
         // custom
         constant FALCO(0x0000D978)
         constant GND(0x0000EA38)
@@ -3423,6 +3427,7 @@ scope CharacterSelect {
         constant ROY(0x00026840 + 0x10)
         constant DRL(0x00026C58 + 0x10)
         constant LANKY(0x00027130 + 0x10)
+        constant DLUIGI(0x00001B18)
         // POLYGONS
         constant NWARIO(0x0001CB28)
         constant NLUCAS(0x0001D008)
@@ -5013,6 +5018,7 @@ scope CharacterSelect {
         constant DSAMUS(0x2D10 + 0x10)
         constant LUCAS(0x2DE8 + 0x10)
         constant ROY(0x2EC0 + 0x10)
+        constant DLUIGI(0x6100 + 0x10)
     }
 
     // @ Description
@@ -5095,6 +5101,9 @@ scope CharacterSelect {
         lli     t2, Character.id.ROY
         beql    a1, t2, _draw_icon          // If ROY, then draw ROY stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.ROY // a1 = ROY footer struct
+        lli     t2, Character.id.DLUIGI
+        beql    a1, t2, _draw_icon          // If DLUIGI, then draw DLUIGI stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.DLUIGI // a1 = DLUIGI footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7057,6 +7066,7 @@ scope CharacterSelect {
     add_to_css(Character.id.JFOX,   FGM.announcer.names.JFOX,           1.50,         0x00010004, STARFOX,      name_texture.FOX,            portrait_offsets.JFOX,           15)
     add_to_css(Character.id.JMARIO, FGM.announcer.names.MARIO,          1.50,         0x00010003, MARIO_BROS,   name_texture.MARIO,          portrait_offsets.JMARIO,         3)
     add_to_css(Character.id.JLUIGI, FGM.announcer.names.LUIGI,          1.50,         0x00010001, MARIO_BROS,   name_texture.LUIGI,          portrait_offsets.JLUIGI,         2)
+    //add_to_css(Character.id.DLUIGI, FGM.announcer.names.LUIGI,          1.50,         0x00010001, MARIO_BROS,   name_texture.LUIGI,          portrait_offsets.DLUIGI,         2)
     add_to_css(Character.id.JDK,    FGM.announcer.names.DONKEY_KONG,    2,            0x00010001, DONKEY_KONG,  name_texture.JDK,            portrait_offsets.JDK,            4)
     add_to_css(Character.id.EPIKA,  FGM.announcer.names.EPIKA,          1.50,         0x00010001, POKEMON,      name_texture.PIKACHU,        portrait_offsets.EPIKA,          16)
     add_to_css(Character.id.JPUFF,  FGM.announcer.names.JPUFF,          1.50,         0x00010002, POKEMON,      name_texture.JPUFF,          portrait_offsets.JPUFF,          17)
@@ -7092,6 +7102,7 @@ scope CharacterSelect {
     add_to_css(Character.id.LANKY,  FGM.announcer.names.LANKY,          2,            0x00010004, DONKEY_KONG,  name_texture.LANKY,          portrait_offsets.LANKY,          BOOKEND_BONUS_PORTRAIT)
     // add_to_css(Character.id.DEDEDECB, FGM.announcer.names.DEDEDE,         2,            0x00010001, KIRBY,        name_texture.DEDEDE,         portrait_offsets.DEDEDE,         10)
     // ADD NEW CHARACTERS HERE
+    add_to_css(Character.id.DLUIGI, FGM.announcer.names.LUIGI,          1.50,         0x00010001, MARIO_BROS,   name_texture.LUIGI,          portrait_offsets.DLUIGI,         2)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

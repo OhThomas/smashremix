@@ -2789,4 +2789,7 @@ scope SinglePlayer {
     add_to_single_player(Character.id.ELINK,   name_texture.ELINK,   name_delay.ELINK)
     add_to_single_player(Character.id.EPIKA,   name_texture.EPIKA,   name_delay.EPIKA)
     add_to_single_player(Character.id.EPUFF,   name_texture.EPUFF,   name_delay.EPUFF)
+
+    // COSTUME CLONES    character id          name texture          name delay
+    add_to_single_player(Character.id.DLUIGI,  name_texture.LUIGI,   name_delay.LUIGI)
 } // __SINGLE_PLAYER__

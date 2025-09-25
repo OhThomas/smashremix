@@ -176,6 +176,8 @@ include "src/JFox/JFox.asm"
 include "src/JMario/JMario.asm"
 // JLUIGI
 include "src/JLuigi/JLuigi.asm"
+// DALE LUIGI
+include "src/DLuigi/DLuigi.asm"
 // JDK
 include "src/JDK/JDK.asm"
 // EPIKA

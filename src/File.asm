@@ -3324,6 +3324,8 @@ scope File {
     constant PIKACHU_HEADBAND_CHARACTER(0x1543)
     constant FOX_HEADPHONES_MAIN(0x1544)
     constant FOX_HEADPHONES_CHARACTER(0x1545)
+    constant LUIGI_DALE_MAIN(0x1546)
+    constant LUIGI_DALE_CHARACTER(0x1547)
 
  }
 

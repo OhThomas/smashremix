@@ -40,6 +40,7 @@ scope luigi_costumes {
     // Register extra costumes
     Costumes.register_extra_costumes_for_char(Character.id.LUIGI)
     Costumes.register_extra_costumes_for_char(Character.id.JLUIGI)
+    Costumes.register_extra_costumes_for_char(Character.id.DLUIGI)
 
     // Costume 0x4
     scope costume_0x4 {

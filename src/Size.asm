@@ -2299,6 +2299,8 @@ scope Size {
             beq     a1, at, _apply_scale    // apply scale if J Mario
             lli     at, Character.id.JLUIGI
             beq     a1, at, _apply_scale    // apply scale if J Luigi
+            lli     at, Character.id.DLUIGI
+            beq     a1, at, _apply_scale    // apply scale if Dale Luigi
             lli     at, Character.id.METAL
             beq     a1, at, _apply_scale    // apply scale if Metal Mario
             lli     at, Character.id.MLUIGI

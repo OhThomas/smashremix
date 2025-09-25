@@ -3332,6 +3332,8 @@
 1543 Pikachu Headband Character
 1544 Fox Headphones Main
 1545 Fox Headphones Character
+1546 Luigi Dale Main
+1547 Luigi Dale Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

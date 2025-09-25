@@ -1081,6 +1081,7 @@ scope Costumes {
         db 0x07                             // Dr. Luigi
         db 0x07                             // Lanky Kong
         // db 0x01                             // DDDCB
+        db 0x03                             // Dale Luigi
         // Polygons
         db 0x05                             // Polygon Wario
         db 0x05                             // Polygon Lucas

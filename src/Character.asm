@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(68)
+    constant ADD_CHARACTERS(69)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -2534,7 +2534,7 @@ scope Character {
         db  id.NONE;    db  id.NFOX;     db  id.JFOX;   db  id.NONE        // 0x01 - FOX
         db  id.GDONKEY; db  id.NDONKEY;  db  id.JDK;    db  id.NONE        // 0x02 - DONKEY
         db  id.NONE;    db  id.NSAMUS;   db  id.JSAMUS; db  id.ESAMUS      // 0x03 - SAMUS
-        db  id.MLUIGI;  db  id.NLUIGI;   db  id.JLUIGI; db  id.NONE        // 0x04 - LUIGI
+        db  id.MLUIGI;  db  id.NLUIGI;   db  id.JLUIGI; db  id.DLUIGI      // 0x04 - LUIGI
         db  id.BOSS;    db  id.NLINK;    db  id.JLINK;  db  id.ELINK       // 0x05 - LINK
         db  id.NONE;    db  id.NYOSHI;   db  id.JYOSHI; db  id.NONE        // 0x06 - YOSHI
         db  id.NONE;    db  id.NCAPTAIN; db  id.JFALCON;db  id.NONE        // 0x07 - CAPTAIN
@@ -3699,6 +3699,8 @@ scope Character {
 
     // DEDEDECB
     // define_character(DEDEDECB, CAPTAIN,  File.DEDEDE_COWBOY_MAIN, 0x0EB, 0, File.DEDEDE_COWBOY_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
+    // 0x4D D_LUIGI
+    define_character(DLUIGI, LUIGI, File.LUIGI_DALE_MAIN, 0x0DC, 0, File.LUIGI_DALE_CHARACTER, 0x12A, 0x0DE , 0x164, 0x129, 0, 0x580, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_LUIGI, Stages.id.BTP_LUIGI, Stages.id.BTT_MARIO, Stages.id.BTP_MARIO, sound_type.U, variant_type.SPECIAL)
 
     // REMIX POLYGONS
     // NWARIO
