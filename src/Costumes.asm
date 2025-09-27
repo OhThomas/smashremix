@@ -771,9 +771,6 @@ scope Costumes {
         lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
         beq     t8, a2, _costume_check      // if Dedede, check to see if we need to change model
         nop
-        lli     a2, Character.id.PIKACHU    // a2 = id.PIKACHU
-        beq     t8, a2, _costume_check      // if Pikachu, check to see if we need to change model
-        nop
 
         b       _determine_screen           // if not character with alt models, skip
         lw      at, 0x0018(sp)              // at = direction pressed (up = 0, right = 1, down = 2, left = 3)
@@ -827,16 +824,10 @@ scope Costumes {
         beq     t8, a2, _change_costume_table// if Sonic, set a1 to classic_table
         nop
 
-        // if Dedede then use bald_table
+        // if Dedede then use bald_table (uncomment and append new characters)
         li      a1, Sonic.bald_table        // a1 = bald_table
-        lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
-        beq     t8, a2, _change_costume_table// if Dedede, set a1 to bald_table
-        nop
-
-        // if Pikachu then use pika_headband_table
-        li      a1, Sonic.pika_headband_table// a1 = pika_headband_table
-        // lli     a2, Character.id.PIKACHU     // a2 = id.PIKACHU
-        // beq     t8, a2, _change_costume_table// if Pikachu, set a1 to pika_headband_table
+        // lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
+        // beq     t8, a2, _change_costume_table// if Dedede, set a1 to bald_table
         // nop
         
         _change_costume_table:
@@ -851,14 +842,11 @@ scope Costumes {
         beq     t8, a2, _change_animation_frame// if Sonic, use a1 as select_anim_frame
         nop
 
-        // if Dedede then set a1 to bald_select_anim_frame
+        // if Dedede then set a1 to bald_select_anim_frame (uncomment and append new characters)
         li      a1, Sonic.bald_select_anim_frame// a1 = bald_select_anim_frame
-        lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
-        beq     t8, a2, _change_animation_frame// if Dedede, use a1 as select_anim_frame
-        nop
-        
-        // if Pikachu then set a1 to pika_headband_select_anim_frame
-        li      a1, Sonic.pika_headband_select_anim_frame// a1 = pika_headband_select_anim_frame
+        // lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
+        // beq     t8, a2, _change_animation_frame// if Dedede, use a1 as select_anim_frame
+        // nop
 
         _change_animation_frame:
         sll     at, a0, 0x2                 // at = port * 4
@@ -915,14 +903,11 @@ scope Costumes {
         beq     t8, a2, _player_frame       // if Sonic, set frame to 193
         nop                                 // put lui at, 0x4341 here
 
-        // If Dedede, set at to end of DDD victory animation (0x4304) 
+        // If Dedede, set at to end of DDD victory animation (0x4304) (uncomment and append new characters)
         lui     at, 0x4304                  // ...set current animation frame to DDD end animation
-        lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
-        beq     t8, a2, _player_frame       // if Dedede, set frame to end
-        nop                                 // put lui at, 0x4304 here
-        
-        // If Pikachu, set at to end of Pika victory animation (0x42F0) 
-        lui     at, 0x42F0                  // ...set current animation frame to Pikachu end animation
+        // lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
+        // beq     t8, a2, _player_frame       // if Dedede, set frame to end
+        // nop                                 // put lui at, 0x4304 here
 
         _player_frame:
         sw      at, 0x0000(a1)              // update px select_anim_frame
@@ -1081,6 +1066,7 @@ scope Costumes {
         db 0x07                             // Dr. Luigi
         db 0x07                             // Lanky Kong
         // db 0x01                             // DDDCB
+        db 0x03                             // Headband Pikachu
         db 0x03                             // Dale Luigi
         // Polygons
         db 0x05                             // Polygon Wario
@@ -1815,19 +1801,6 @@ scope Costumes {
     include "costumes/NBanjo.asm"
     include "costumes/NPeach.asm"
     include "costumes/NCrash.asm"
-
-    // San Antonio Costumes file ID/pointer overrides for vanilla characters
-    // Pikachu (ROM offset of struct = A04E4)
-    pushvar origin, base
-    origin 0xA0504
-    dw File.PIKACHU_HEADBAND_MAIN           // Changing File 9 to Pikachu Headband Main
-    pullvar base, origin
-
-    // putting file pointer to 0x801310CC because file pointers around it are set up to neighboring addresses
-    pushvar origin, base
-    origin 0xA052C
-    dw 0x801310CC                           // Changing File 9 pointer address (or 0x80124CE0)
-    pullvar base, origin
 
     // @ Description
     // Revises attribute location within main file to adjust for Polygon Characters and Metal Mario's new costumes

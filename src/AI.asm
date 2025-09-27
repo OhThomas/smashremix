@@ -2461,6 +2461,8 @@ scope AI {
         // if here, level 10. check character id
         addiu   at, r0, Character.id.PIKA   // at = pikas ID
         beq     at, t6, _no_shoot           // branch if pika
+        addiu   at, r0, Character.id.HBPIKA // at = hbpikas ID
+        beq     at, t6, _no_shoot           // branch if epika
         addiu   at, r0, Character.id.EPIKA  // at = epikas ID
         beq     at, t6, _no_shoot           // branch if epika
         addiu   at, r0, Character.id.JPIKA  // at = jpikas ID
@@ -5106,6 +5108,11 @@ scope AI {
             // These patches will prevent non-level 10 puffs from using DSP
             // PIKA
             Character.table_patch_start(ai_attack_prevent, Character.id.PIKA, 0x4)
+            dw      PREVENT_ATTACK.ROUTINE.LVL_10_PREVENT_NSP
+            OS.patch_end();
+
+            // HBPIKA
+            Character.table_patch_start(ai_attack_prevent, Character.id.HBPIKA, 0x4)
             dw      PREVENT_ATTACK.ROUTINE.LVL_10_PREVENT_NSP
             OS.patch_end();
 

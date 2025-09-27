@@ -480,6 +480,7 @@
         set_charged_smash_attacks(Character.id.MLUIGI, entry_mario)
         set_charged_smash_attacks(Character.id.EBI, entry_ebisumaru)
         set_charged_smash_attacks(Character.id.DRAGONKING, entry_dragonking)
+        set_charged_smash_attacks(Character.id.HBPIKA, entry_pikachu)
         set_charged_smash_attacks(Character.id.DLUIGI, entry_mario)
         // REMIX POLYGONS
         set_charged_smash_attacks(Character.id.NWARIO, entry_wario)

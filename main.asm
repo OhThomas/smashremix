@@ -190,6 +190,8 @@ include "src/EPuff/EPuff.asm"
 include "src/JYoshi/JYoshi.asm"
 // JPIKA
 include "src/JPika/JPika.asm"
+// HEADBAND PIKA
+include "src/HBPika/HBPika.asm"
 // ESAMUS
 include "src/ESamus/ESamus.asm"
 // BOWSER

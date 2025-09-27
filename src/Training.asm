@@ -3059,7 +3059,8 @@ scope Training {
     string_roy:; char_0x4A:; db "Roy", 0x00
     string_drluigi:; char_0x4B:; db "Dr. Luigi", 0x00
     string_lanky:; char_0x4C:; db "Lanky Kong", 0x00
-    string_dluigi:; char_0x4D:; db "Dale Luigi", 0x00
+    string_hbpika:; char_0x4D:; db "Headband Pikachu", 0x00
+    string_dluigi:; char_0x4E:; db "Dale Luigi", 0x00
     OS.align(4)
 
     string_table_char:
@@ -3123,7 +3124,8 @@ scope Training {
     dw char_0x47            // DRAGONKING
     dw char_0x46            // EBISUMARU
     dw char_0x36            // PIANO
-    dw char_0x4D            // DLUIGI
+    dw char_0x4D            // HBPIKA
+    dw char_0x4E            // DLUIGI
     dw char_0x0D            // METAL MARIO
     dw char_0x45            // METAL LUIGI
     dw char_0x1A            // GIANT DK
@@ -3241,6 +3243,7 @@ scope Training {
         register_character_id(DRAGONKING);
         register_character_id(EBI);
         register_character_id(PIANO);
+        register_character_id(HBPIKA);
         register_character_id(DLUIGI);
         // ADD BONUS CHARACTERS HERE
 
@@ -3346,6 +3349,7 @@ scope Training {
     db Character.id.DRAGONKING
     db Character.id.EBI
     db Character.id.PIANO
+    db Character.id.HBPIKA
     db Character.id.DLUIGI
 
     db Character.id.METAL
@@ -3467,6 +3471,7 @@ scope Training {
     db id.DRL
     db id.LANKY
     // ADD NEW CHARACTERS Here
+    db id.HBPIKA
     db id.DLUIGI
 
     // REMIX POLYGONS

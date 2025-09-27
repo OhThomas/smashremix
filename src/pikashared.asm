@@ -134,6 +134,8 @@ scope PikaShared {
     // Assign custom recovery logic to all Pikas
     Character.table_patch_start(recovery_logic, Character.id.PIKACHU, 0x4)
     dw recovery_logic; OS.patch_end()
+    Character.table_patch_start(recovery_logic, Character.id.HBPIKA, 0x4)
+    dw recovery_logic; OS.patch_end()
     Character.table_patch_start(recovery_logic, Character.id.EPIKA, 0x4)
     dw recovery_logic; OS.patch_end()
     Character.table_patch_start(recovery_logic, Character.id.JPIKA, 0x4)
@@ -148,6 +150,8 @@ scope PikaShared {
         OS.patch_end()
 
         beq     v0, at, _rapid_jump             // modified original line 1
+        addiu   at, r0, Character.id.HBPIKA     // HBPIKA ID
+        beq     v0, at, _rapid_jump
         addiu   at, r0, Character.id.EPIKA      // EPIKA ID
         beq     v0, at, _rapid_jump
         addiu   at, r0, Character.id.JPIKA      // JPIKA ID
@@ -170,6 +174,8 @@ scope PikaShared {
         OS.patch_end()
 
         beq     v1, at, _rapid_jump_2             // modified original line 1
+        addiu   at, r0, Character.id.HBPIKA     // HBPIKA ID
+        beq     v1, at, _rapid_jump_2
         addiu   at, r0, Character.id.EPIKA      // EPIKA ID
         beq     v1, at, _rapid_jump_2
         addiu   at, r0, Character.id.JPIKA      // JPIKA ID
@@ -192,6 +198,8 @@ scope PikaShared {
         OS.patch_end()
 
         beq     v0, at, _fsmash_jump          // modified original line 1
+        addiu   at, r0, Character.id.HBPIKA   // HBPIKA ID
+        beq     v0, at, _fsmash_jump
         addiu   at, r0, Character.id.EPIKA    // EPIKA ID
         beq     v0, at, _fsmash_jump
         addiu   at, r0, Character.id.JPIKA    // JPIKA ID
@@ -214,6 +222,8 @@ scope PikaShared {
         OS.patch_end()
 
         beq     v0, at, _fsmash_jump_2          // modified original line 1
+        addiu   at, r0, Character.id.HBPIKA   // HBPIKA ID
+        beq     v0, at, _fsmash_jump_2
         addiu   at, r0, Character.id.EPIKA    // EPIKA ID
         beq     v0, at, _fsmash_jump_2
         addiu   at, r0, Character.id.JPIKA    // JPIKA ID
@@ -236,6 +246,8 @@ scope PikaShared {
         OS.patch_end()
 
         beq     v0, at, _fsmash_jump_3          // modified original line 1
+        addiu   at, r0, Character.id.HBPIKA   // HBPIKA ID
+        beq     v0, at, _fsmash_jump_3
         addiu   at, r0, Character.id.EPIKA    // EPIKA ID
         beq     v0, at, _fsmash_jump_3
         addiu   at, r0, Character.id.JPIKA    // JPIKA ID
@@ -314,6 +326,9 @@ scope PikaShared {
         lw      t1, 0x007C(t1)              // load player struct from projectile struct
         lw      t1, 0x0008(t1)              // load character ID from player struct
 
+        ori     t2, r0, Character.id.HBPIKA // t2 = id.HBPIKA
+        li      a0, thunder_anim_struct_hbpika    // a0 = thunder_struct_hbpika
+        beq     t1, t2, _end                // end if character id = HBPIKA
         ori     t2, r0, Character.id.EPIKA  // t2 = id.EPIKA
         li      a0, thunder_anim_struct     // a0 = thunder_struct
         beq     t1, t2, _end                // end if character id = EPIKA
@@ -455,6 +470,9 @@ scope PikaShared {
         lw      t1, 0x006C(sp)              // load player struct from stack
         lw      t1, 0x0008(t1)              // load character ID from player struct
 
+        ori     t2, r0, Character.id.HBPIKA // t2 = id.HBPIKA
+        li      a1, thunder_special_struct_1_hbpika    // a0 = thunder_struct_hbpika
+        beq     t1, t2, _end                // end if character id = HBPIKA
         ori     t2, r0, Character.id.EPIKA  // t2 = id.EPIKA
         li      a1, thunder_special_struct_1     // a0 = thunder_struct
         beq     t1, t2, _end                // end if character id = EPIKA
@@ -490,6 +508,9 @@ scope PikaShared {
         lw      t1, 0x007C(t0)              // load player struct from projectile struct
         lw      t1, 0x0008(t1)              // load character ID from player struct
 
+        ori     t2, r0, Character.id.HBPIKA  // t2 = id.HBPIKA
+        li      a1, thunder_special_struct_2_hbpika    // a0 = thunder_struct_hbpika
+        beq     t1, t2, _end                // end if character id = HBPIKA
         ori     t2, r0, Character.id.EPIKA  // t2 = id.EPIKA
         li      a1, thunder_special_struct_2     // a0 = thunder_struct
         beq     t1, t2, _end                // end if character id = EPIKA
@@ -509,6 +530,28 @@ scope PikaShared {
         j       _return                     // return
         nop
     }
+
+    // HBPIKA
+
+    OS.align(16)
+    thunder_anim_struct_hbpika:
+    dw  0x020F0000
+    dw  Character.HBPIKA_file_4_ptr
+    OS.copy_segment(0xA9A2C, 0x20)
+
+    OS.align(16)
+    thunder_special_struct_1_hbpika:
+    dw 0x02000000
+    dw 0x0000000B
+    dw Character.HBPIKA_file_1_ptr
+    OS.copy_segment(0x103B6C, 0x40)
+
+    OS.align(16)
+    thunder_special_struct_2_hbpika:
+    dw 0x02000000
+    dw 0x0000000C
+    dw Character.HBPIKA_file_1_ptr
+    OS.copy_segment(0x103BA0, 0x40)
 
     // EPIKA
 
