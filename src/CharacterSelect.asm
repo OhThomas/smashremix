@@ -240,8 +240,7 @@ scope CharacterSelect {
     dw  0x18820 + 0x200                     // 0x26 - LUCAS
     dw  0x12170                             // 0x27 - JLINK
     dw  0x0                                 // 0x28 - JFALCON
-    // dw  0x0                                 // 0x29 - JFOX
-    dw  0x8C38 + 0x200                      // 0x29 - JFOX w/ HEADPHONES
+    dw  0x0                                 // 0x29 - JFOX
     dw  0x772C                              // 0x2A - JMARIO
     dw  0x8110                              // 0x2B - JLUIGI
     dw  0x0                                 // 0x2C - JDK
@@ -285,6 +284,7 @@ scope CharacterSelect {
     // COSTUMES
     // dw  0x173C8 + 0x223C8 + 0x12100 + 0x173C8 + 0x200                     // DEDEDE COWBOY
     dw  0xA340 + 0x200                      // 0x4D - PIKACHU w/ HEADBAND
+    dw  0x8C40 + 0x200                      // 0x29 - FOX w/ HEADPHONES
     dw  0x8A90                              // 0x4E - LUIGI w/ DALE HAT
 
     // REMIX POLYGONS
@@ -390,8 +390,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.LUCAS, req/LUCAS_MODEL)
     add_alt_req_list(Character.id.JLINK, req/JLINK_MODEL)
     add_alt_req_list(Character.id.JFALCON, req/CAPTAIN_MODEL)
-    // add_alt_req_list(Character.id.JFOX, req/FOX_MODEL)
-    add_alt_req_list(Character.id.JFOX, req/FOX_HEADPHONES_MODEL)
+    add_alt_req_list(Character.id.JFOX, req/FOX_MODEL)
     add_alt_req_list(Character.id.JMARIO, req/JMARIO_MODEL)
     add_alt_req_list(Character.id.JLUIGI, req/JLUIGI_MODEL)
     add_alt_req_list(Character.id.JDK, req/DONKEY_MODEL)
@@ -431,6 +430,7 @@ scope CharacterSelect {
     // COSTUMES
     // add_alt_req_list(Character.id.DEDEDECB, req/DEDEDECB_MODEL)
     add_alt_req_list(Character.id.HBPIKA, req/HBPIKA_MODEL)
+    add_alt_req_list(Character.id.HPFOX, req/FOX_HEADPHONES_MODEL)
     add_alt_req_list(Character.id.DLUIGI, req/DLUIGI_MODEL)
 
     // POLYGONS
@@ -3055,6 +3055,7 @@ scope CharacterSelect {
         constant METALLUIGI(0x00028CE0 + 0x10)
         constant DRAGONKING(0x00029D98 + 0x10)
         constant HBPIKA(0x0000A738)
+        constant HPFOX(0x00002138)
         constant DLUIGI(0x00005378)
         // custom
         constant FALCO(0x0000D978)
@@ -3429,6 +3430,7 @@ scope CharacterSelect {
         constant DRL(0x00026C58 + 0x10)
         constant LANKY(0x00027130 + 0x10)
         constant HBPIKA(0x000032F8)
+        constant HPFOX(0x000025B8)
         constant DLUIGI(0x00001B18)
         // POLYGONS
         constant NWARIO(0x0001CB28)
@@ -5021,6 +5023,7 @@ scope CharacterSelect {
         constant LUCAS(0x2DE8 + 0x10)
         constant ROY(0x2EC0 + 0x10)
         constant HBPIKA(0x61D8 + 0x10)
+        constant HPFOX(0x62A8 + 0x10)
         constant DLUIGI(0x6100 + 0x10)
     }
 
@@ -5107,6 +5110,9 @@ scope CharacterSelect {
         lli     t2, Character.id.HBPIKA
         beql    a1, t2, _draw_icon          // If HBPIKA, then draw HBPIKA stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.HBPIKA // a1 = HBPIKA footer struct
+        lli     t2, Character.id.HPFOX
+        beql    a1, t2, _draw_icon          // If HPFOX, then draw HPFOX stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.HPFOX // a1 = HPFOX footer struct
         lli     t2, Character.id.DLUIGI
         beql    a1, t2, _draw_icon          // If DLUIGI, then draw DLUIGI stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.DLUIGI // a1 = DLUIGI footer struct
@@ -7108,6 +7114,7 @@ scope CharacterSelect {
     // add_to_css(Character.id.DEDEDECB, FGM.announcer.names.DEDEDE,         2,            0x00010001, KIRBY,        name_texture.DEDEDE,         portrait_offsets.DEDEDE,         10)
     // ADD NEW CHARACTERS HERE
     add_to_css(Character.id.HBPIKA, FGM.announcer.names.PIKACHU,        1.50,         0x00010001, POKEMON,      name_texture.PIKACHU,        portrait_offsets.HBPIKA,         16)
+    add_to_css(Character.id.HPFOX,  FGM.announcer.names.FOX,            1.50,         0x00010004, STARFOX,      name_texture.FOX,            portrait_offsets.HPFOX,          15)
     add_to_css(Character.id.DLUIGI, FGM.announcer.names.LUIGI,          1.50,         0x00010001, MARIO_BROS,   name_texture.LUIGI,          portrait_offsets.DLUIGI,         2)
 
     // REMIX POLYGONS

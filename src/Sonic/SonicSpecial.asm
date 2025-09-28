@@ -1764,6 +1764,8 @@ scope SonicUSP {
         lw      t4, 0x0008(t2)      // t4 = char_id
         lli     at, Character.id.FOX
         beq     t4, at, _fox_falco  // if Fox, need to do action checks
+        lli     at, Character.id.HPFOX
+        beq     t4, at, _fox_falco  // if Headphones Fox, need to do action checks
         lli     at, Character.id.JFOX
         beq     t4, at, _fox_falco  // if JFox, need to do action checks
         lli     at, Character.id.FALCO

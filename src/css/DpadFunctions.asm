@@ -312,6 +312,8 @@ scope dpad_macro_check_: {
     lw      at, 0x0008(a2)                       // get current character id
     lli     t5, Character.id.FOX
     beq     at, t5, _dpad_move_check_action_spacies // branch if relevant character...
+    lli     t5, Character.id.HPFOX
+    beq     at, t5, _dpad_move_check_action_spacies
     lli     t5, Character.id.JFOX
     beq     at, t5, _dpad_move_check_action_spacies
     lli     t5, Character.id.FALCO

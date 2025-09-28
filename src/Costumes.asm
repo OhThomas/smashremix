@@ -1067,6 +1067,7 @@ scope Costumes {
         db 0x07                             // Lanky Kong
         // db 0x01                             // DDDCB
         db 0x03                             // Headband Pikachu
+        db 0x03                             // Headphones Fox
         db 0x03                             // Dale Luigi
         // Polygons
         db 0x05                             // Polygon Wario

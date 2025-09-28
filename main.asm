@@ -172,6 +172,8 @@ include "src/JLink/JLink.asm"
 include "src/JFalcon/JFalcon.asm"
 // JFOX
 include "src/JFox/JFox.asm"
+// HEADPHONES FOX
+include "src/HPFox/HPFox.asm"
 // JMARIO
 include "src/JMario/JMario.asm"
 // JLUIGI

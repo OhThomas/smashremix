@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(70)
+    constant ADD_CHARACTERS(71)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -2531,7 +2531,7 @@ scope Character {
         constant TABLE_ORIGIN(origin())
         //  D-UP        //  D-DOWN       //  D-LEFT     //  D-RIGHT
         db  id.METAL;   db  id.NMARIO;   db  id.JMARIO; db  id.NONE        // 0x00 - MARIO
-        db  id.NONE;    db  id.NFOX;     db  id.JFOX;   db  id.NONE        // 0x01 - FOX
+        db  id.HPFOX;   db  id.NFOX;     db  id.JFOX;   db  id.NONE        // 0x01 - FOX
         db  id.GDONKEY; db  id.NDONKEY;  db  id.JDK;    db  id.NONE        // 0x02 - DONKEY
         db  id.NONE;    db  id.NSAMUS;   db  id.JSAMUS; db  id.ESAMUS      // 0x03 - SAMUS
         db  id.MLUIGI;  db  id.NLUIGI;   db  id.JLUIGI; db  id.DLUIGI      // 0x04 - LUIGI
@@ -2568,8 +2568,7 @@ scope Character {
         table:
         constant TABLE_ORIGIN(origin())
         db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x00 - MARIO
-        // db  id.JFOX;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x01 - FOX
-        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x01 - FOX
+        db  id.JFOX;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x01 - FOX
         db  id.JDK;     db  id.GDONKEY;  db  id.NONE;   db  id.NONE        // 0x02 - DONKEY
         db  id.JSAMUS;  db  id.ESAMUS;   db  id.NONE;   db  id.NONE        // 0x03 - SAMUS
         db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x04 - LUIGI
@@ -3621,8 +3620,7 @@ scope Character {
     // 0x28 - JFALCON
     define_character(JFALCON, CAPTAIN, File.JFALCON_MAIN, 0x0EB, 0, 0x14C, 0x14E, 0, 0x15E, 0x14D, 0, 0x488, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FALCON, Stages.id.BTP_FALCON, Stages.id.BTT_GND, Stages.id.BTP_GND, sound_type.J, variant_type.J)
     // 0x29 - JFOX
-    // define_character(JFOX, FOX, File.JFOX_MAIN, 0x0D0, 0, 0x139, 0x13A, File.JFOX_PROJECTILE, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.J, variant_type.J)
-    define_character(JFOX, FOX, File.JFOX_MAIN, 0x0D0, 0, File.FOX_HEADPHONES_CHARACTER, 0x13A, File.JFOX_PROJECTILE, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.J, variant_type.J)
+    define_character(JFOX, FOX, File.JFOX_MAIN, 0x0D0, 0, 0x139, 0x13A, File.JFOX_PROJECTILE, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.J, variant_type.J)
     // 0x2A - JMARIO
     define_character(JMARIO, MARIO, File.JMARIO_MAIN, 0x0CA, 0, File.JMARIO_CHARACTER, 0x12A, File.JMARIO_PROJECTILE_HITBOX, 0x164, 0x129, 0, 0x428, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_MARIO, Stages.id.BTP_MARIO, Stages.id.BTT_DRM, Stages.id.BTP_DRM, sound_type.J, variant_type.J)
     // 0x2B - JLUIGI
@@ -3701,8 +3699,9 @@ scope Character {
     // define_character(DEDEDECB, CAPTAIN,  File.DEDEDE_COWBOY_MAIN, 0x0EB, 0, File.DEDEDE_COWBOY_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
     // 0x4D - HEADBAND PIKACHU
     define_character(HBPIKA, PIKACHU, File.PIKACHU_HEADBAND_MAIN, 0x0F2, 0, File.PIKACHU_HEADBAND_CHARACTER, 0x157, 0x0F4, 0x15B, 0x156, 0, 0x41C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_PIKACHU, Stages.id.BTP_PIKACHU, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF, sound_type.U, variant_type.SPECIAL)
-    
-    // 0x4E DALE LUIGI
+    // 0x4E - HEADPHONES FOX
+    define_character(HPFOX, FOX, File.FOX_HEADPHONES_MAIN, 0x0D0, 0, File.FOX_HEADPHONES_CHARACTER, 0x13A, 0x0D2, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.U, variant_type.SPECIAL)
+    // 0x4F - DALE LUIGI
     define_character(DLUIGI, LUIGI, File.LUIGI_DALE_MAIN, 0x0DC, 0, File.LUIGI_DALE_CHARACTER, 0x12A, 0x0DE , 0x164, 0x129, 0, 0x580, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_LUIGI, Stages.id.BTP_LUIGI, Stages.id.BTT_MARIO, Stages.id.BTP_MARIO, sound_type.U, variant_type.SPECIAL)
 
     // REMIX POLYGONS

@@ -3162,7 +3162,8 @@ scope TwelveCharBattle {
     add_defeat_parameters(File.LANKY_DOWN_STAND_U,      defeated_moveset_mario,     0)          // 0x4C - LANKY
     // ADD NEW CHARACTERS HERE
     add_defeat_parameters(0x80E,                        defeated_moveset_pikachu,   0)          // 0x4D - HEADBAND PIKACHU
-    add_defeat_parameters(0x222,                        defeated_moveset_luigi,     0)          // 0x4E - DALE LUIGI
+    add_defeat_parameters(0x2B1,                        defeated_moveset_fox_link,  0)          // 0x4E - HEADPHONES FOX
+    add_defeat_parameters(0x222,                        defeated_moveset_luigi,     0)          // 0x4F - DALE LUIGI
 
     // REMIX POLYGONS
     add_defeat_parameters(0x222,                        defeated_moveset_mario,     0)          // - NWARIO

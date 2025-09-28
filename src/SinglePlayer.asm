@@ -2792,5 +2792,6 @@ scope SinglePlayer {
 
     // COSTUME CLONES    character id          name texture          name delay
     add_to_single_player(Character.id.HBPIKA,  name_texture.PIKACHU, name_delay.PIKACHU)
+    add_to_single_player(Character.id.HPFOX,   name_texture.FOX,     name_delay.FOX)
     add_to_single_player(Character.id.DLUIGI,  name_texture.LUIGI,   name_delay.LUIGI)
 } // __SINGLE_PLAYER__

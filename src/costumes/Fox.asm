@@ -40,6 +40,7 @@ scope fox_costumes {
     // Register extra costumes
     Costumes.register_extra_costumes_for_char(Character.id.FOX)
     Costumes.register_extra_costumes_for_char(Character.id.JFOX)
+    Costumes.register_extra_costumes_for_char(Character.id.HPFOX)
 
     // Costume 0x4
     scope costume_0x4 {

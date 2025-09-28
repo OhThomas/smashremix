@@ -1121,6 +1121,8 @@ scope AI {
         beq      v0, at, _sheik_check           // branch if opponent is Ness
         addiu    at, r0, Character.id.FOX
         beq      v0, at, _fox_or_ness_opponent  // branch if opponent is Fox
+        addiu    at, r0, Character.id.HPFOX
+        beq      v0, at, _fox_or_ness_opponent  // branch if opponent is Headphones Fox
         addiu    at, r0, Character.id.SLIPPY
         beq      v0, at, _fox_or_ness_opponent  // branch if opponent is Slippy
         addiu    at, r0, Character.id.LUCAS
@@ -1329,6 +1331,8 @@ scope AI {
 
         // at = fox's character id
         // t9 = character id
+        beq      t9, at, _fox      // branch to Fox usp action check
+        addiu    at, r0, Character.id.HPFOX
         beq      t9, at, _fox      // branch to Fox usp action check
         addiu    at, r0, Character.id.JFOX
         beq      t9, at, _fox      // branch to Fox usp action check
@@ -4954,6 +4958,9 @@ scope AI {
         // FOX
         Character.table_patch_start(close_quarter_combat, Character.id.FOX, 0x4)
         dw     stop_roll_spam_._fox; OS.patch_end()
+        // HPFOX
+        Character.table_patch_start(close_quarter_combat, Character.id.HPFOX, 0x4)
+        dw     stop_roll_spam_._fox; OS.patch_end()
         // JFOX
         Character.table_patch_start(close_quarter_combat, Character.id.JFOX, 0x4)
         dw     stop_roll_spam_._fox; OS.patch_end()
@@ -5136,6 +5143,11 @@ scope AI {
             // These patches will allow LVL 10 fox to not rely on his up special
             // JIGGLYPUFF
             Character.table_patch_start(ai_attack_prevent, Character.id.FOX, 0x4)
+            dw      PREVENT_ATTACK.ROUTINE.FOX_USP
+            OS.patch_end()
+
+            // HPFOX
+            Character.table_patch_start(ai_attack_prevent, Character.id.HPFOX, 0x4)
             dw      PREVENT_ATTACK.ROUTINE.FOX_USP
             OS.patch_end()
 

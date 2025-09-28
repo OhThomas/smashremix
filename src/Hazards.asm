@@ -3869,6 +3869,8 @@ scope Hazards {
         lw      t6, 0x0008(v0)              // t6 = character id
         lli     at, Character.id.FOX        // at = id.FOX
         beq     at, t6, _fire_fox_check     // perform action check if character = FOX
+        lli     at, Character.id.HPFOX      // at = id.HPFOX
+        beq     at, t6, _fire_fox_check     // perform action check if character = HPFOX
         lli     at, Character.id.JFOX       // at = id.JFOX
         beq     at, t6, _fire_fox_check     // perform action check if character = FOX
         lli     at, Character.id.FALCO      // at = id.FALCO
@@ -6957,6 +6959,8 @@ scope Hazards {
         lw      t6, 0x0008(v0)              // t6 = character id
         lli     at, Character.id.FOX        // at = id.FOX
         beq     at, t6, _fire_fox_check     // perform action check if character = FOX
+        lli     at, Character.id.HPFOX      // at = id.HPFOX
+        beq     at, t6, _fire_fox_check     // perform action check if character = HPFOX
         lli     at, Character.id.JFOX       // at = id.JFOX
         beq     at, t6, _fire_fox_check     // perform action check if character = FOX
         lli     at, Character.id.FALCO      // at = id.FALCO
@@ -7175,6 +7179,8 @@ scope Hazards {
         lw      t6, 0x0008(v0)              // t6 = character id
         lli     at, Character.id.FOX        // at = id.FOX
         beq     at, t6, _fire_fox_check     // perform action check if character = FOX
+        lli     at, Character.id.HPFOX      // at = id.HPFOX
+        beq     at, t6, _fire_fox_check     // perform action check if character = HPFOX
         lli     at, Character.id.JFOX       // at = id.JFOX
         beq     at, t6, _fire_fox_check     // perform action check if character = FOX
         lli     at, Character.id.FALCO      // at = id.FALCO

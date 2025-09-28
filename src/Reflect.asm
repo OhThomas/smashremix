@@ -28,6 +28,8 @@ scope Reflect {
     db    	OS.TRUE;     OS.patch_end();
     Character.table_patch_start(fighter_reflect, Character.id.FALCO, 0x1)
     db    	OS.TRUE;     OS.patch_end();
+    Character.table_patch_start(fighter_reflect, Character.id.HPFOX, 0x1)
+    db    	OS.TRUE;     OS.patch_end();
     Character.table_patch_start(fighter_reflect, Character.id.JFOX, 0x1)
     db    	OS.TRUE;     OS.patch_end();
     Character.table_patch_start(fighter_reflect, Character.id.JNESS, 0x1)
@@ -172,6 +174,8 @@ scope Reflect {
 			// a2 = player struct
 
 			beq    v0, at, _ness_absorb       	// modified og line 1
+			lli    at, Character.id.HPFOX
+			beq    at, v0, _fox_reflect       	// Fox branch if HPFOX
 			lli    at, Character.id.JFOX
 			beq    at, v0, _fox_reflect       	// Fox branch if JFOX
 			lli    at, Character.id.MARINA
@@ -334,6 +338,8 @@ scope Reflect {
 			// a2 = player struct
 
 			beq    at, v0, _fox_reflect       	// Fox branch if JFOX
+			lli    at, Character.id.HPFOX
+			beq    at, v0, _fox_reflect     	// Fox branch if HPFOX
 			lli    at, Character.id.MARINA
 			beq    at, v0, _marina_absorb     	// Marina branch if MARINA
 			lli    at, Character.id.FALCO
@@ -427,6 +433,8 @@ scope Reflect {
 			// v0 = character id
 			// a2 = player struct
 
+			lli    at, Character.id.HPFOX
+			beq    at, v0, _fox_reflect       	// Fox branch if HPFOX
 			lli    at, Character.id.JFOX
 			beq    at, v0, _fox_reflect       	// Fox branch if JFOX
 			lli    at, Character.id.MARINA
