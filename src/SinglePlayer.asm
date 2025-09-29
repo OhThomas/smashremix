@@ -2377,6 +2377,12 @@ scope SinglePlayer {
     set_ending_image(Character.id.MLUIGI, 0xBC)
     set_ending_image(Character.id.EBI, File.EBI_VICTORY_IMAGE_BOTTOM)
 
+    // COSTUME CLONES
+    set_ending_image(Character.id.HBPIKA, 0xAE)
+    set_ending_image(Character.id.HPFOX, 0xBE)
+    set_ending_image(Character.id.DLUIGI, 0xBC)
+    set_ending_image(Character.id.MPPUFF, 0xB4)
+
     // @ Description
     // Patch which substitutes the victory picture with a custom one for all non-original characters.
     // There are a number of hardcodings addressed.
@@ -2794,4 +2800,5 @@ scope SinglePlayer {
     add_to_single_player(Character.id.HBPIKA,  name_texture.PIKACHU, name_delay.PIKACHU)
     add_to_single_player(Character.id.HPFOX,   name_texture.FOX,     name_delay.FOX)
     add_to_single_player(Character.id.DLUIGI,  name_texture.LUIGI,   name_delay.LUIGI)
+    add_to_single_player(Character.id.MPPUFF,  name_texture.JIGGLYPUFF,name_delay.JIGGLYPUFF)
 } // __SINGLE_PLAYER__

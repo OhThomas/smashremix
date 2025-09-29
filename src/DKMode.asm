@@ -84,6 +84,8 @@ scope DKMode {
     // kirby/puff based
     Character.table_patch_start(fighter_DK_mode, Character.id.JKIRBY, 0x4)
     db 0x2, 0x6, 0xB, 0x0;   OS.patch_end();   // copy of kirby
+    Character.table_patch_start(fighter_DK_mode, Character.id.MPPUFF, 0x4)
+    db 0x2, 0x6, 0xA, 0x0;   OS.patch_end();   // copy of puff
     Character.table_patch_start(fighter_DK_mode, Character.id.JPUFF, 0x4)
     db 0x2, 0x6, 0xA, 0x0;   OS.patch_end();   // copy of puff
     Character.table_patch_start(fighter_DK_mode, Character.id.EPUFF, 0x4)

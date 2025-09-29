@@ -9,6 +9,8 @@ ADD,,.\original\1544.bin,1,0140,0000,.\original\1544.txt,2
 ADD,,.\original\1545.bin,0,0004,6364,.\original\1545.txt,2
 ADD,,.\original\1546.bin,1,0114,0000,.\original\1546.txt,2
 ADD,,.\original\1547.bin,0,0008,5E94,.\original\1547.txt,2
+ADD,,.\original\1548.bin,1,02C0,0000,.\original\1548.txt,2
+ADD,,.\original\1549.bin,0,0008,3FFFC,,2
 MODIFY,0FFD,.\original\0FFD.bin,1,026C,0000,.\original\0FFD.txt,2
 MODIFY,0A06,.\original\0A06.bin,1,0210,3FFFC,,2
 END,,,,,,,

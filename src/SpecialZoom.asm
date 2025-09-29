@@ -1198,6 +1198,10 @@ scope Zoom {
         beq     t0, t2, attacker_special_move_jigglypuff
         nop
 
+        ori     t2, r0, Character.id.MPPUFF
+        beq     t0, t2, attacker_special_move_jigglypuff
+        nop
+
         ori     t2, r0, Character.id.JPUFF
         beq     t0, t2, attacker_special_move_jigglypuff
         nop
@@ -1215,6 +1219,10 @@ scope Zoom {
         nop
 
         ori     t2, r0, Character.id.LUIGI
+        beq     t0, t2, attacker_special_move_luigi
+        nop
+
+        ori     t2, r0, Character.id.DLUIGI
         beq     t0, t2, attacker_special_move_luigi
         nop
 

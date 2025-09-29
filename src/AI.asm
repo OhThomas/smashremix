@@ -4233,6 +4233,8 @@ scope AI {
                     lw t0, 0x8(a0) // t0 = character id
                     addiu at, r0, Character.id.JIGGLYPUFF
                     beq at, t0, below_ledge_facing_away
+                    addiu at, r0, Character.id.MPPUFF
+                    beq at, t0, below_ledge_facing_away
                     addiu at, r0, Character.id.JPUFF
                     beq at, t0, below_ledge_facing_away
                     addiu at, r0, Character.id.EPUFF
@@ -4949,6 +4951,9 @@ scope AI {
         // PUFF
         Character.table_patch_start(close_quarter_combat, Character.id.JIGGLYPUFF, 0x4)
         dw     stop_roll_spam_._puff; OS.patch_end()
+        // MPPUFF
+        Character.table_patch_start(close_quarter_combat, Character.id.MPPUFF, 0x4)
+        dw     stop_roll_spam_._puff; OS.patch_end()
         // JPUFF
         Character.table_patch_start(close_quarter_combat, Character.id.JPUFF, 0x4)
         dw     stop_roll_spam_._puff; OS.patch_end()
@@ -5085,6 +5090,11 @@ scope AI {
             // These patches will prevent non-level 10 puffs from using DSP
             // JIGGLYPUFF
             Character.table_patch_start(ai_attack_prevent, Character.id.JIGGLYPUFF, 0x4)
+            dw      PREVENT_ATTACK.ROUTINE.PUFF_DSP
+            OS.patch_end()
+
+            // MICROPHONE JIGGLYPUFF
+            Character.table_patch_start(ai_attack_prevent, Character.id.MPPUFF, 0x4)
             dw      PREVENT_ATTACK.ROUTINE.PUFF_DSP
             OS.patch_end()
 

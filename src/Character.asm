@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(71)
+    constant ADD_CHARACTERS(72)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -2540,7 +2540,7 @@ scope Character {
         db  id.NONE;    db  id.NCAPTAIN; db  id.JFALCON;db  id.NONE        // 0x07 - CAPTAIN
         db  id.NONE;    db  id.NKIRBY;   db  id.JKIRBY; db  id.NONE        // 0x08 - KIRBY
         db  id.HBPIKA;  db  id.NPIKACHU; db  id.JPIKA;  db  id.EPIKA       // 0x09 - PIKACHU
-        db  id.NONE;    db  id.NJIGGLY;  db  id.JPUFF;  db  id.EPUFF       // 0x0A - JIGGLY
+        db  id.MPPUFF;  db  id.NJIGGLY;  db  id.JPUFF;  db  id.EPUFF       // 0x0A - JIGGLY
         db  id.NONE;    db  id.NNESS;    db  id.JNESS;  db  id.NONE        // 0x0B - NESS
         db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x0C - BOSS
         db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x0D - METAL
@@ -2606,7 +2606,6 @@ scope Character {
         constant J(0x02)
         constant E(0x03)
         constant SPECIAL(0x04)
-        // constant CB(0x03)
         constant UNUSED(0xFF)
         OS.align(16)
         table:
@@ -3703,7 +3702,9 @@ scope Character {
     define_character(HPFOX, FOX, File.FOX_HEADPHONES_MAIN, 0x0D0, 0, File.FOX_HEADPHONES_CHARACTER, 0x13A, 0x0D2, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.U, variant_type.SPECIAL)
     // 0x4F - DALE LUIGI
     define_character(DLUIGI, LUIGI, File.LUIGI_DALE_MAIN, 0x0DC, 0, File.LUIGI_DALE_CHARACTER, 0x12A, 0x0DE , 0x164, 0x129, 0, 0x580, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_LUIGI, Stages.id.BTP_LUIGI, Stages.id.BTT_MARIO, Stages.id.BTP_MARIO, sound_type.U, variant_type.SPECIAL)
-
+    // 0x50 - MICROPHONE JIGGLYPUFF
+    define_character(MPPUFF, JIGGLYPUFF, File.JIGGLYPUFF_MICROPHONE_MAIN, 0x0E8, 0, File.JIGGLYPUFF_MICROPHONE_CHARACTER, 0x14B, 0, 0x15F, 0, 0, 0x474, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF, Stages.id.BTT_FALCO, Stages.id.BTP_MARIO, sound_type.U, variant_type.SPECIAL)
+    
     // REMIX POLYGONS
     // NWARIO
     define_character(NWARIO, MARIO, File.NWARIO_MAIN, 0x0CA, 0, File.NWARIO_CHARACTER, 0x12A, 0x0CC, 0x164, 0x129, 0, 0x2B0, 2, OS.FALSE, OS.FALSE, Stages.id.BTT_STG1, Stages.id.BTP_POLY, Stages.id.BTT_STG1, Stages.id.BTP_POLY, sound_type.U, variant_type.POLYGON)

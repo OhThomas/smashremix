@@ -3164,6 +3164,7 @@ scope TwelveCharBattle {
     add_defeat_parameters(0x80E,                        defeated_moveset_pikachu,   0)          // 0x4D - HEADBAND PIKACHU
     add_defeat_parameters(0x2B1,                        defeated_moveset_fox_link,  0)          // 0x4E - HEADPHONES FOX
     add_defeat_parameters(0x222,                        defeated_moveset_luigi,     0)          // 0x4F - DALE LUIGI
+    add_defeat_parameters(0x51D,                        defeated_moveset_jiggly,    0)          // 0x50 - MICROPHONE JIGGLYPUFF
 
     // REMIX POLYGONS
     add_defeat_parameters(0x222,                        defeated_moveset_mario,     0)          // - NWARIO

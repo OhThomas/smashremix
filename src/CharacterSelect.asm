@@ -264,9 +264,7 @@ scope CharacterSelect {
     dw  0x122E8 + 0x200                     // 0x3E - SHEIK
     dw  0x136E8 + 0x200                     // 0x3F - MARINA
     // dw  0x173C8 + 0x200                     // 0x40 - DEDEDE
-    // dw  0x173C8 + 0x173C8 + 0x173C8 + 0x200 // 0x40 - DEDEDE w/ BALD
-    dw  0x173C8 + 0x223C8 + 0x12100 + 0x200 // 0x40 - DEDEDE w/ COWBOY
-    // dw  0x173C8 + 0x223C8 + 0x12100 + 0x173C8 + 0x200 // 0x40 - DEDEDE w/ BALD AND COWBOY
+    dw  0x173C8 + 0x191F0 + 0x18820 + 0x200 // 0x40 - DEDEDE w/ COWBOY
     dw  0x12EA0 + 0x1BE0 + 0x200            // 0x41 - GOEMON
     dw  0x5A50 + 0x200                      // 0x42 - PEPPY
     dw  0xA310 + 0x200                      // 0x43 - SLIPPY
@@ -284,8 +282,9 @@ scope CharacterSelect {
     // COSTUMES
     // dw  0x173C8 + 0x223C8 + 0x12100 + 0x173C8 + 0x200                     // DEDEDE COWBOY
     dw  0xA340 + 0x200                      // 0x4D - PIKACHU w/ HEADBAND
-    dw  0x8C40 + 0x200                      // 0x29 - FOX w/ HEADPHONES
-    dw  0x8A90                              // 0x4E - LUIGI w/ DALE HAT
+    dw  0x8C40 + 0x200                      // 0x4E - FOX w/ HEADPHONES
+    dw  0x8A90                              // 0x4F - LUIGI w/ DALE HAT
+    dw  0x8860 + 0x200                      // 0x50 - JIGGLYPUFF w/ MICROPHONE
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -432,6 +431,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.HBPIKA, req/HBPIKA_MODEL)
     add_alt_req_list(Character.id.HPFOX, req/FOX_HEADPHONES_MODEL)
     add_alt_req_list(Character.id.DLUIGI, req/DLUIGI_MODEL)
+    add_alt_req_list(Character.id.MPPUFF, req/MPPUFF_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -3057,6 +3057,7 @@ scope CharacterSelect {
         constant HBPIKA(0x0000A738)
         constant HPFOX(0x00002138)
         constant DLUIGI(0x00005378)
+        constant MPPUFF(0x0000B7F8)
         // custom
         constant FALCO(0x0000D978)
         constant GND(0x0000EA38)
@@ -3432,6 +3433,7 @@ scope CharacterSelect {
         constant HBPIKA(0x000032F8)
         constant HPFOX(0x000025B8)
         constant DLUIGI(0x00001B18)
+        constant MPPUFF(0x00003DB8)
         // POLYGONS
         constant NWARIO(0x0001CB28)
         constant NLUCAS(0x0001D008)
@@ -5025,6 +5027,7 @@ scope CharacterSelect {
         constant HBPIKA(0x61D8 + 0x10)
         constant HPFOX(0x62A8 + 0x10)
         constant DLUIGI(0x6100 + 0x10)
+        constant MPPUFF(0x6380 + 0x10)
     }
 
     // @ Description
@@ -5116,6 +5119,9 @@ scope CharacterSelect {
         lli     t2, Character.id.DLUIGI
         beql    a1, t2, _draw_icon          // If DLUIGI, then draw DLUIGI stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.DLUIGI // a1 = DLUIGI footer struct
+        lli     t2, Character.id.MPPUFF
+        beql    a1, t2, _draw_icon          // If MPPUFF, then draw MPPUFF stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.MPPUFF // a1 = MPPUFF footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7116,6 +7122,7 @@ scope CharacterSelect {
     add_to_css(Character.id.HBPIKA, FGM.announcer.names.PIKACHU,        1.50,         0x00010001, POKEMON,      name_texture.PIKACHU,        portrait_offsets.HBPIKA,         16)
     add_to_css(Character.id.HPFOX,  FGM.announcer.names.FOX,            1.50,         0x00010004, STARFOX,      name_texture.FOX,            portrait_offsets.HPFOX,          15)
     add_to_css(Character.id.DLUIGI, FGM.announcer.names.LUIGI,          1.50,         0x00010001, MARIO_BROS,   name_texture.LUIGI,          portrait_offsets.DLUIGI,         2)
+    add_to_css(Character.id.MPPUFF, FGM.announcer.names.JIGGLYPUFF,     1.50,         0x00010002, POKEMON,      name_texture.JIGGLYPUFF,     portrait_offsets.MPPUFF,         17)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

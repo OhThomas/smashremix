@@ -188,6 +188,8 @@ include "src/EPika/EPika.asm"
 include "src/JPuff/JPuff.asm"
 // EPUFF
 include "src/EPuff/EPuff.asm"
+// MICROPHONE JIGGLYPUFF
+include "src/MPPuff/MPPuff.asm"
 // JYOSHI
 include "src/JYoshi/JYoshi.asm"
 // JPIKA

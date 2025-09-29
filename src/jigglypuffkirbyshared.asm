@@ -19,6 +19,8 @@ scope JigglypuffKirbyShared {
         beq     v0, at, _puff_jump_1       // modified original line 2
         addiu   at, r0, Character.id.DEDEDE   // Dedede ID
         beq     v0, at, _kirby_jump_1
+        addiu   at, r0, Character.id.MPPUFF   // MPPuff ID
+        beq     v0, at, _puff_jump_1
         addiu   at, r0, Character.id.JPUFF    // JPuff ID
         beq     v0, at, _puff_jump_1
         addiu   at, r0, Character.id.EPUFF    // EPuff ID
@@ -52,6 +54,8 @@ scope JigglypuffKirbyShared {
         beq     v0, at, _puff_jump_2            // modified original line 2
         addiu   at, r0, Character.id.DEDEDE     // Dedede ID
         beq     v0, at, _dedede_jump_2
+        addiu   at, r0, Character.id.MPPUFF     // MPPuff ID
+        beq     v0, at, _puff_jump_2
         addiu   at, r0, Character.id.JPUFF      // JPuff ID
         beq     v0, at, _puff_jump_2
         addiu   at, r0, Character.id.EPUFF   // EPuff ID
@@ -98,6 +102,8 @@ scope JigglypuffKirbyShared {
         beq     v1, at, _puff_jump_3            // modified original line 1
         addiu   at, r0, Character.id.DEDEDE     // Dedede ID
         beq     v1, at, _puff_jump_3
+        addiu   at, r0, Character.id.MPPUFF     // MPPuff ID
+        beq     v1, at, _puff_jump_3
         addiu   at, r0, Character.id.JPUFF      // JPuff ID
         beq     v1, at, _puff_jump_3
         addiu   at, r0, Character.id.EPUFF   // EPuff ID
@@ -126,6 +132,8 @@ scope JigglypuffKirbyShared {
         beq     v0, at, _puff_jump_4            // modified original line 1
         addiu   at, r0, Character.id.DEDEDE     // Dedede ID
         beq     v0, at, _kirby_jump_4
+        addiu   at, r0, Character.id.MPPUFF     // MPPuff ID
+        beq     v0, at, _puff_jump_4
         addiu   at, r0, Character.id.JPUFF      // JPuff ID
         beq     v0, at, _puff_jump_4
         addiu   at, r0, Character.id.EPUFF   // EPuff ID
@@ -158,6 +166,8 @@ scope JigglypuffKirbyShared {
         beq     v1, at, _puff_jump_5            // modified original line 1
         addiu   at, r0, Character.id.DEDEDE     // Dedede ID
         beq     v1, at, _kirby_jump_5
+        addiu   at, r0, Character.id.MPPUFF     // MPPuff ID
+        beq     v1, at, _puff_jump_5
         addiu   at, r0, Character.id.JPUFF      // JPuff ID
         beq     v1, at, _puff_jump_5
         addiu   at, r0, Character.id.EPUFF      // EPuff ID
@@ -437,6 +447,8 @@ scope JigglypuffKirbyShared {
 
         beq     v0, at, _pokeballflash          // modified original line 1 part 1
 
+        addiu   at, r0, Character.id.MPPUFF     // MPPUFF ID
+        beq     v0, at, _pokeballflash          // JPUFF Jump
         addiu   at, r0, Character.id.JPUFF      // JPUFF ID
         beq     v0, at, _pokeballflash          // JPUFF Jump
         addiu   at, r0, Character.id.EPUFF      // EPUFF ID
@@ -497,6 +509,8 @@ scope JigglypuffKirbyShared {
 
         addiu   at, r0, Character.id.JIGGLYPUFF     // PUFF ID
         beq     t9, at, _puffhat                    // PUFF Jump - original line 1 replacement
+        addiu   at, r0, Character.id.MPPUFF         // MPPUFF ID
+        beq     t9, at, _puffhat                    // JPUFF Jump
         addiu   at, r0, Character.id.EPUFF          // EPUFF ID
         beq     t9, at, _puffhat                    // EPUFF Jump
         addiu   at, r0, Character.id.JPUFF          // JPUFF ID
@@ -716,6 +730,8 @@ scope JigglypuffKirbyShared {
         OS.patch_end()
 
         beq     v0, at, j_0x80161F04        // original line 1, modified to use jump
+        lli     at, Character.id.MPPUFF     // at = MPPUFF
+        beq     v0, at, j_0x80161F04        // if MPPUFF, take Jigglypuff branch
         lli     at, Character.id.JPUFF      // at = JPUFF
         beq     v0, at, j_0x80161F04        // if JPUFF, take Jigglypuff branch
         lli     at, Character.id.EPUFF      // at = EPUFF
@@ -782,6 +798,8 @@ scope JigglypuffKirbyShared {
         // v0 = character id
         // at = Jiggly character id
         beq      v0, at, _puff_kirby       // skip if PUFF
+        addiu    at, r0, Character.id.MPPUFF
+        beq      v0, at, _puff_kirby       // skip if MICROPHONE PUFF
         addiu    at, r0, Character.id.JPUFF
         beq      v0, at, _puff_kirby       // skip if JPN PUFF
         addiu    at, r0, Character.id.MARINA
@@ -828,6 +846,8 @@ scope JigglypuffKirbyShared {
         // t6 = character id
         addiu    at, r0, Character.id.JIGGLYPUFF // original line 1
         beq      t6, at, _puff              // no usp if vanilla PUFF
+        addiu    at, r0, Character.id.MPPUFF
+        beq      t6, at, _puff              // no usp if microphone PUFF
         addiu    at, r0, Character.id.JPUFF
         beq      t6, at, _puff              // no usp if JPN PUFF
         addiu    at, r0, Character.id.EPUFF

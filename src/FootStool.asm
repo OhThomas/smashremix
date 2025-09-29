@@ -378,6 +378,8 @@ scope FootStool {
         beq     v0, at, _kirby_puff_dedede_jump_check
         addiu   at, r0, Character.id.PUFF
         beq     v0, at, _kirby_puff_dedede_jump_check
+        addiu   at, r0, Character.id.MPPUFF
+        beq     v0, at, _kirby_puff_dedede_jump_check
         addiu   at, r0, Character.id.JPUFF
         beq     v0, at, _kirby_puff_dedede_jump_check
         addiu   at, r0, Character.id.EPUFF

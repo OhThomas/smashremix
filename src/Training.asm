@@ -3062,6 +3062,7 @@ scope Training {
     string_hbpika:; char_0x4D:; db "Headband Pikachu", 0x00
     string_hpfox:; char_0x4E:; db "Headphones Fox", 0x00
     string_dluigi:; char_0x4F:; db "Dale Luigi", 0x00
+    string_mppuff:; char_0x50:; db "Microphone Jigglypuff", 0x00
     OS.align(4)
 
     string_table_char:
@@ -3128,6 +3129,7 @@ scope Training {
     dw char_0x4D            // HEADBAND PIKACHU
     dw char_0x4E            // HEADPHONES FOX
     dw char_0x4F            // DALE LUIGI
+    dw char_0x50            // MICROPHONE JIGGLYPUFF
     dw char_0x0D            // METAL MARIO
     dw char_0x45            // METAL LUIGI
     dw char_0x1A            // GIANT DK
@@ -3248,6 +3250,7 @@ scope Training {
         register_character_id(HBPIKA);
         register_character_id(HPFOX);
         register_character_id(DLUIGI);
+        register_character_id(MPPUFF);
         // ADD BONUS CHARACTERS HERE
 
         // bosses and polygons
@@ -3355,6 +3358,7 @@ scope Training {
     db Character.id.HBPIKA
     db Character.id.HPFOX
     db Character.id.DLUIGI
+    db Character.id.MPPUFF
 
     db Character.id.METAL
     db Character.id.MLUIGI
@@ -3478,6 +3482,7 @@ scope Training {
     db id.HBPIKA
     db id.HPFOX
     db id.DLUIGI
+    db id.MPPUFF
 
     // REMIX POLYGONS
     db id.NWARIO

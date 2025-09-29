@@ -483,6 +483,7 @@
         set_charged_smash_attacks(Character.id.HBPIKA, entry_pikachu)
         set_charged_smash_attacks(Character.id.HPFOX, entry_fox)
         set_charged_smash_attacks(Character.id.DLUIGI, entry_mario)
+        set_charged_smash_attacks(Character.id.MPPUFF, entry_puff)
         // REMIX POLYGONS
         set_charged_smash_attacks(Character.id.NWARIO, entry_wario)
         set_charged_smash_attacks(Character.id.NLUCAS, entry_lucas)
