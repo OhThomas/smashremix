@@ -407,10 +407,14 @@ scope GoemonNSP {
         multu   t6, t7                      // stick_x * DIRECTION
         sw      ra, 0x0014(sp)              // store ra
 
-        lw      t7, 0x0008(v1)              // character id
+        lw      a1, 0x0008(v1)              // character id
         addiu   at, r0, Character.id.GOEMON
 
-        beq     t7, at, _goemon
+        beq     a1, at, _goemon
+        lw      t7, 0x0024(v1)              // t7 = current action
+        
+        addiu   at, r0, Character.id.CBGOEMON
+        beq     a1, at, _goemon
         lw      t7, 0x0024(v1)              // t7 = current action
 
         // kirby
@@ -2770,12 +2774,18 @@ scope GoemonDSP {
         OS.patch_end()
 
         lw      t0, 0x0008(s7)              // t0 = character id
+
+        lli     at, Character.id.CBGOEMON   // at = id.CBGOEMON
+        beq     at, t0, _goemon_itembox_check // check if character == CBGOEMON
+        nop
+
         lli     at, Character.id.GOEMON     // at = id.GOEMON
 
         bne     at, t0, _check_grab         // skip if character != GOEMON
         nop
 
         // if we're here the character is Goemon
+        _goemon_itembox_check:
         lw      t0, 0x0024(s7)              // t0 = current action id
         lli     at, Goemon.Action.DSPGround // at = DSPGround
         beq     t0, at, _end                // skip grab check for Goemon DSPGround

@@ -1025,6 +1025,8 @@ scope CharEnvColor {
         lli     t9, Character.id.GOEMON
         li      v0, custom_display_lists_struct_goemon
         beq     t2, t9, _fix_goemon         // skip to fixing GOEMON
+        lli     t9, Character.id.CBGOEMON
+        beq     t2, t9, _fix_goemon         // skip to fixing COWBOY GOEMON
         lli     t9, Character.id.CRASH
         li      v0, custom_display_lists_struct_crash_left_eyebrow
         beq     t2, t9, _fix_crash          // skip to fixing CRASH
@@ -1432,6 +1434,9 @@ scope CharEnvColor {
         li      a1, custom_display_lists_struct_goemon
         lli     a2, Character.id.GOEMON
         beq     a0, a2, _clear              // if GOEMON, clear GOEMON's custom display lists
+        nop
+        lli     a2, Character.id.CBGOEMON
+        beq     a0, a2, _clear              // if COWBOY GOEMON, clear GOEMON's custom display lists
         nop
         li      a1, custom_display_lists_struct_crash_left_eyebrow
         lli     a2, Character.id.CRASH

@@ -17,4 +17,7 @@ scope DLuigi {
     Character.table_patch_start(remix_1p_end_bgm, Character.id.DLUIGI, 0x2)
     dh {MIDI.id.SMB2_MEDLEY}
     OS.patch_end()
+
+    // Setting Yellow costume
+    Teams.add_team_costume(YELLOW, DLUIGI, 0x6)
 }

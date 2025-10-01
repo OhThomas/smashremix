@@ -448,7 +448,7 @@ scope JigglypuffKirbyShared {
         beq     v0, at, _pokeballflash          // modified original line 1 part 1
 
         addiu   at, r0, Character.id.MPPUFF     // MPPUFF ID
-        beq     v0, at, _pokeballflash          // JPUFF Jump
+        beq     v0, at, _pokeballflash          // MPPUFF Jump
         addiu   at, r0, Character.id.JPUFF      // JPUFF ID
         beq     v0, at, _pokeballflash          // JPUFF Jump
         addiu   at, r0, Character.id.EPUFF      // EPUFF ID
@@ -510,7 +510,7 @@ scope JigglypuffKirbyShared {
         addiu   at, r0, Character.id.JIGGLYPUFF     // PUFF ID
         beq     t9, at, _puffhat                    // PUFF Jump - original line 1 replacement
         addiu   at, r0, Character.id.MPPUFF         // MPPUFF ID
-        beq     t9, at, _puffhat                    // JPUFF Jump
+        beq     t9, at, _puffhat                    // MPPUFF Jump
         addiu   at, r0, Character.id.EPUFF          // EPUFF ID
         beq     t9, at, _puffhat                    // EPUFF Jump
         addiu   at, r0, Character.id.JPUFF          // JPUFF ID

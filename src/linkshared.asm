@@ -201,6 +201,8 @@ scope LinkShared {
         beq     t0, t1, _custom             // branch if Banjo
         lli     t1, Character.id.GOEMON     // t1 = id.GOEMON
         beq     t0, t1, _skip               // branch if Goemon
+        lli     t1, Character.id.CBGOEMON   // t1 = id.CBGOEMON
+        beq     t0, t1, _skip               // branch if Cowboy Goemon
         lli     t1, Character.id.EBI        // t1 = id.EBI
         beq     t0, t1, _skip               // branch if Ebisumaru
         lw      t0, 0x0004(sp)              // ~
@@ -259,6 +261,8 @@ scope LinkShared {
         lli     t1, Character.id.GOEMON     // t1 = id.GOEMON
         li      a0, entry_anim_struct_2_GOEMON // a0 = entry_anim_struct
         beq     t0, t1, _custom             // branch if Goemon
+        lli     t1, Character.id.CBGOEMON   // t1 = id.CBGOEMON
+        beq     t0, t1, _custom             // branch if Cowboy Goemon
         lli     t1, Character.id.EBI        // t1 = id.EBI
         li      a0, entry_anim_struct_2_EBI // a0 = entry_anim_struct
         beq     t0, t1, _custom             // branch if Ebisumaru

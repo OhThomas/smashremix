@@ -2393,6 +2393,8 @@ scope Size {
             beq     t7, t8, _link_ground_gfx // if Marina, scale like ground gfx
             lli     t8, Character.id.GOEMON
             beq     t7, t8, _render_override  // if Goemon, update render routine
+            lli     t8, Character.id.CBGOEMON
+            beq     t7, t8, _render_override  // if Cowboy Goemon, update render routine
             lli     t8, Character.id.BANJO
             beq     t7, t8, _2nd_joint  // if Banjo, update 2nd joint
             lli     t8, Character.id.EBI

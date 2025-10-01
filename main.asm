@@ -253,6 +253,8 @@ include "src/NMarina/NMarina.asm"
 // GOEMON
 include "src/Goemon/GoemonSpecial.asm"
 include "src/Goemon/Goemon.asm"
+// COWBOY GOEMON
+include "src/CBGoemon/CBGoemon.asm"
 // NFALCO
 include "src/NFalco/NFalco.asm"
 // NGANONDORF

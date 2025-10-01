@@ -336,6 +336,8 @@ scope dpad_macro_check_: {
     beq     at, t5, _dpad_move_check_action_pika
     lli     t5, Character.id.GOEMON
     beq     at, t5, _dpad_move_check_action_mystical_ninjas
+    lli     t5, Character.id.CBGOEMON
+    beq     at, t5, _dpad_move_check_action_mystical_ninjas
     lli     t5, Character.id.EBI
     beq     at, t5, _dpad_move_check_action_mystical_ninjas
     nop

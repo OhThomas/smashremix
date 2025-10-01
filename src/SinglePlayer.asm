@@ -2382,6 +2382,7 @@ scope SinglePlayer {
     set_ending_image(Character.id.HPFOX, 0xBE)
     set_ending_image(Character.id.DLUIGI, 0xBC)
     set_ending_image(Character.id.MPPUFF, 0xB4)
+    set_ending_image(Character.id.CBGOEMON, File.GOEMON_VICTORY_IMAGE_BOTTOM)
 
     // @ Description
     // Patch which substitutes the victory picture with a custom one for all non-original characters.
@@ -2797,8 +2798,9 @@ scope SinglePlayer {
     add_to_single_player(Character.id.EPUFF,   name_texture.EPUFF,   name_delay.EPUFF)
 
     // COSTUME CLONES    character id          name texture          name delay
-    add_to_single_player(Character.id.HBPIKA,  name_texture.PIKACHU, name_delay.PIKACHU)
-    add_to_single_player(Character.id.HPFOX,   name_texture.FOX,     name_delay.FOX)
-    add_to_single_player(Character.id.DLUIGI,  name_texture.LUIGI,   name_delay.LUIGI)
-    add_to_single_player(Character.id.MPPUFF,  name_texture.JIGGLYPUFF,name_delay.JIGGLYPUFF)
+    add_to_single_player(Character.id.HBPIKA,  name_texture.PIKACHU,       name_delay.PIKACHU)
+    add_to_single_player(Character.id.HPFOX,   name_texture.FOX,           name_delay.FOX)
+    add_to_single_player(Character.id.DLUIGI,  name_texture.LUIGI,         name_delay.LUIGI)
+    add_to_single_player(Character.id.MPPUFF,  name_texture.JIGGLYPUFF,    name_delay.JIGGLYPUFF)
+    add_to_single_player(Character.id.CBGOEMON,name_texture.GOEMON,        name_delay.GOEMON)
 } // __SINGLE_PLAYER__

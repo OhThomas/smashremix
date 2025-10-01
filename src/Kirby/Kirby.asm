@@ -573,6 +573,13 @@ scope Kirby {
     dw      GoemonNSP.air_begin_initial_
     OS.patch_end()
 
+    Character.table_patch_start(kirby_ground_nsp, Character.id.CBGOEMON, 0x4)
+    dw      GoemonNSP.ground_begin_initial_
+    OS.patch_end()
+    Character.table_patch_start(kirby_air_nsp, Character.id.CBGOEMON, 0x4)
+    dw      GoemonNSP.air_begin_initial_
+    OS.patch_end()
+
     Character.table_patch_start(kirby_ground_nsp, Character.id.SLIPPY, 0x4)
     dw      SlippyNSP.kirby_ground_begin_initial
     OS.patch_end()

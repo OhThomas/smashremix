@@ -1340,6 +1340,8 @@ scope AI {
         beq      t9, at, _fox      // branch to Goemon usp action check
         addiu    at, r0, Character.id.GOEMON
         beq      t9, at, _goemon   // branch to Goemon usp action check
+        addiu    at, r0, Character.id.CBGOEMON
+        beq      t9, at, _goemon   // branch to Cowboy Goemon usp action check
         addiu    at, r0, Character.id.EBI
         beq      t9, at, _ebi      // branch to Ebisumaru usp action check
         addiu    at, r0, Character.id.FALCO
@@ -1393,9 +1395,12 @@ scope AI {
 
         addiu   at, r0, Character.id.EBI        // at = Ebisumaru
         beq     at, v0, _ebisumaru_action_check
+        addiu   at, r0, Character.id.CBGOEMON   // at = Cowboy Goemon
+        beq     at, v0, _goemon_action_check
         addiu   at, r0, Character.id.GOEMON    // at = Goemon
         bne     at, v0, _continue
 
+        _goemon_action_check:
         lw      v0, 0x0024(a0)    // v0 = current action
         addiu   at, r0, 0xDF      // MagicCloudRide
         beq     at, v0, _goemon_usp

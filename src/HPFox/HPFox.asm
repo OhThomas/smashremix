@@ -17,4 +17,7 @@ scope HPFox {
     Character.table_patch_start(remix_1p_end_bgm, Character.id.HPFOX, 0x2)
     dh {MIDI.id.STARFOX_MEDLEY}
     OS.patch_end()
+
+    // Setting Yellow costume
+    Teams.add_team_costume(YELLOW, HPFOX, 0x6)
 }

@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(72)
+    constant ADD_CHARACTERS(73)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -3704,6 +3704,8 @@ scope Character {
     define_character(DLUIGI, LUIGI, File.LUIGI_DALE_MAIN, 0x0DC, 0, File.LUIGI_DALE_CHARACTER, 0x12A, 0x0DE , 0x164, 0x129, 0, 0x580, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_LUIGI, Stages.id.BTP_LUIGI, Stages.id.BTT_MARIO, Stages.id.BTP_MARIO, sound_type.U, variant_type.SPECIAL)
     // 0x50 - MICROPHONE JIGGLYPUFF
     define_character(MPPUFF, JIGGLYPUFF, File.JIGGLYPUFF_MICROPHONE_MAIN, 0x0E8, 0, File.JIGGLYPUFF_MICROPHONE_CHARACTER, 0x14B, 0, 0x15F, 0, 0, 0x474, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF, Stages.id.BTT_FALCO, Stages.id.BTP_MARIO, sound_type.U, variant_type.SPECIAL)
+    // 0x51 - COWBOY GOEMON
+    define_character(CBGOEMON, MARIO, File.GOEMON_COWBOY_MAIN, 0x0CA, 0, File.GOEMON_COWBOY_CHARACTER, File.GOEMON_SHIELD_POSE, File.GOEMON_RYO_HITBOX, File.GOEMON_CLOUD_INFO, File.GOEMON_RYO_GRAPHIC, File.GOEMON_ENTRY_GFX, 0x91C, 22, OS.TRUE, OS.TRUE, Stages.id.BTT_GOEMON, Stages.id.BTP_GOEMON, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF,sound_type.U, variant_type.SPECIAL)
     
     // REMIX POLYGONS
     // NWARIO

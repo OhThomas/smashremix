@@ -285,6 +285,7 @@ scope CharacterSelect {
     dw  0x8C40 + 0x200                      // 0x4E - FOX w/ HEADPHONES
     dw  0x8A90                              // 0x4F - LUIGI w/ DALE HAT
     dw  0x8860 + 0x200                      // 0x50 - JIGGLYPUFF w/ MICROPHONE
+    dw  0x13C00 + 0x1BE0 + 0x200            // 0x51 - COWBOY GOEMON
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -432,6 +433,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.HPFOX, req/FOX_HEADPHONES_MODEL)
     add_alt_req_list(Character.id.DLUIGI, req/DLUIGI_MODEL)
     add_alt_req_list(Character.id.MPPUFF, req/MPPUFF_MODEL)
+    add_alt_req_list(Character.id.CBGOEMON, req/CBGOEMON_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -3058,6 +3060,7 @@ scope CharacterSelect {
         constant HPFOX(0x00002138)
         constant DLUIGI(0x00005378)
         constant MPPUFF(0x0000B7F8)
+        constant CBGOEMON(0x00023938)
         // custom
         constant FALCO(0x0000D978)
         constant GND(0x0000EA38)
@@ -3434,6 +3437,7 @@ scope CharacterSelect {
         constant HPFOX(0x000025B8)
         constant DLUIGI(0x00001B18)
         constant MPPUFF(0x00003DB8)
+        constant CBGOEMON(0x0001F228)
         // POLYGONS
         constant NWARIO(0x0001CB28)
         constant NLUCAS(0x0001D008)
@@ -5028,6 +5032,7 @@ scope CharacterSelect {
         constant HPFOX(0x62A8 + 0x10)
         constant DLUIGI(0x6100 + 0x10)
         constant MPPUFF(0x6380 + 0x10)
+        constant CBGOEMON(0x6458 + 0x10)
     }
 
     // @ Description
@@ -5122,6 +5127,9 @@ scope CharacterSelect {
         lli     t2, Character.id.MPPUFF
         beql    a1, t2, _draw_icon          // If MPPUFF, then draw MPPUFF stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MPPUFF // a1 = MPPUFF footer struct
+        lli     t2, Character.id.CBGOEMON
+        beql    a1, t2, _draw_icon          // If CBGOEMON, then draw CBGOEMON stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.CBGOEMON // a1 = CBGOEMON footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7123,6 +7131,7 @@ scope CharacterSelect {
     add_to_css(Character.id.HPFOX,  FGM.announcer.names.FOX,            1.50,         0x00010004, STARFOX,      name_texture.FOX,            portrait_offsets.HPFOX,          15)
     add_to_css(Character.id.DLUIGI, FGM.announcer.names.LUIGI,          1.50,         0x00010001, MARIO_BROS,   name_texture.LUIGI,          portrait_offsets.DLUIGI,         2)
     add_to_css(Character.id.MPPUFF, FGM.announcer.names.JIGGLYPUFF,     1.50,         0x00010002, POKEMON,      name_texture.JIGGLYPUFF,     portrait_offsets.MPPUFF,         17)
+    add_to_css(Character.id.CBGOEMON,FGM.announcer.names.GOEMON,        1.50,         0x00010001, GOEMON,       name_texture.GOEMON,         portrait_offsets.CBGOEMON,       20)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

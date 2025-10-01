@@ -3336,6 +3336,8 @@
 1547 Luigi Dale Character
 1548 Jigglypuff Microphone Main
 1549 Jigglypuff Microphone Character
+154A Goemon Cowboy Main
+154B Goemon Cowboy Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

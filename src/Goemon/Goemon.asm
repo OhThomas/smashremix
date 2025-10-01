@@ -528,7 +528,7 @@ scope Goemon {
     Character.set_costume_shield_colors(GOEMON, RED, BLUE, GREEN, PURPLE, MAGENTA, WHITE, YELLOW, RED)
 
     Character.table_patch_start(variants, Character.id.GOEMON, 0x4)
-    db      Character.id.NONE // set EBI as SPECIAL variant for GOEMON
+    db      Character.id.CBGOEMON // set EBI as SPECIAL variant for GOEMON
     db      Character.id.NGOEMON
     db      Character.id.NONE
     db      Character.id.NONE

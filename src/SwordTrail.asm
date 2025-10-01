@@ -112,6 +112,7 @@ scope SwordTrail {
     add_sword_trail(ssonic_trail, -1, 0x1A, AXIS_Z, 0xeeff5f00, 0xe4d72600, -190, 190)
 	add_sword_trail(dedede_hammer, Character.id.DEDEDE, 0xE, AXIS_Z, 0xEEEEEE00, 0xB68E5600, -576, -192)
     add_sword_trail(goemon_trail, Character.id.GOEMON, 0xD, AXIS_Y, 0xE0B00000, 0xFFFFFF00, -64, 220)
+    add_sword_trail(goemon_trail, Character.id.CBGOEMON, 0xD, AXIS_Y, 0xE0B00000, 0xFFFFFF00, -64, 220)
     add_sword_trail(falco_trail, Character.id.FALCO, 0x0, AXIS_Y, 0x00FFFF00, 0x00FFFF00, -150, 250)
     add_sword_trail(falco_trail2, Character.id.FALCO, 0x1, AXIS_Y, 0x00FFFF00, 0x00FFFF00, -150, 250)
     add_sword_trail(kirby_falco_trail, Character.id.KIRBY, 0x0, AXIS_Y, 0x00FFFF00, 0x00FFFF00, -140, 240)

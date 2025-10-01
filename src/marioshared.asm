@@ -40,6 +40,10 @@ scope MarioShared {
     Character.table_patch_start(pipe_turn, Character.id.GOEMON, 0x1)
     db      OS.TRUE;     OS.patch_end();
 
+    // Set pipe turn rotation for COWBOY GOEMON
+    Character.table_patch_start(pipe_turn, Character.id.CBGOEMON, 0x1)
+    db      OS.TRUE;     OS.patch_end();
+
     // Set pipe turn rotation for EBI
     Character.table_patch_start(pipe_turn, Character.id.EBI, 0x1)
     db      OS.TRUE;     OS.patch_end();
