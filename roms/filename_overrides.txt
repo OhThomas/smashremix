@@ -3338,6 +3338,8 @@
 1549 Jigglypuff Microphone Character
 154A Goemon Cowboy Main
 154B Goemon Cowboy Character
+154C Ganondorf Link Mask Main
+154D Ganondorf Link Mask Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

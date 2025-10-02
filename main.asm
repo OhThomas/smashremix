@@ -259,6 +259,8 @@ include "src/CBGoemon/CBGoemon.asm"
 include "src/NFalco/NFalco.asm"
 // NGANONDORF
 include "src/NGanondorf/NGanondorf.asm"
+// LINK MASK GANONDORF
+include "src/LMGanondorf/LMGanondorf.asm"
 // PEPPY
 include "src/Peppy/PeppySpecial.asm"
 include "src/Peppy/Peppy.asm"

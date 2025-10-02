@@ -999,6 +999,8 @@ scope Kirby {
         lw      t7, 0x0ADC(s1)              // t7 = character id of copied power
         lli     t8, Character.id.GND        // t8 = id.GND
         beq     t7, t8, _gnd_actions        // branch if copied power = GND
+        lli     t8, Character.id.LMGND      // t8 = id.LMGND
+        beq     t7, t8, _gnd_actions        // branch if copied power = LMGND
         lli     t8, Character.id.DRM        // t8 = id.DRM
         beq     t7, t8, _drm_actions        // branch if copied power = DRM
         lli     t8, Character.id.DRL        // t8 = id.DRL

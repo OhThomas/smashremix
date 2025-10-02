@@ -1071,6 +1071,7 @@ scope Costumes {
         db 0x03                             // Dale Luigi
         db 0x04                             // Microphone Jigglypuff
         db 0x05                             // Cowboy Goemon
+        db 0x06                             // Link Mask Ganondorf
         // Polygons
         db 0x05                             // Polygon Wario
         db 0x05                             // Polygon Lucas

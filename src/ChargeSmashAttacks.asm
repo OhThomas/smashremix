@@ -485,6 +485,7 @@
         set_charged_smash_attacks(Character.id.DLUIGI, entry_mario)
         set_charged_smash_attacks(Character.id.MPPUFF, entry_puff)
         set_charged_smash_attacks(Character.id.CBGOEMON, entry_goemon)
+        set_charged_smash_attacks(Character.id.LMGND, entry_ganon)
         // REMIX POLYGONS
         set_charged_smash_attacks(Character.id.NWARIO, entry_wario)
         set_charged_smash_attacks(Character.id.NLUCAS, entry_lucas)

@@ -1010,6 +1010,13 @@ scope CharEnvColor {
         lli     t9, Character.id.GND
         li      v0, custom_display_lists_struct_gnd
         beq     t2, t9, _fix_gnd            // skip to fixing GND
+
+        // Currently causes Ganondorf model to not load properly after loading
+        // Link Mask Ganondorf, like it's replacing the display list pointer in 
+        // the custom display list for GND so leaving commented out
+        // lli     t9, Character.id.LMGND
+        // beq     t2, t9, _fix_gnd         // skip to fixing LMGND
+        
         lli     t9, Character.id.WARIO
         li      v0, custom_display_lists_struct_wario
         beq     t2, t9, _fix                // skip to fixing WARIO
@@ -1414,6 +1421,9 @@ scope CharEnvColor {
         li      a1, custom_display_lists_struct_gnd
         lli     a2, Character.id.GND
         beq     a0, a2, _clear_gnd          // if GND, clear GND's custom display lists
+        nop
+        lli     a2, Character.id.LMGND
+        beq     a0, a2, _clear_gnd          // if LINK MASK GANONDORF, clear GND's custom display lists
         nop
         li      a1, custom_display_lists_struct_wario
         lli     a2, Character.id.WARIO

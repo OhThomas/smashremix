@@ -3064,6 +3064,7 @@ scope Training {
     string_dluigi:; char_0x4F:; db "Dale Luigi", 0x00
     string_mppuff:; char_0x50:; db "Microphone Jigglypuff", 0x00
     string_cbgoemon:; char_0x51:; db "Cowboy Goemon", 0x00
+    string_lmgnd:; char_0x52:; db "Masked Ganondorf", 0x00
     OS.align(4)
 
     string_table_char:
@@ -3132,6 +3133,7 @@ scope Training {
     dw char_0x4F            // DALE LUIGI
     dw char_0x50            // MICROPHONE JIGGLYPUFF
     dw char_0x51            // COWBOY GOEMON
+    dw char_0x52            // LINK MASK GANONDORF
     dw char_0x0D            // METAL MARIO
     dw char_0x45            // METAL LUIGI
     dw char_0x1A            // GIANT DK
@@ -3254,6 +3256,7 @@ scope Training {
         register_character_id(DLUIGI);
         register_character_id(MPPUFF);
         register_character_id(CBGOEMON);
+        register_character_id(LMGND);
         // ADD BONUS CHARACTERS HERE
 
         // bosses and polygons
@@ -3363,6 +3366,7 @@ scope Training {
     db Character.id.DLUIGI
     db Character.id.MPPUFF
     db Character.id.CBGOEMON
+    db Character.id.LMGND
 
     db Character.id.METAL
     db Character.id.MLUIGI
@@ -3488,6 +3492,7 @@ scope Training {
     db id.DLUIGI
     db id.MPPUFF
     db id.CBGOEMON
+    db id.LMGND
 
     // REMIX POLYGONS
     db id.NWARIO

@@ -3166,6 +3166,7 @@ scope TwelveCharBattle {
     add_defeat_parameters(0x222,                        defeated_moveset_luigi,     0)          // 0x4F - DALE LUIGI
     add_defeat_parameters(0x51D,                        defeated_moveset_jiggly,    0)          // 0x50 - MICROPHONE JIGGLYPUFF
     add_defeat_parameters(File.GOEMON_DOWN_STAND_U,     defeated_moveset_mario,     0)          // 0x51 - COWBOY GOEMON
+    add_defeat_parameters(0x617,                        defeated_moveset_captain,   0)          // 0x52 - LINK MASK GANONDORF
 
     // REMIX POLYGONS
     add_defeat_parameters(0x222,                        defeated_moveset_mario,     0)          // - NWARIO
