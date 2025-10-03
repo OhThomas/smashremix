@@ -2937,14 +2937,14 @@ scope Stages {
     db id.BATTLEFIELD                       // 00
     db id.SMASHVILLE2                       // 01
     db id.POKEMON_STADIUM                   // 02
-    db id.FIRST_DESTINATION                 // 03
+    db id.WARIOWARE                         // 03
     db id.GERUDO                            // 04
     db id.GOOMBA_ROAD                       // 05
     db id.YOSHIS_ISLAND                     // 06
     db id.DREAM_LAND                        // 07
     db id.SECTOR_Z                          // 08
-    db id.FINAL_DESTINATION                 // 09
-    db id.META_CRYSTAL                      // 0A
+    db id.FIRST_DESTINATION                 // 09
+    db id.FINAL_DESTINATION                 // 0A
     db id.SAFFRON_CITY                      // 0B
     db id.MUSHROOM_KINGDOM                  // 0C
     db id.PLANET_ZEBES                      // 0D
@@ -2967,7 +2967,7 @@ scope Stages {
     db id.KITCHEN                           // 1D
     db id.FROSTY                            // 1E
     db id.FRAYS_STAGE                       // 1F
-    db id.WARIOWARE                         // 20
+    db id.META_CRYSTAL                      // 20
     db id.GYM_LEADER_CASTLE                 // 21
     db id.HOW_TO_PLAY                       // 22
     db id.RANDOM                            // 23
@@ -3039,14 +3039,14 @@ scope Stages {
     db id.BATTLEFIELD                       // 00
     db id.SMASHVILLE2                       // 01
     db id.POKEMON_STADIUM                   // 02
-    db id.FIRST_DESTINATION                 // 03
+    db id.WARIOWARE                         // 03
     db id.GERUDO                            // 04
     db id.GOOMBA_ROAD                       // 05
     db id.FRAYS_STAGE                       // 06
     db id.FRAYS_STAGE_NIGHT                 // 07
     db id.POKEMON_STADIUM_2                 // 08
     db id.SAFFRON_DL                        // 09       <-- Movement ON
-    db id.GANONS_TOWER                      // 0A
+    db id.FIRST_DESTINATION                 // 0A
     db id.GLACIAL_REMIX                     // 0B
     db id.DR_MARIO                          // 0C
     db id.TALTAL                            // 0D
@@ -3056,7 +3056,7 @@ scope Stages {
     db id.RANDOM                            // 11
     // Page 2 - Viable Stages
     db id.GYM_LEADER_CASTLE                 // 12
-    db id.WARIOWARE                         // 13
+    db id.GANONS_TOWER                      // 13
     db id.DELFINO                           // 14
     db id.CSIEGE                            // 15
     db id.SPIRALM                           // 16
