@@ -3291,7 +3291,7 @@ scope Stages {
 
         // Shown when tournament layout for ban indicator
         Render.draw_string_pointer(2, 0xB, layout_pointer, Render.update_live_string_, 0x437C0000, 0x43470000, 0xFFFFFFFF, 0x3F400000, Render.alignment.RIGHT)
-        Render.draw_texture_at_offset(2, 0xB, Render.file_pointer_3, 0x0688, Render.NOOP, 0x43710000, 0x43468000, 0xC0CC00FF, 0x000000FF, 0x3F400000)
+        Render.draw_texture_at_offset(2, 0xB, Render.file_pointer_3, 0x0688, Render.NOOP, 0x43720000, 0x43468000, 0xC0CC00FF, 0x000000FF, 0x3F400000)
         lui     t0, 0x3F38                  // t0 = x scale
         lw      t1, 0x0074(v0)              // t1 = image struct
         sw      t0, 0x0018(t1)              // set x scale
