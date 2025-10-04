@@ -775,6 +775,9 @@ scope Marina {
         lli     at, Character.id.GND        // at = id.GND
         beql    t7, at, _end                // end if character = GND...
         lli     a0, File.FALCON_THROWN_MARINA // ...override animation with FALCON_THROWN_MARINA
+        lli     at, Character.id.LMGND        // at = id.GND
+        beql    t7, at, _end                // end if character = GND...
+        lli     a0, File.FALCON_THROWN_MARINA // ...override animation with FALCON_THROWN_MARINA
         lli     at, Character.id.NGND        // at = id.GND
         beql    t7, at, _end                // end if character = NGND...
         lli     a0, File.FALCON_THROWN_MARINA // ...override animation with FALCON_THROWN_MARINA

@@ -153,7 +153,7 @@ scope Ganondorf {
     Character.edit_menu_action_parameters(GND,   0xD,               File.GND_POSE_1P,           ONEP,                       -1)
 
     Character.table_patch_start(variants, Character.id.GND, 0x4)
-    db      Character.id.NONE   // set as SPECIAL variant for GND
+    db      Character.id.LMGND  // set as SPECIAL variant for GND
     db      Character.id.NGND   // set as POLYGON variant for GND
     db      Character.id.NONE
     db      Character.id.NONE

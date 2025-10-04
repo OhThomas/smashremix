@@ -34,6 +34,7 @@ scope link_costumes {
     Costumes.register_extra_costumes_for_char(Character.id.LINK)
     Costumes.register_extra_costumes_for_char(Character.id.JLINK)
     Costumes.register_extra_costumes_for_char(Character.id.ELINK)
+    Costumes.register_extra_costumes_for_char(Character.id.MJLINK)
 
     // Costume 0x4
     // Black Link

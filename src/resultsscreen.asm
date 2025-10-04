@@ -751,6 +751,7 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.MPPUFF,   FGM.announcer.names.JIGGLYPUFF,             POKEMON,         Character.id.JIGGLYPUFF, 180,  JIGGLYPUFF,      20,     0.65,       0x14)
     add_to_results_screen(Character.id.CBGOEMON, FGM.announcer.names.GOEMON,                 GOEMON,          Character.id.CAPTAIN, 170,     GOEMON,          25,     0.75,      {MIDI.id.GOEMON_VICTORY})
     add_to_results_screen(Character.id.LMGND,    FGM.announcer.names.GANONDORF,              ZELDA,           Character.id.CAPTAIN, 185,     GANONDORF,       20,     0.6,       {MIDI.id.GANON_VICTORY})
+    add_to_results_screen(Character.id.MJLINK,   FGM.announcer.names.LINK,                   ZELDA,           Character.id.LINK,    160,     LINK,            50,     1,         0x15)
 
     // REMIX POLYGONS
     add_to_results_screen(Character.id.NFALCO,   FGM.announcer.names.NFIGHTER,               SMASH,           Character.id.FOX,     185,     POLY FALCO,      20,     0.6,       0x0B)

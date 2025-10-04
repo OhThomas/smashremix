@@ -15,6 +15,8 @@ ADD,,.\original\154A.bin,1,05A4,0000,.\original\154A.txt,2
 ADD,,.\original\154B.bin,0,0008,3FFFC,,2
 ADD,,.\original\154C.bin,1,0164,0000,.\original\154C.txt,2
 ADD,,.\original\154D.bin,0,0004,3FFFC,,2
+ADD,,.\original\154E.bin,1,03A4,0000,.\original\154E.txt,2
+ADD,,.\original\154F.bin,0,0004,A4D4,.\original\154F.txt,2
 MODIFY,0FFD,.\original\0FFD.bin,1,026C,0000,.\original\0FFD.txt,2
 MODIFY,0A06,.\original\0A06.bin,1,0210,3FFFC,,2
 END,,,,,,,

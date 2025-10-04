@@ -38,6 +38,21 @@ scope CaptainShared {
     dw  Character.GND_file_7_ptr
     OS.copy_segment(0xA9EAC, 0x20)
 
+    kick_anim_struct_LMGND:
+    dw  0x060F0000
+    dw  Character.LMGND_file_7_ptr
+    OS.copy_segment(0xA9ACC, 0x08)
+    dw  Size.falcon.kick.update_routine_    // scales gfx based on size
+    OS.copy_segment(0xA9AD8, 0x14)
+
+    punch_anim_struct_LMGND:
+    dw  0x020F0000
+    dw  Character.LMGND_file_8_ptr
+    dw  0x501C0000
+    OS.copy_segment(0xA9AF8, 0x0008)
+    dw  Size.falcon.punch.render_routine_
+    OS.copy_segment(0xA9B04, 0x0010)
+
     kick_anim_struct_JFALCON:
     dw  0x060F0000
     dw  Character.JFALCON_file_7_ptr
@@ -92,6 +107,11 @@ scope CaptainShared {
     dw  0x00000000
     dw  0x0000021C
 
+    entry_anim_struct_LMGND:
+    dw  0x060A0000
+    dw  Character.LMGND_file_7_ptr
+    OS.copy_segment(0xA9EAC, 0x20)
+
     entry_anim_struct_JFALCON:
     dw  0x060A0000
     dw  Character.JFALCON_file_7_ptr
@@ -134,6 +154,10 @@ scope CaptainShared {
         ori     t1, r0, Character.id.GND    // t1 = id.GND
         li      a0, kick_anim_struct        // a0 = kick_anim_struct
         beq     t0, t1, _end                // end if character id = GND
+        nop
+        ori     t1, r0, Character.id.LMGND  // t1 = id.LMGND
+        li      a0, kick_anim_struct_LMGND  // a0 = kick_anim_struct_LMGND
+        beq     t0, t1, _end                // end if character id = LMGND
         nop
         ori     t1, r0, Character.id.JFALCON    // t1 = id.JFALCON
         li      a0, kick_anim_struct_JFALCON        // a0 = kick_anim_struct_JFALCON
@@ -194,6 +218,11 @@ scope CaptainShared {
         beq     t0, t1, _end                // end if character id = GND
         nop
 
+        ori     t1, r0, Character.id.LMGND  // t1 = id.LMGND
+        li      a0, punch_anim_struct_LMGND // a0 = punch_anim_struct_LMGND
+        beq     t0, t1, _end                // end if character id = LMGND
+        nop
+
         ori     t1, r0, Character.id.WOLF   // t1 = id.WOLF
         li      a0, slash_anim_struct_WOLF  // a0 = slash_anim_struct
         beq     t0, t1, _end                // end if character id = WOLF
@@ -247,6 +276,10 @@ scope CaptainShared {
         beq     t0, t1, _gnd                // end if character id = GND
         nop
 
+        ori     t1, r0, Character.id.LMGND  // t1 = id.LMGND
+        li      a0, entry_anim_struct_LMGND // a0 = entry_anim_struct_LMGND
+        beq     t0, t1, _gnd                // end if character id = LMGND
+        nop
 
 	    ori     t1, r0, Character.id.JFALCON    // t1 = id.JFALCON
         li      a0, entry_anim_struct_JFALCON       // a0 = entry_anim_struct_JFALCON
@@ -307,6 +340,12 @@ scope CaptainShared {
         li      s2, Character.GND_file_7_ptr // a0 = Character.GND_file_7_ptr
         beq     t0, t1, _end                // end if character id = GND
         nop
+
+        ori     t1, r0, Character.id.LMGND  // t1 = id.LMGND
+        li      s2, Character.LMGND_file_7_ptr // a0 = Character.LMGND_file_7_ptr
+        beq     t0, t1, _end                // end if character id = LMGND
+        nop
+
         ori     t1, r0, Character.id.JFALCON    // t1 = id.JFALCON
         li      s2, Character.JFALCON_file_7_ptr // a0 = Character.JFALCON _file_7_ptr
         beq     t0, t1, _end                // end if character id = JFALCON
@@ -356,6 +395,9 @@ scope CaptainShared {
         lw      v1, 0x0928(a0)              // v1 = falcon hand bone struct
         ori     at, r0, Character.id.GND
         beq     a1, at, _end                // end if character id = GND
+        lw      v1, 0x0928(a0)              // v1 = falcon hand bone struct
+        ori     at, r0, Character.id.LMGND
+        beq     a1, at, _end                // end if character id = LMGND
         lw      v1, 0x0928(a0)              // v1 = falcon hand bone struct
         ori     at, r0, Character.id.JFALCON
         beq     a1, at, _end                // end if character id = JFALCON
@@ -450,6 +492,8 @@ scope CaptainShared {
         beq     v0, at, j_0x80161EF8        // original line 1, modified to use jump
         lli     at, Character.id.JFALCON    // at = JFALCON
         beq     v0, at, j_0x80161EF8        // if JFALCON, take Falcon branch
+        lli     at, Character.id.LMGND      // at = LMGND
+        beq     v0, at, j_0x80161EF8        // if LMGND, take Falcon branch
         lli     at, Character.id.GND        // at = GND
         beq     v0, at, j_0x80161EF8        // if GND, take Falcon branch
         nop

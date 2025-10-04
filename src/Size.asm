@@ -2383,6 +2383,8 @@ scope Size {
             lw      t7, 0x0008(s0)          // t7 = char_id
             lli     t8, Character.id.LINK
             beq     t7, t8, _top_joint_no_y // if Link, scale top joint without y
+            lli     t8, Character.id.MJLINK
+            beq     t7, t8, _top_joint_no_y // if Majora Link, scale top joint without y
             lli     t8, Character.id.JLINK
             beq     t7, t8, _top_joint_no_y // if J Link, scale top joint without y
             lli     t8, Character.id.ELINK

@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(74)
+    constant ADD_CHARACTERS(75)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -2535,7 +2535,8 @@ scope Character {
         db  id.GDONKEY; db  id.NDONKEY;  db  id.JDK;    db  id.NONE        // 0x02 - DONKEY
         db  id.NONE;    db  id.NSAMUS;   db  id.JSAMUS; db  id.ESAMUS      // 0x03 - SAMUS
         db  id.MLUIGI;  db  id.NLUIGI;   db  id.JLUIGI; db  id.DLUIGI      // 0x04 - LUIGI
-        db  id.BOSS;    db  id.NLINK;    db  id.JLINK;  db  id.ELINK       // 0x05 - LINK
+        // db  id.BOSS;    db  id.NLINK;    db  id.JLINK;  db  id.ELINK       // 0x05 - LINK
+        db  id.MJLINK;  db  id.NLINK;    db  id.JLINK;  db  id.ELINK       // 0x05 - LINK
         db  id.NONE;    db  id.NYOSHI;   db  id.JYOSHI; db  id.NONE        // 0x06 - YOSHI
         db  id.NONE;    db  id.NCAPTAIN; db  id.JFALCON;db  id.NONE        // 0x07 - CAPTAIN
         db  id.NONE;    db  id.NKIRBY;   db  id.JKIRBY; db  id.NONE        // 0x08 - KIRBY
@@ -3708,7 +3709,9 @@ scope Character {
     define_character(CBGOEMON, MARIO, File.GOEMON_COWBOY_MAIN, 0x0CA, 0, File.GOEMON_COWBOY_CHARACTER, File.GOEMON_SHIELD_POSE, File.GOEMON_RYO_HITBOX, File.GOEMON_CLOUD_INFO, File.GOEMON_RYO_GRAPHIC, File.GOEMON_ENTRY_GFX, 0x91C, 22, OS.TRUE, OS.TRUE, Stages.id.BTT_GOEMON, Stages.id.BTP_GOEMON, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF,sound_type.U, variant_type.SPECIAL)
     // 0x52 - LINK MASK GANONDORF
     define_character(LMGND, CAPTAIN, File.GND_LINK_MASK_MAIN, 0x0EB, 0, File.GND_LINK_MASK_CHARACTER, 0x14E, 0, File.GND_ENTRY_KICK, File.GND_PUNCH_GRAPHIC, 0, 0x48C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_GND, Stages.id.BTP_GND, Stages.id.BTT_FALCON, Stages.id.BTP_YOSHI, sound_type.U, variant_type.SPECIAL)
-
+    // 0x53 - MAJORA LINK
+    define_character(MJLINK, LINK, File.LINK_MAJORA_MAIN, 0x0E0, 0, File.LINK_MAJORA_CHARACTER, 0x147, 0x0E2, 0x161, 0x145, 0, 0x708, 0, OS.TRUE, OS.TRUE, Stages.id.BTT_LINK, Stages.id.BTP_LINK, Stages.id.BTT_YL, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
+    
 
     // REMIX POLYGONS
     // NWARIO

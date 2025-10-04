@@ -287,6 +287,7 @@ scope CharacterSelect {
     dw  0x8860 + 0x200                      // 0x50 - JIGGLYPUFF w/ MICROPHONE
     dw  0x13C00 + 0x1BE0 + 0x200            // 0x51 - COWBOY GOEMON
     dw  0x16C50 + 0x200                     // 0x52 - GANONDORF w/ LINK MASK
+    dw  0x128B0 + 0x200                     // 0x53 - LINK w/ MAJORA MASK
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -436,6 +437,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.MPPUFF, req/MPPUFF_MODEL)
     add_alt_req_list(Character.id.CBGOEMON, req/CBGOEMON_MODEL)
     add_alt_req_list(Character.id.LMGND, req/LMGND_MODEL)
+    add_alt_req_list(Character.id.MJLINK, req/MJLINK_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -3064,6 +3066,7 @@ scope CharacterSelect {
         constant MPPUFF(0x0000B7F8)
         constant CBGOEMON(0x00023938)
         constant LMGND(0x0000EA38)
+        constant MJLINK(0x00006438)
         // custom
         constant FALCO(0x0000D978)
         constant GND(0x0000EA38)
@@ -3442,6 +3445,7 @@ scope CharacterSelect {
         constant MPPUFF(0x00003DB8)
         constant CBGOEMON(0x0001F228)
         constant LMGND(0x00011AA8)
+        constant MJLINK(0x00002BA0)
         // POLYGONS
         constant NWARIO(0x0001CB28)
         constant NLUCAS(0x0001D008)
@@ -5038,6 +5042,7 @@ scope CharacterSelect {
         constant MPPUFF(0x6380 + 0x10)
         constant CBGOEMON(0x6458 + 0x10)
         constant LMGND(0x6530 + 0x10)
+        constant MJLINK(0x6608 + 0x10)
     }
 
     // @ Description
@@ -5138,6 +5143,9 @@ scope CharacterSelect {
         lli     t2, Character.id.LMGND
         beql    a1, t2, _draw_icon          // If LMGND, then draw LMGND stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.LMGND // a1 = LMGND footer struct
+        lli     t2, Character.id.MJLINK
+        beql    a1, t2, _draw_icon          // If MJLINK, then draw MJLINK stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.MJLINK // a1 = MJLINK footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7141,6 +7149,7 @@ scope CharacterSelect {
     add_to_css(Character.id.MPPUFF, FGM.announcer.names.JIGGLYPUFF,     1.50,         0x00010002, POKEMON,      name_texture.JIGGLYPUFF,     portrait_offsets.MPPUFF,         17)
     add_to_css(Character.id.CBGOEMON,FGM.announcer.names.GOEMON,        1.50,         0x00010001, GOEMON,       name_texture.GOEMON,         portrait_offsets.CBGOEMON,       20)
     add_to_css(Character.id.LMGND,  FGM.announcer.names.GANONDORF,      1.50,         0x00010002, ZELDA,        name_texture.GND,            portrait_offsets.LMGND,          8)
+    add_to_css(Character.id.MJLINK, FGM.announcer.names.LINK,           1.50,         0x00010001, ZELDA,        name_texture.LINK,           portrait_offsets.MJLINK,         5)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

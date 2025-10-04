@@ -3332,6 +3332,8 @@ scope File {
     constant GOEMON_COWBOY_CHARACTER(0x154B)
     constant GND_LINK_MASK_MAIN(0x154C)
     constant GND_LINK_MASK_CHARACTER(0x154D)
+    constant LINK_MAJORA_MAIN(0x154E)
+    constant LINK_MAJORA_CHARACTER(0x154F)
 
  }
 

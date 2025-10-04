@@ -43,3 +43,13 @@ OS.patch_end()
 Character.table_patch_start(ai_attack_prevent, Character.id.GND, 0x4)
 dw    	AI.PREVENT_ATTACK.ROUTINE.YOSHI_FALCON
 OS.patch_end()
+
+// Set CPU behaviour
+Character.table_patch_start(ai_behaviour, Character.id.LMGND, 0x4)
+dw      CPU_ATTACKS
+OS.patch_end()
+
+// Set CPU SD prevent routine
+Character.table_patch_start(ai_attack_prevent, Character.id.LMGND, 0x4)
+dw    	AI.PREVENT_ATTACK.ROUTINE.YOSHI_FALCON
+OS.patch_end()

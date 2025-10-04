@@ -347,6 +347,8 @@ scope JigglypuffKirbyShared {
 
         addiu   at, r0, Character.id.YLINK     // YLINK ID
         beq     v0, at, _linkblast_1
+        addiu   at, r0, Character.id.MJLINK    // MJLINK ID
+        beq     v0, at, _linkblast_1
         addiu   at, r0, Character.id.ELINK     // ELINK ID
         beq     v0, at, _linkblast_1
         addiu   at, r0, Character.id.JLINK     // JLINK ID

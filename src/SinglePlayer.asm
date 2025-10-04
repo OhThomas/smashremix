@@ -2384,6 +2384,7 @@ scope SinglePlayer {
     set_ending_image(Character.id.MPPUFF, 0xB4)
     set_ending_image(Character.id.CBGOEMON, File.GOEMON_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.LMGND, File.GANON_VICTORY_IMAGE_BOTTOM)
+    set_ending_image(Character.id.MJLINK, 0xB2)
 
     // @ Description
     // Patch which substitutes the victory picture with a custom one for all non-original characters.
@@ -2805,4 +2806,5 @@ scope SinglePlayer {
     add_to_single_player(Character.id.MPPUFF,  name_texture.JIGGLYPUFF,    name_delay.JIGGLYPUFF)
     add_to_single_player(Character.id.CBGOEMON,name_texture.GOEMON,        name_delay.GOEMON)
     add_to_single_player(Character.id.LMGND,   name_texture.GND,           name_delay.GND)
+    add_to_single_player(Character.id.MJLINK,  name_texture.LINK,          name_delay.LINK)
 } // __SINGLE_PLAYER__

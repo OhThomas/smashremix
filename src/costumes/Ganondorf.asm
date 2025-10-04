@@ -67,6 +67,7 @@ scope ganondorf_costumes {
 
     // Register extra costumes
     Costumes.register_extra_costumes_for_char(Character.id.GND)
+    Costumes.register_extra_costumes_for_char(Character.id.LMGND)
 
     // Costume 0x6
     scope costume_0x6 {

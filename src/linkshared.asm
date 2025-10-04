@@ -21,6 +21,26 @@ scope LinkShared {
     OS.copy_segment(0x103DEC, 0x34)
 
     OS.align(16)
+    bomb_struct_mjlink:
+    dw 0x00000015
+    dw Character.MJLINK_file_1_ptr
+    OS.copy_segment(0x106108, 0xF8)
+
+    OS.align(16)
+    up_special_struct_mjlink:
+    dw 0x03000000
+    dw 0x00000008
+    dw Character.MJLINK_file_1_ptr
+    OS.copy_segment(0x103DAC, 0x34)
+
+    OS.align(16)
+    boomerang_struct_mjlink:
+    dw 0x01000000
+    dw 0x00000007
+    dw Character.MJLINK_file_6_ptr
+    OS.copy_segment(0x103DEC, 0x34)
+
+    OS.align(16)
     bomb_struct_elink:
     dw 0x00000015
     dw Character.ELINK_file_1_ptr
@@ -330,6 +350,10 @@ scope LinkShared {
             li      t0, YoungLinkDSP.item_info_array // t0 = YoungLinkDSP.item_info_array
             beq     t1, a1, _end                // end if character id = YLINK
             nop
+            ori     t1, r0, Character.id.MJLINK // t1 = id.MJLINK
+            li      t0, bomb_struct_mjlink      // t0 = MJlink.bomb_struct
+            beq     t1, a1, _end                // end if character id = MJLINK
+            nop
             ori     t1, r0, Character.id.ELINK  // t1 = id.ELINK
             li      t0, bomb_struct_elink       // t0 = Elink.bomb_struct
             beq     t1, a1, _end                // end if character id = ELINK
@@ -394,6 +418,10 @@ scope LinkShared {
         li      t6, YoungLinkDSP.item_info_array // t6 = YoungLinkDSP.item_info_array
         beq     t7, a2, _end                // end if character id = YLINK
         nop
+        ori     a2, r0, Character.id.MJLINK // a2 = id.MJLINK
+        li      t6, bomb_struct_mjlink      // t6 = MJLink.bomb_struct
+        beq     t7, a2, _end                // end if character id = MJLINK
+        nop
         ori     a2, r0, Character.id.ELINK  // a2 = id.ELINK
         li      t6, bomb_struct_elink       // t6 = ELink.bomb_struct
         beq     t7, a2, _end                // end if character id = ELINK
@@ -425,6 +453,10 @@ scope LinkShared {
         ori     a1, r0, Character.id.YLINK  // a1 = id.YLINK
         li      t6, YoungLinkDSP.item_info_array // t6 = YoungLinkDSP.item_info_array
         beq     t7, a1, _end                // end if character id = YLINK
+        nop
+        ori     a1, r0, Character.id.MJLINK // a1 = id.MJLINK
+        li      t6, bomb_struct_mjlink      // t6 = MJLink.bomb_struct
+        beq     t7, a1, _end                // end if character id = MJLINK
         nop
         ori     a1, r0, Character.id.ELINK  // a1 = id.ELINK
         li      t6, bomb_struct_elink       // t6 = ELink.bomb_struct
@@ -468,6 +500,9 @@ scope LinkShared {
         ori     at, r0, Character.id.NYLINK  // at = NYLINK
         beq     v1, at, _end                // end if id = NYLINK
         nop
+        ori     at, r0, Character.id.MJLINK // at = MJLINK
+        beq     v1, at, _end                // end if id = MJLINK
+        nop
         ori     at, r0, Character.id.ELINK  // at = ELINK
         beq     v1, at, _end                // end if id = ELINK
         nop
@@ -501,6 +536,9 @@ scope LinkShared {
         nop
         ori     at, r0, Character.id.NYLINK  // at = NYLINK
         beq     v0, at, _end                // end if id = NYLINK
+        nop
+        ori     at, r0, Character.id.MJLINK // at = MJLINK
+        beq     v0, at, _end                // end if id = MJLINK
         nop
         ori     at, r0, Character.id.ELINK  // at = ELINK
         beq     v0, at, _end                // end if id = ELINK
@@ -538,6 +576,9 @@ scope LinkShared {
         ori     at, r0, Character.id.YLINK  // at = YLINK
         beq     v1, at, _end                // end if id = YLINK
         nop
+        ori     at, r0, Character.id.MJLINK // at = MJLINK
+        beq     v1, at, _end                // end if id = MJLINK
+        nop
         ori     at, r0, Character.id.ELINK  // at = ELINK
         beq     v1, at, _end                // end if id = ELINK
         nop
@@ -569,6 +610,9 @@ scope LinkShared {
         nop
         ori     at, r0, Character.id.YLINK  // at = YLINK
         beq     t8, at, _branch_end         // branch if id = YLINK
+        nop
+        ori     at, r0, Character.id.MJLINK // at = MJLINK
+        beq     t8, at, _branch_end         // branch if id = MJLINK
         nop
         ori     at, r0, Character.id.ELINK  // at = ELINK
         beq     t8, at, _branch_end         // branch if id = ELINK
@@ -606,6 +650,10 @@ scope LinkShared {
         ori     t1, r0, Character.id.YLINK  // t1 = id.YLINK
         li      a1, up_special_struct       // a1 = YoungLink.up_special_struct
         beq     t1, t0, _end                // end if character id = YLINK
+        nop
+        ori     t1, r0, Character.id.MJLINK // t1 = id.MJLINK
+        li      a1, up_special_struct_mjlink // a1 = MJLink.up_special_struct
+        beq     t1, t0, _end                // end if character id = MJLINK
         nop
         ori     t1, r0, Character.id.ELINK  // t1 = id.ELINK
         li      a1, up_special_struct_elink // a1 = ELink.up_special_struct
@@ -654,6 +702,10 @@ scope LinkShared {
         li      a1, boomerang_struct        // a1 = YoungLink.boomerang_struct
         beq     t1, t0, _end                // end if character id = YLINK
         nop
+        ori     t1, r0, Character.id.MJLINK // t1 = id.MJLINK
+        li      a1, boomerang_struct_mjlink // a1 = MJLink.boomerang_struct
+        beq     t1, t0, _end                // end if character id = MJLINK
+        nop
         ori     t1, r0, Character.id.ELINK  // t1 = id.ELINK
         li      a1, boomerang_struct_elink  // a1 = ELink.boomerang_struct
         beq     t1, t0, _end                // end if character id = ELINK
@@ -692,6 +744,10 @@ scope LinkShared {
         lui     at, 0x4250                  // at = float: 52
         beq     t1, t0, _end                // end if character id = YLINK
         nop
+        // ori     t1, r0, Character.id.MJLINK // t1 = id.MJLINK
+        // lui     at, 0x428A                  // at = float: 69
+        // beq     t1, t0, _end                // end if character id = MJLINK
+        // nop
         ori     t1, r0, Character.id.JLINK  // t1 = id.JLINK
         lui     at, 0x428E                  // at = float: 71
         beq     t1, t0, _end                // end if character id = JLINK
@@ -722,6 +778,8 @@ scope LinkShared {
 
 	    // at = Character.id.LINK
 	    beq		a0, at, _pull_bomb
+	    addiu 	at, r0, Character.id.MJLINK
+	    beq		a0, at, _pull_bomb			// branch if MJLINK
 	    addiu 	at, r0, Character.id.ELINK
 	    beq		a0, at, _pull_bomb			// branch if ELink
 	    addiu 	at, r0, Character.id.JLINK

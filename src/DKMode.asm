@@ -111,6 +111,8 @@ scope DKMode {
     // link based
     Character.table_patch_start(fighter_DK_mode, Character.id.ELINK, 0x4)
     db 0x12, 0x4, 0x9, 0x0;   OS.patch_end();   // copy of Link
+    Character.table_patch_start(fighter_DK_mode, Character.id.MJLINK, 0x4)
+    db 0x12, 0x4, 0x9, 0x0;   OS.patch_end();   // copy of Link
     Character.table_patch_start(fighter_DK_mode, Character.id.JLINK, 0x4)
     db 0x12, 0x4, 0x9, 0x0;   OS.patch_end();   // copy of Link
     Character.table_patch_start(fighter_DK_mode, Character.id.YLINK, 0x4)
