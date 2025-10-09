@@ -180,6 +180,54 @@ scope FGM {
         jal     0x800269C0
         addiu   a0, r0, {sfx}
     }
+    
+    // @ Description
+    // Changes FGM volume
+    // @ Arguments
+    // a0 - volume, max = 30720 (0x7800)
+    constant change_vol_(0x80020E64)
+
+    // @ Description
+    // Edits function 0x80020E64 (Set FGM Volume) to take into account the master SFX volume
+    // a0 - volume, max = 30720 (0x7800)
+    scope master_fgm_volume: {
+        OS.patch_start(0x21A64, 0x80020E64)
+        addiu   sp, sp, -0x0018                 // original line 1
+        sw      ra, 0x0014(sp)                  // original line 3
+        jal     master_fgm_volume
+        nop
+        nop
+        nop
+        nop
+        _return:
+        OS.patch_end()
+
+        li      at, Toggles.entry_fgm_volume    // at = address of master SFX volume
+        lw      at, 0x0004(at)                  // ~
+        addiu   at, at, 0x0001                  // at = master SFX volume (1 to 10)
+        mtc1    at, f4                          // ~
+        cvt.s.w f4, f4                          // f4 = master SFX volume fp
+        lui     at, 0x4120                      // ~
+        mtc1    at, f0                          // f0 = 10.0
+        div.s   f2, f4, f0                      // f2 = (master SFX volume / 10.0)
+        mtc1    a0, f0                          // ~
+        cvt.s.w f0, f0                          // f0 = new volume fp
+        mul.s   f0, f0, f2                      // f0 = new volume * (master SFX volume / 10.0)
+        cvt.w.s f4, f0                          // f4 = (word)f4
+        mfc1    a0, f4                          // a0 = updated volume
+
+        sltiu   at, a0, 0x7801                  // original line 2
+        //bnez    at, 0x80020E80                // original line 4 (need to 'j' instead of 'b')
+        bnez    at, _srl                        // original line 4, modified
+        or      a1, a0, r0                      // original line 5
+        //b       0x80020E88                    // original line 6 (need to 'j' instead of 'b')
+        j       _return+8                       // original line 6, modified
+        addiu   a0, r0, 0x007F                  // original line 7
+
+        _srl:
+        j       _return
+        nop
+    }
 
     // Extended Sound Effects
 
@@ -1478,7 +1526,7 @@ scope FGM {
     add_sound(Goemon/sounds/STUN_INITIAL, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Goemon/sounds/LETS_GO, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Piano/sounds/CHANT, SAMPLE_RATE_16000, FGM_TYPE_CHANT, 0, 312)
-    add_sound(Ganondorf/sounds/PLACEHOLDER, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1) // UNUSED, REPLACE WITH ADD_SOUND OR ADD_SOUND_AVANCED
+    add_sound(Sandbag/sounds/ANNOUNCER, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 40, -1)
     add_sound(YoungLink/sounds/STUN, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Peppy/sounds/ATTACK_1, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Peppy/sounds/ATTACK_2, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
@@ -1541,7 +1589,7 @@ scope FGM {
     add_sound(Banjo/sounds/ATTACK_2, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Banjo/sounds/ATTACK_3, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Banjo/sounds/ANNOUNCER, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 40, -1)
-    add_sound(Ganondorf/sounds/PLACEHOLDER, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1) // UNUSED, REPLACE WITH ADD_SOUND OR ADD_SOUND_AVANCED
+    add_sound(sounds/misc/cdtime_travel, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Banjo/sounds/SHIELD_BREAK, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(MLuigi/sounds/ANNOUNCER, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 40, -1)
     add_sound(Ebi/sounds/ANNOUNCER, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 40, -1)
@@ -1583,7 +1631,7 @@ scope FGM {
     add_sound(Banjo/sounds/CROWD_CHANT, SAMPLE_RATE_16000, FGM_TYPE_CHANT, 0, 420)
     add_sound(Banjo/sounds/KAZOOIE_USMASH, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Goemon/sounds/SLEEP, SAMPLE_RATE_16000, FGM_TYPE_SLEEP, 0, 0x150)
-    add_sound(Ganondorf/sounds/PLACEHOLDER, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1) // UNUSED, REPLACE WITH ADD_SOUND OR ADD_SOUND_AVANCED
+    add_sound(Sandbag/sounds/CHANT, SAMPLE_RATE_16000, FGM_TYPE_CHANT, 0, 318)
     add_sound(Ganondorf/sounds/PLACEHOLDER, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1) // UNUSED, REPLACE WITH ADD_SOUND OR ADD_SOUND_AVANCED
     add_sound(Banjo/sounds/KAZOOIE_DSMASH, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
     add_sound(Banjo/sounds/YUH_OH, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
@@ -1951,6 +1999,7 @@ scope FGM {
             constant PEACH(1432)
             constant LANKY(1497)
             constant EPIKA(1459)
+            constant SANDBAG(1236)
         }
 
         scope css {

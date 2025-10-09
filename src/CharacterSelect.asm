@@ -31,8 +31,9 @@ scope CharacterSelect {
     db Character.id.DRAGONKING
     db Character.id.EBI
     db Character.id.PIANO
+    db Character.id.SANDBAG
     OS.align(4)
-    constant NUM_BONUS_CHARS(10)
+    constant NUM_BONUS_CHARS(11)
 
     // @ Description
     // Points to the Bonus Character index table for the current screen
@@ -1956,9 +1957,6 @@ scope CharacterSelect {
         addiu   s0, s0, 0x0001              // increment index
         lli     a0, Character.id.NONE       // a0 = NONE
         beql    a0, s0, _loop               // if char_id = NONE, skip
-        addiu   s0, s0, 0x0001              // increment index
-        lli     a0, Character.id.SANDBAG    // a0 = SANDBAG
-        beql    a0, s0, _loop               // if char_id = SANDBAG, skip
         addiu   s0, s0, 0x0001              // increment index
 
         li      a0, alt_malloc_table
@@ -5125,6 +5123,9 @@ scope CharacterSelect {
         lli     t2, Character.id.ROY
         beql    a1, t2, _draw_icon          // If ROY, then draw ROY stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.ROY // a1 = ROY footer struct
+        lli     t2, Character.id.SANDBAG
+        beq     a1, t2, _sandbag            // If SANDBAG, then draw SANDBAG stock icon
+        sll     t2, t2, 0x0002              // t2 = SANDBAG * 4 (offset in struct table)
         lli     t2, Character.id.HBPIKA
         beql    a1, t2, _draw_icon          // If HBPIKA, then draw HBPIKA stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.HBPIKA // a1 = HBPIKA footer struct
@@ -5157,6 +5158,20 @@ scope CharacterSelect {
         nop
         b       _draw_icon
         nop
+
+        _sandbag:
+        // If here, Sandbag. Loading stock icon from character struct
+        li      t1, 0x80116E10              // t1 = main character struct table
+        addu    t1, t1, t2                  // t1 = pointer to character struct
+        lw      t1, 0x0000(t1)              // t1 = character struct
+        lw      t2, 0x0028(t1)              // t2 = main character file address pointer
+        lw      t2, 0x0000(t2)              // t2 = main character file address
+        beqz    t2, _gdk
+        lw      t1, 0x0060(t1)              // t1 = offset to attribute dataAdd commentMore actions
+        addu    t1, t2, t1                  // t1 = attribute data address
+        lw      t1, 0x0340(t1)              // t1 = pointer to stock icon footer address
+        b       _draw_icon
+        lw      a1, 0x0000(t1)              // a1 = stock icon footer address
 
         _gdk:
         // If here, GDK. Loading stock icon from character struct
@@ -7124,7 +7139,7 @@ scope CharacterSelect {
     add_to_css(Character.id.MTWO,   FGM.announcer.names.MEWTWO,         1.50,         0x00010004, POKEMON,      name_texture.MEWTWO,         portrait_offsets.MTWO,           -1)
     add_to_css(Character.id.MARTH,  FGM.announcer.names.MARTH,          1.50,         0x00010004, FIRE_EMBLEM,  name_texture.MARTH,          portrait_offsets.MARTH,          -1)
     add_to_css(Character.id.SONIC,  FGM.announcer.names.SONIC,          1.50,         0x00010004, SONIC,        name_texture.SONIC,          portrait_offsets.SONIC,          -1)
-    add_to_css(Character.id.SANDBAG,FGM.announcer.names.FALCO,          1.50,         0x00010001, ZELDA,        name_texture.JPUFF,          portrait_offsets.SANDBAG,        -1)
+    add_to_css(Character.id.SANDBAG,FGM.announcer.names.SANDBAG,        1.50,         0x00010001, SMASH,        name_texture.JPUFF,          portrait_offsets.SANDBAG,        BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.SSONIC, FGM.announcer.names.SSONIC,         1.50,         0x00010004, SONIC,        name_texture.SSONIC,         portrait_offsets.SSONIC,         9)
     add_to_css(Character.id.SHEIK,  FGM.announcer.names.SHEIK,          1.50,         0x00010001, ZELDA,        name_texture.SHEIK,          portrait_offsets.SHEIK,          -1)
     add_to_css(Character.id.MARINA, FGM.announcer.names.MARINA,         1.50,         0x00010004, MISCHIEF_MAKERS,  name_texture.MARINA,     portrait_offsets.MARINA,         -1)

@@ -320,6 +320,13 @@ scope JigglypuffKirbyShared {
         nop
         _return:
         OS.patch_end()
+        
+        addiu   sp, sp, -0x0010
+        sw      ra, 0x0004(sp)
+        jal     VsStats.count_throws
+        nop
+        lw      ra, 0x0004(sp)
+        addiu   sp, sp, 0x0010
 
         beq     v0, at, _kirbyfthrow_2          // modified original line 1
         addiu   at, r0, Character.id.JKIRBY     // JKIRBY ID

@@ -744,6 +744,14 @@ scope Toggles {
         _exit_super_menu:
         jal     save_                       // save toggles
         nop
+        
+        lli     a0, 0x0000                  // a0 = unknown, set to 0
+        jal     BGM.change_vol_             // update BGM volume
+        lli     a1, 0x7800                  // a1 = max volume
+
+        jal     FGM.change_vol_             // update FGM volume
+        lli     a0, 0x7800                  // a0 = max volume
+
         // check if we got here by using the 'L' shortcut, and retrieve current_screen if so
         li      t3, shortcut_stored_screens    // t3 = shortcut_stored_screens
         lbu     a0, 0x0000(t3)                 // a0 = 0 if we didn't use 'L' shortcut
@@ -1178,6 +1186,9 @@ scope Toggles {
     bury:; db "Bury", 0x00
     laugh_track:; db "Laugh Track", 0x00
     egg:; db "Egg", 0x00
+    sleep:; db "Sleep", 0x00
+    trip:; db "Trip", 0x00
+    swap_music:; db "Swap Music", 0x00
     _random:; db "Random", 0x00
     OS.align(4)
 
@@ -1191,6 +1202,9 @@ scope Toggles {
     dw bury
     dw laugh_track
     dw egg
+    dw sleep
+    dw trip
+    dw swap_music
     dw _random
 
     // @ Description
@@ -1560,6 +1574,18 @@ scope Toggles {
     // Screenshake strings
     light:; db "LIGHT", 0x00
     OS.align(4)
+    
+    string_table_volume:
+    dw num_1
+    dw num_2
+    dw num_3
+    dw num_4
+    dw num_5
+    dw num_6
+    dw num_7
+    dw num_8
+    dw num_9
+    dw num_10
 
     // @ Description
     // Pokemon Stadium Announcer strings
@@ -1732,7 +1758,7 @@ scope Toggles {
         sw      t0, 0x000C(sp)              // ~
         sw      ra, 0x0010(sp)              // save registers
 
-        // 0 if off, 1 if '7% Damage', 2 if 'Lava Floor', 3 if 'Shield-Break', 4 if 'Instant K.O.', 5 if 'Force Taunt', 6 if 'Bury', 7 if 'Laugh Track', 8 if 'Egg', 9 if 'Random'
+        // 0 if off, 1 if '7% Damage', 2 if 'Lava Floor', 3 if 'Shield-Break', 4 if 'Instant K.O.', 5 if 'Force Taunt', 6 if 'Bury', 7 if 'Laugh Track', 8 if 'Egg', 9 if 'Sleep', 10 if 'Trip', 11 if 'Swap Music' 12 if 'Random'
         li      t0, Toggles.entry_punish_on_failed_z_cancel
         lw      t0, 0x0004(t0)
         addiu   a0, r0, 1                   // a0 = (7% damage)
@@ -1759,7 +1785,16 @@ scope Toggles {
         addiu   a0, r0, 8                   // a0 = (Egg)
         beql    a0, t0, _play
         lli     a0, 0x24B                   // a0 - fgm_id
-        addiu   a0, r0, 9                   // a0 = (random)
+        addiu   a0, r0, 9                   // a0 = (Sleep)
+        beql    a0, t0, _play
+        lli     a0, 0x23C                   // a0 - fgm_id
+        addiu   a0, r0, 10                  // a0 = (Trip)
+        beql    a0, t0, _play
+        lli     a0, 0x456                   // a0 - fgm_id
+        addiu   a0, r0, 11                  // a0 = (Swap Music)
+        beql    a0, t0, _play
+        lli     a0, 0x529                   // a0 - fgm_id
+        addiu   a0, r0, 12                  // a0 = (random)
         beql    a0, t0, _play
         lli     a0, 0x3A                    // a0 - fgm_id
         bnez    t0, _end                    // safety branch
@@ -2141,6 +2176,37 @@ scope Toggles {
         nop
     }
 
+        // @ Description
+    // Run BGM volume change to update volume
+    scope update_bgm_volume: {
+        addiu   sp, sp,-0x0020              // allocate stack space
+        sw      ra, 0x0008(sp)              // save registers
+
+        lli     a1, 0x7800                  // a1 = max volume
+        jal     BGM.change_vol_             // update BGM volume with toggle value
+        lli     a0, 0x0000                  // a0 = unknown, set to 0
+
+        lw      ra, 0x0008(sp)              // ~
+        addiu   sp, sp, 0x0020              // deallocate stack space
+        jr      ra
+        nop
+    }
+
+    // @ Description
+    // Run FGM volume change to update volume
+    scope update_fgm_volume: {
+        addiu   sp, sp,-0x0020              // allocate stack space
+        sw      ra, 0x0008(sp)              // save registers
+
+        jal     FGM.change_vol_             // update FGM volume with toggle value
+        lli     a0, 0x7800                  // a0 = max volume
+
+        lw      ra, 0x0008(sp)              // ~
+        addiu   sp, sp, 0x0020              // deallocate stack space
+        jr      ra
+        nop
+    }
+
     string_table_gallery:
     dw mario
     dw dk
@@ -2308,7 +2374,9 @@ scope Toggles {
     entry_dpad_css_control:;            entry_bool("Dpad CSS Cursor Control", OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, entry_pk_thunder_reflect_crash_fix)
     entry_pk_thunder_reflect_crash_fix:;entry_bool("PK Thunder Reflect Crash Fix", OS.TRUE, OS.TRUE, OS.TRUE, OS.TRUE, entry_flash_guard)
     entry_flash_guard:;                 entry_bool("Flash Guard", OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, entry_screenshake)
-    entry_screenshake:;                 entry("Screenshake", Menu.type.INT, OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, 0, 2, OS.NULL, string_table_screenshake, OS.NULL, OS.NULL)
+    entry_screenshake:;                 entry("Screenshake", Menu.type.INT, OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, 0, 2, OS.NULL, string_table_screenshake, OS.NULL, entry_bgm_volume)
+    entry_bgm_volume:;                  entry("BGM Volume", Menu.type.INT, 9, 9, 9, 9, 0, 9, update_bgm_volume, string_table_volume, OS.NULL, entry_fgm_volume)
+    entry_fgm_volume:;                  entry("SFX Volume", Menu.type.INT, 9, 9, 9, 9, 0, 9, update_fgm_volume, string_table_volume, OS.NULL, OS.NULL)
 
     evaluate num_remix_toggles(num_toggles)
     evaluate remix_toggles_block_size(block_size)
@@ -2324,7 +2392,7 @@ scope Toggles {
     entry_momentum_slide:;              entry_bool("Momentum Slide", OS.FALSE, OS.FALSE, OS.FALSE, OS.TRUE, entry_shieldstun)
     entry_shieldstun:;                  entry("Shield Stun", Menu.type.INT, 0, 0, 0, 1, 0, 4, OS.NULL, string_table_shieldstun, OS.NULL, entry_z_cancel_opts)
     entry_z_cancel_opts:;               entry("Z-Cancel", Menu.type.INT, OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, 0, 4, OS.NULL, string_table_z_cancel_opts, OS.NULL, entry_punish_on_failed_z_cancel)
-    entry_punish_on_failed_z_cancel:;   entry("Punish Failed Z-Cancel", Menu.type.INT, OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, 0, 9, punish_fgm_, string_table_failed_z_cancel, OS.NULL, entry_improved_ai)
+    entry_punish_on_failed_z_cancel:;   entry("Punish Failed Z-Cancel", Menu.type.INT, OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, 0, 12, punish_fgm_, string_table_failed_z_cancel, OS.NULL, entry_improved_ai)
     entry_improved_ai:;                 entry_bool("Improved AI", OS.TRUE, OS.FALSE, OS.TRUE, OS.TRUE, entry_tripping)
     entry_tripping:;                    entry("Tripping", Menu.type.INT, 0, 0, 0, 0, 0, 3, OS.NULL, string_table_tripping, OS.NULL, entry_rage)
     entry_rage:;                        entry("Rage", Menu.type.INT, 0, 0, 0, 0, 0, 4, OS.NULL, string_table_rage, OS.NULL, entry_footstool)
@@ -2502,8 +2570,17 @@ scope Toggles {
                 evaluate m({n}+1)
                 evaluate next(entry_random_stage_{m})
             }
+            
+            evaluate default_toggled(OS.TRUE)
+            if ({id} == Stages.id.HRC) {
+                evaluate default_toggled(OS.FALSE)
+            }
+            if ({id} == Stages.id.TIME_TWISTER_SSS) {
+                evaluate default_toggled(OS.FALSE)
+            }
+
             evaluate stage_toggle_{Stages.STAGE_{id}_NAME}(num_toggles - {first_stage_toggle})
-            entry_bool({Stages.STAGE_{id}_TITLE}, OS.TRUE, {Stages.STAGE_{id}_TE}, {Stages.STAGE_{id}_NE}, OS.TRUE, {next})
+            entry_bool({Stages.STAGE_{id}_TITLE}, {default_toggled}, {Stages.STAGE_{id}_TE}, {Stages.STAGE_{id}_NE}, {default_toggled}, {next})
         }
         evaluate n({n}+1)
     }
@@ -2928,6 +3005,7 @@ scope Toggles {
     include "/music/profiles/positivevibes.asm"
     include "/music/profiles/slappers.asm"
     include "/music/profiles/freshjams.asm"
+    include "/music/profiles/medleys.asm"
     include "/music/profiles/staff.asm"
 
     // Include stage profiles here

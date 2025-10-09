@@ -531,6 +531,7 @@ scope Stages {
         constant REMIX4(0x06)
         constant REMIX5(0x07)
         constant REMIX6(0x08)
+        constant REMIX7(0x09)
     }
 
     constant ICON_WIDTH(40)
@@ -1837,6 +1838,10 @@ scope Stages {
         dw layout_remix
         dw layout_remix     // remix 2
         dw layout_remix     // remix 3
+        dw layout_remix     // remix 4
+        dw layout_remix     // remix 5
+        dw layout_remix     // remix 6
+        dw layout_remix     // remix 7
     }
 
     // @ Arguments
@@ -3336,7 +3341,7 @@ scope Stages {
     // Holds NUM_PAGES for each stage table
     stage_table_pages:
     dw NUM_PAGES
-    dw 3
+    dw 4
 
     // @ Description
     // Pointers to On/Off strings for the given toggle
@@ -3515,76 +3520,25 @@ scope Stages {
     db id.ZLANDING_DL                       // 34
     db id.FOD                               // 35
     db id.RANDOM                            // 36
-
-    //// Page 3 - Non-Viable
-    //db id.GHZ                               // 1C
-    //db id.POKEMON_STADIUM                   // 04
-    //db id.MINI_YOSHIS_ISLAND                // 0D
-    //db id.FOD                               // 2C
-    //db id.YOSHIS_ISLAND_II                  // 28
-    //db id.BATTLEFIELD                       // 10
-    //db id.WARIOWARE                         // 24
-    //db id.NPC                               // 28
-    //db id.RANDOM                            // 0
-    //db id.GHZ                               // 2D
-    //db id.TOH                               // 2D
-    //db id.BOWSERB                           // 17
-    //db id.DATA                              // 28
-    //db id.CSIEGE                            // 28
-    //db id.EDO                               // 28
-    //db id.RAIDBLUE                          // 2A
-    //db id.GANONS_TOWER                      // 13
-    //db id.BOWSERS_KEEP                      // 13
-    //db id.TALTAL                            // 27
-    //db id.DELFINO                           // 30
-    //db id.MT_DEDEDE                         //
-    //db id.REAPERS                           // 29
-    //db id.FALLS                             // 06
-    //db id.MMADNESS                          // 06
-    //db id.CASINO                            // 06
-    //db id.FLAT_ZONE_2                       // 06
-    //db id.FLAT_ZONE                         // 06
-    //db id.RANDOM                            // 0
-
-    // Page 4 - Non-Viable
-    db id.CORNERIA2                         //
-    db id.COOLCOOL                          //
-    db id.GREAT_BAY                         //
-    db id.N64                               //
-    db id.HTEMPLE                           //
-    db id.SUBCON                            //
-    db id.MADMM                             //
-    db id.KITCHEN                           //
-    db id.WINDY                             //
-    db id.JAPES                             //
-    db id.FROSTY                            //
-    db id.NORFAIR                           //
-    db id.VENOM                             //
-    db id.RITH_ESSA                         //
-    db id.PEACH2                            //
-    db id.OSOHE                             //
-    db id.RANDOM                            //
-
-    // Page 4 - Non-Viable
-    db id.GB_LAND                           //
-    db id.DRAGONKING                        //
-    db id.SHOWDOWN                          //
-    db id.ONETT                             //
-    db id.SMASHKETBALL                      //
-    db id.WORLD1                            //
-    db id.DREAM_LAND_BETA_1                 //
-    db id.DREAM_LAND_BETA_2                 //
-    db id.HOW_TO_PLAY                       //
-    db id.RAINBOWROAD                       //
-    db id.TOADSTURNPIKE                     //
-    db id.DRACULAS_CASTLE                   //
-    db id.BLUE                              //
-    db id.DEKU_TREE                         //
-    db id.ZLANDING                          //
-    db id.FIRST_REMIX                       //
-    db id.TWILIGHT_CITY                     //
-    db id.RANDOM                            //
-
+    // Page 4 - Additional Viable Stages
+    db id.TOH                               // 37       
+    db id.N64_REMIX                         // 38
+    db id.RAINBOWROAD                       // 39       <-- Movement OFF
+    db id.RAIDBLUE                          // 3A
+    db id.COOLCOOL_DL                       // 3B
+    db id.META_CRYSTAL                      // 3C
+    db id.YOSHI_ISLAND_O                    // 3D
+    db id.DREAM_LAND_O                      // 3E       <-- Hazards ON
+    db id.EDO                               // 3F       <-- Hazards ON
+    db id.SAFFRON_O                         // 40
+    db id.DUEL_ZONE                         // 41
+    db id.KITCHEN                           // 42       <-- Movement ON
+    db id.DRAGONKING                        // 43
+    db id.TALTAL_REMIX                      // 44       <-- Hazards OFF
+    db id.BOWSERB                           // 45       <-- Hazards OFF
+    db id.DISCOVERY_FALLS_REMIX             // 46
+    db id.TIME_TWISTER                      // 47       <-- Movement OFF
+    db id.RANDOM                            // 48
     OS.align(4)
 
     // These set up the hazards routines for stage, which generally create objects that has associated routines which create the hazards on a stage
@@ -4908,9 +4862,10 @@ scope Stages {
     // 0x0005 - Remix 4 variant stage_id
     // 0x0006 - Remix 5 variant stage_id
     // 0x0007 - Remix 6 variant stage_id
+    // 0x0008 - Remix 7 variant stage_id
     variant_table:
     constant variant_table_origin(origin())
-    fill 8 * (id.MAX_STAGE_ID + 1), 0xFF
+    fill 9 * (id.MAX_STAGE_ID + 1), 0xFF
 
     // Helps set vanilla stages as remix variants
     macro set_remix_variant(main_stage_id, variant_stage_id) {

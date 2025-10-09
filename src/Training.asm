@@ -1517,6 +1517,120 @@ scope Training {
         jr      ra
         nop
     }
+    
+    // @ Description
+    // Runs every frame to update Z-Cancel Guide's port indicator colour
+    scope _port_indicator_update: {
+        addiu   sp, sp,-0x0020              // allocate stack space
+        sw      ra, 0x0004(sp)              // ~
+        sw      at, 0x0008(sp)              // store at
+        sw      t0, 0x000C(sp)              // store t0
+        sw      t2, 0x0010(sp)              // store t2
+        sw      t4, 0x0014(sp)              // store t4
+
+        constant TIMER_LENGTH(10)  // 10 frames
+
+        constant P1_HI(0xD87272FF) // red
+        constant P2_HI(0x6678C1FF) // blue
+        constant P3_HI(0xD8D072FF) // yellow
+        constant P4_HI(0x71D679FF) // green
+
+        constant P1_LO(0xAF1818FF) // red
+        constant P2_LO(0x1824ADFF) // blue
+        constant P3_LO(0xAFA318FF) // yellow
+        constant P4_LO(0x17A520FF) // green
+
+        li      t0, timer                   // t0 = address of timer
+        li      t2, current_shade           // t2 = address of current shade
+        lbu     t4, 0x0000(t0)              // t4 = timer
+        addiu   at, t4, -0x0001             // at = timer - 1
+        bnezl   t4, _check_port             // branch if timer still has frames..
+        sb      at, 0x0000(t0)              // store updated timer
+
+        // ..else alternate the port shade and reset timer
+        lbu     at, 0x0000(t2)              // at = current shade
+        xori    at, at, 0x0001              // 0 -> 1 or 1 -> 0 (flip bool)
+        sb      at, 0x0000(t2)              // store flipped shade
+        addiu   at, r0, TIMER_LENGTH        // timer = 10 frames
+        sb      at, 0x0000(t0)              // store timer
+
+        _check_port:
+        li      t0, port                    // t0 = address of port
+        lbu     t4, 0x0000(t0)              // t4 = port (1-4), 0 if no one has landed from an aerial yet
+        beqz    t4, _end                    // branch to end if no port
+        addiu   t4, t4, -0x0001             // t4 = port (0-3)
+
+        _get_colour:
+        lbu     at, 0x0000(t2)              // at = current shade
+        bnez    at, _hi                     // branch if current shade is light
+        sll     at, t4, 0x0004              // at = player index * 16
+
+        _lo:
+        li      t0, _lo_branches            // ~
+        addu    t0, t0, at                  // t0 = branch address for this index
+        jr      t0                          // branch to corresponding port's colour selection
+        nop
+
+        _hi:
+        li      t0, _hi_branches            // ~
+        addu    t0, t0, at                  // t0 = branch address for this index
+        jr      t0                          // branch to corresponding port's colour selection
+        nop
+
+        _lo_branches:
+        li      at, P1_LO
+        b       _update_colour
+        nop
+        li      at, P2_LO
+        b       _update_colour
+        nop
+        li      at, P3_LO
+        b       _update_colour
+        nop
+        li      at, P4_LO
+        b       _update_colour
+        nop
+
+        _hi_branches:
+        li      at, P1_HI
+        b       _update_colour
+        nop
+        li      at, P2_HI
+        b       _update_colour
+        nop
+        li      at, P3_HI
+        b       _update_colour
+        nop
+        li      at, P4_HI
+        b       _update_colour
+        nop
+
+        _update_colour:
+        li      t0, z_cancel_object         // t0 = address of z cancel object
+        lw      t0, 0x0004(t0)              // t0 = port indicator object
+        sw      at, 0x0040(t0)              // store updated port indicator colour
+
+        _end:
+        lw      at, 0x0008(sp)              // restore at
+        lw      t0, 0x000C(sp)              // restore t0
+        lw      t2, 0x0010(sp)              // restore t2
+        lw      t4, 0x0014(sp)              // restore t4
+        lw      ra, 0x0004(sp)              // restore ra
+        addiu   sp, sp, 0x0020              // deallocate stack space
+        jr      ra                          // return
+        nop
+
+        variables:
+        timer:
+        db  TIMER_LENGTH
+
+        port:
+        db  0
+
+        current_shade:
+        db  0
+        OS.align(4)
+    }
 
     // @ Description
     // Sets up the custom objects for the custom menu
@@ -1567,6 +1681,38 @@ scope Training {
         sw      r0, 0x0000(s1)              // hold_A_rect_width = 0
 
         _no_hold_A_text:
+                li      t9, entry_z_cancel_guide    // t9 = our menu toggle
+        lw      t9, 0x0004(t9)              // t9 = 1 if z cancel guide is enabled, else 0
+        beqzl   t9, _none_enabled           // if z cancel guide is disabled, skip
+        nop
+
+        // draw z-cancel guide
+        Render.draw_rectangle(0x16, 0xB, 245, 39, 4, 10, 0x202020FF, OS.FALSE) // port indicator
+        li      s1, z_cancel_object         // s1 = address of z_cancel_object
+        sw      v0, 0x0004(s1)              // z_cancel_object tint bar = v0, the return value of Render.draw_rectangle_
+        Render.register_routine(_port_indicator_update)
+
+        Render.draw_rectangle(0x16, 0xB, 88, 41, 162, 6, 0x202020FF, OS.FALSE) // bar background
+
+        define n(0)
+        while ({n} < 25) {
+            if (25 - {n}) > 11 {
+                evaluate rect_colour(0xFB4523FF) // red
+            } else {
+                evaluate rect_colour(0x4BFF3EFF) // green
+            }
+
+            Render.draw_rectangle(0x16, 0xB, 95 + (6 * {n}), 42, 4, 4, {rect_colour}, OS.FALSE) // draw frame blocks
+            evaluate n({n} + 1)
+        }
+
+        Render.draw_rectangle(0x16, 0xB, 89, 43, 4, 2, 0x909090FF, OS.FALSE) // left-most thin grey block
+        Render.draw_rectangle(0x16, 0xB, 245, 43, 4, 2, 0x909090FF, OS.FALSE) // right-most thin grey block
+        Render.draw_rectangle(0x16, 0xB, 246, 40, 2, 8, 0xF0F0F0FF, OS.FALSE) // frame marker bar
+        li      s1, z_cancel_object         // s1 = address of z_cancel_object
+        sw      v0, 0x0000(s1)              // z_cancel_object frame marker bar = v0, the return value of Render.draw_rectangle_
+
+        _none_enabled:
         // Reset counter
         Render.draw_string(0x17, 0x15, reset_string, Render.NOOP, 0x42C70000, 0x41C80000, 0xFFFFFFFF, 0x3F800000, Render.alignment.LEFT, OS.FALSE)
         Render.draw_number(0x17, 0x15, reset_counter, Render.NOOP, 0x435D0000, 0x41C80000, 0xFFFFFFFF, 0x3F800000, Render.alignment.RIGHT, OS.FALSE)
@@ -1727,6 +1873,9 @@ scope Training {
         xori    a1, a1, 0x0001              // a1 = initial display state
         jal     Render.toggle_group_display_
         lli     a0, 0x0017                  // a0 = action & frame group
+        
+        li      t0, _port_indicator_update.variables
+        sw      r0, 0x0000(t0)              // reset port indicator variables
 
         // Ensure BGM volume is correct level.
         // Fixes bug where music is quiet if you do a quick reset while paused.
@@ -2021,6 +2170,105 @@ scope Training {
         jal     Render.toggle_group_display_
         lli     a1, 0x0001                  // a1 = display off
 
+        _z_cancel_guide:
+        li      t9, entry_z_cancel_guide
+        lw      t9, 0x0004(t9)              // t9 = 1 if z cancel guide is enabled, else 0
+        beqzl   t9, _hold_to_exit_check     // if z cancel guide disabled
+        nop
+
+        li      t9, ZCancel.z_cancel_status
+        lbu     at, 0x0005(t9)              // at = z-cancel landed status
+        beqzl   at, _hold_to_exit_check     // branch if no one has landed from an aerial just now
+        nop
+
+        // if we're here, a player has just landed from an aerial
+        lbu     t8, 0x0006(t9)              // t8 = player index (0 - 3)
+        sll     t8, t8, 0x0005              // t8 = player index * 32
+        li      t7, _port_indicator_update.variables
+        li      t0, _port_branches          // ~
+        addu    t0, t0, t8                  // t0 = branch address for this index
+        jr      t0                          // branch to corresponding player type check
+        nop
+
+        _port_branches:
+        li      t0, struct.port_1.type      // t0 = address of p1 type
+        lw      t0, 0x0000(t0)              // t0 = p1 type
+        bnez    t0, _z_cancel_guide_end     // skip updating if player isn't human
+        addiu   at, r0, 1                   // at = port
+        b       _human
+        sb      at, 0x0001(t7)              // store port
+        nop
+
+        li      t0, struct.port_2.type      // t0 = address of p2 type
+        lw      t0, 0x0000(t0)              // t0 = p2 type
+        bnez    t0, _z_cancel_guide_end     // skip updating if player isn't human
+        addiu   at, r0, 2                   // at = port
+        b       _human
+        sb      at, 0x0001(t7)              // store port
+        nop
+
+        li      t0, struct.port_3.type      // t0 = address of p3 type
+        lw      t0, 0x0000(t0)              // t0 = p3 type
+        bnez    t0, _z_cancel_guide_end     // skip updating if player isn't human
+        addiu   at, r0, 3                   // at = port
+        b       _human
+        sb      at, 0x0001(t7)              // store port
+        nop
+
+        li      t0, struct.port_4.type      // t0 = address of p4 type
+        lw      t0, 0x0000(t0)              // t0 = p4 type
+        bnez    t0, _z_cancel_guide_end     // skip updating if player isn't human
+        addiu   at, r0, 4                   // at = port
+        sb      at, 0x0001(t7)              // store port
+        nop
+
+        _human:
+        // if we're here, the player is human, so we should update the frame marker
+        li      t8, z_cancel_object         // t8 = address of z cancel objects
+        lw      t6, 0x0000(t8)              // t6 = frame marker object
+        lw      t5, 0x0004(t8)              // t5 = port indicator object
+
+        lw      t0, 0x0000(t9)              // t0 = tics since last Z press
+        li      at, 0x00010000              // tics value = 0x00010000 when a Z press never happened during aerial(?)
+        beql    t0, at, _set_ulx            // branch if Z press too late for guide's range
+        addiu   a1, r0, 0                   // ulx offset = right-most frame block
+
+        addiu   t0, t0, 0x0001              // tics since last Z press + 1
+        sltiu   a0, t0, 25                  // a0 = 0 if Z press too early for guide's range
+        beqzl   a0, _set_ulx                // branch if a0 = 0
+        addiu   a1, r0, 156                 // ulx offset = left-most frame block
+
+        mtc1    t0, f0                      // f0 = tics since last Z press
+        cvt.s.w f0, f0                      // f0 = Z tics, floating point
+
+        lli     at, 0x0006                  // at = gap per frame block (6 px)
+        mtc1    at, f2                      // f2 = gap
+        cvt.s.w f2, f2                      // f2 = gap, floating point
+        mul.s   f2, f2, f0                  // f2 = gap * Z tics
+        nop
+        cvt.w.s f2, f2                      // f2 = gap * Z tics, fixed point
+        mfc1    a1, f2                      // ulx offset = frame block Z was pressed on
+
+        _set_ulx:
+        addiu   a0, r0, 246                 // ~
+        subu    a0, a0, a1                  // a0 = right-most frame block ulx - ulx offset
+        sw      a0, 0x0030(t6)              // frame marker object ulx = adjusted ulx
+        addiu   a0, a0, -1                  // ~
+        sw      a0, 0x0030(t5)              // port indicator object ulx = adjusted ulx - 1
+
+        sb      r0, 0x0000(t7)              // reset port indicator timer
+        lbu     at, 0x0004(t9)              // at = z-cancel success status
+        beqz    at, _z_cancel_guide_end     // branch if z-cancel failed
+        sb      r0, 0x0002(t7)              // reset port indicator shade
+
+        // if we're here, there was a successful z-cancel
+        jal     FGM.play_
+        lli     a0, 0x118                   // fgm id = Target break SFX
+
+        _z_cancel_guide_end:
+        sb      r0, 0x0005(t9)              // reset z-cancel landed bool
+
+        _hold_to_exit_check:
         li      t9, Toggles.entry_hold_to_exit_training
         lw      t9, 0x0004(t9)              // t9 = 1 if hold to exit training mode is enabled, else 0
         beqzl   t9, _end                    // if hold to exit disabled
@@ -3859,7 +4107,8 @@ scope Training {
     entry_di_practice_mode:; Menu.entry_bool("DI Practice Mode:", OS.FALSE, entry_spam_practice)
     entry_spam_practice:; Menu.entry("Spam Practice:", Menu.type.INT, 0, 0, SPAM_PRACTICE_MAX, OS.NULL, OS.NULL, string_table_spam_practice, OS.NULL, entry_spam_interval)
     entry_spam_interval:; Menu.entry("Spam Interval:", Menu.type.INT, 1, 1, 999, OS.NULL, OS.NULL, OS.NULL, OS.NULL, entry_spam_interval_random)
-    entry_spam_interval_random:; Menu.entry_bool("Spam Interval Random:", OS.FALSE, OS.NULL)
+    entry_spam_interval_random:; Menu.entry_bool("Spam Interval Random:", OS.FALSE, entry_z_cancel_guide)
+    entry_z_cancel_guide:; Menu.entry_bool("Z-Cancel Guide:", OS.FALSE, OS.NULL)
 
     // @ Description
     // Holds the initial value of the special model display toggle
@@ -3881,6 +4130,10 @@ scope Training {
 
     hold_A_rect_width:
     dw 0
+
+    z_cancel_object:
+    dw 0 // frame marker
+    dw 0 // port indicator
 
 }
 
