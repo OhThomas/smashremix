@@ -168,6 +168,8 @@ include "src/Lucas/LucasSpecial.asm"
 include "src/Lucas/Lucas.asm"
 // JLINK
 include "src/JLink/JLink.asm"
+// MAJORA LINK
+include "src/MJLink/MJLink.asm"
 // JFALCON
 include "src/JFalcon/JFalcon.asm"
 // JFOX
