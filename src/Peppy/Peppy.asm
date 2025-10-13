@@ -255,7 +255,12 @@ scope Peppy {
     Character.edit_menu_action_parameters(PEPPY, 0xD,               File.PEPPY_1P_POSE,         -1,                         -1)
 	
 
-
+	Character.table_patch_start(variants, Character.id.PEPPY, 0x4)
+    db      Character.id.CBPEPPY // set as CBPEPPY variant for Peppy
+    db      Character.id.NONE
+    db      Character.id.NONE
+    db      Character.id.NONE
+    OS.patch_end()
 
     Character.table_patch_start(ground_nsp, Character.id.PEPPY, 0x4)
     dw      PeppyNSP.ground_begin_initial_
@@ -345,10 +350,15 @@ scope Peppy {
         _return:
         OS.patch_end()
 
+        addiu   at, r0, Character.id.CBPEPPY // checking Cowboy Peppy
+        beql    at, t6, _peppy_rotation
+        nop
+
         addiu   at, r0, Character.id.PEPPY
         bnel    at, t6, _normal
         lui     at, 0x8019              // og line 1
 
+        _peppy_rotation:
         mtc1    r0, f10                 // rotation = 0 for peppy
         j       _return
         nop

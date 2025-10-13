@@ -158,7 +158,8 @@ scope Boot {
         nop
     }
 
-    string_version:; String.insert("Smash Remix v2.0.0")
+    // string_version:; String.insert("Smash Remix v2.0.0")
+    string_version:; String.insert("San Antonio v2.0.0")
 
     // @ Description
     // Use larger logo black backsplash

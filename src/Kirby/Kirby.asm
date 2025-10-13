@@ -594,6 +594,13 @@ scope Kirby {
     dw      PeppyNSP.air_begin_initial_
     OS.patch_end()
 
+    Character.table_patch_start(kirby_ground_nsp, Character.id.CBPEPPY, 0x4)
+    dw      PeppyNSP.ground_begin_initial_
+    OS.patch_end()
+    Character.table_patch_start(kirby_air_nsp, Character.id.CBPEPPY, 0x4)
+    dw      PeppyNSP.air_begin_initial_
+    OS.patch_end()
+
     Character.table_patch_start(kirby_ground_nsp, Character.id.BANJO, 0x4)
     dw      BanjoNSP.ground_begin_initial_
     OS.patch_end()
@@ -893,6 +900,7 @@ scope Kirby {
     db 0, 0, 0, 0; dh Character.id.MTWO;    dh 7
     db 0, 0, 0, 0; dh Character.id.SHEIK;   dh 6
     db 0, 0, 0, 0; dh Character.id.PEPPY;   dh 5
+    db 0, 0, 0, 0; dh Character.id.CBPEPPY; dh 5
     db 0, 0, 0, 0; dh -1;                   dh 0 // Dummy (indicates last entry)
 
     // @ Description

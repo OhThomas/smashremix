@@ -3342,6 +3342,8 @@
 154D Ganondorf Link Mask Character
 154E Link Majora Main
 154F Link Majora Character
+1550 Peppy Cowboy Main
+1551 Peppy Cowboy Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

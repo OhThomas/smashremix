@@ -3334,6 +3334,8 @@ scope File {
     constant GND_LINK_MASK_CHARACTER(0x154D)
     constant LINK_MAJORA_MAIN(0x154E)
     constant LINK_MAJORA_CHARACTER(0x154F)
+    constant PEPPY_COWBOY_MAIN(0x1550)
+    constant PEPPY_COWBOY_CHARACTER(0x1551)
 
  }
 

@@ -899,10 +899,15 @@ scope PeppyNSP {
         // if we're here, then temp variable 1 was enabled, so create a projectile
         mtc1    r0, f0                      // move 0 to f0
         sw      r0, 0x0028(sp)              // z offset = 0
-        addiu   at, r0, Character.id.PEPPY
+        addiu   at, r0, Character.id.CBPEPPY
         lw      t5, 0x0008(v0)              // load character id
         beq     at, t5, _peppy
         lui     at, 0x4320
+
+        addiu   at, r0, Character.id.PEPPY
+        beq     at, t5, _peppy
+        lui     at, 0x4320
+
         sw      at, 0x0020(sp)              // x offset = ^
         lui     at, 0xC202
         beq     r0, r0, _kirby
@@ -956,6 +961,10 @@ scope PeppyNSP {
         lhu     t1, 0x0026(t1)              // player action
         lli     t3, Character.id.PEPPY      // t3 = id.PEPPYY
         beq     t3, t4, _peppy_action       // if PEPPY, select correct action ID
+        nop
+        
+        lli     t3, Character.id.CBPEPPY    // t3 = id.CBPEPPYY
+        beq     t3, t4, _peppy_action       // if COWBOY PEPPY, select correct action ID
         nop
 
         addiu   t2, r0, Kirby.Action.PEPPY_NSP_Ground_Shoot

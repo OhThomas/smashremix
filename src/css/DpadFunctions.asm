@@ -322,6 +322,8 @@ scope dpad_macro_check_: {
     beq     at, t5, _dpad_move_check_action_spacies
     lli     t5, Character.id.PEPPY
     beq     at, t5, _dpad_move_check_action_spacies
+    lli     t5, Character.id.CBPEPPY
+    beq     at, t5, _dpad_move_check_action_spacies
     lli     t5, Character.id.MTWO
     beq     at, t5, _dpad_move_check_action_m2
     lli     t5, Character.id.SHEIK

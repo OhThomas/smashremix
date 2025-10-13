@@ -2385,6 +2385,7 @@ scope SinglePlayer {
     set_ending_image(Character.id.CBGOEMON, File.GOEMON_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.LMGND, File.GANON_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.MJLINK, 0xB2)
+    set_ending_image(Character.id.CBPEPPY, File.PEPPY_SLIPPY_VICTORY_IMAGE_BOTTOM)
 
     // @ Description
     // Patch which substitutes the victory picture with a custom one for all non-original characters.
@@ -2799,7 +2800,7 @@ scope SinglePlayer {
     add_to_single_player(Character.id.EPIKA,   name_texture.EPIKA,   name_delay.EPIKA)
     add_to_single_player(Character.id.EPUFF,   name_texture.EPUFF,   name_delay.EPUFF)
 
-    // COSTUME CLONES    character id          name texture          name delay
+    // COSTUME CLONES    character id          name texture                name delay
     add_to_single_player(Character.id.HBPIKA,  name_texture.PIKACHU,       name_delay.PIKACHU)
     add_to_single_player(Character.id.HPFOX,   name_texture.FOX,           name_delay.FOX)
     add_to_single_player(Character.id.DLUIGI,  name_texture.LUIGI,         name_delay.LUIGI)
@@ -2807,4 +2808,5 @@ scope SinglePlayer {
     add_to_single_player(Character.id.CBGOEMON,name_texture.GOEMON,        name_delay.GOEMON)
     add_to_single_player(Character.id.LMGND,   name_texture.GND,           name_delay.GND)
     add_to_single_player(Character.id.MJLINK,  name_texture.LINK,          name_delay.LINK)
+    add_to_single_player(Character.id.CBPEPPY, name_texture.PEPPY,         name_delay.PEPPY)
 } // __SINGLE_PLAYER__
