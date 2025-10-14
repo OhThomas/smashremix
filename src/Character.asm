@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(75)
+    constant ADD_CHARACTERS(76)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -3763,6 +3763,8 @@ scope Character {
     define_character(LMGND, CAPTAIN, File.GND_LINK_MASK_MAIN, 0x0EB, 0, File.GND_LINK_MASK_CHARACTER, 0x14E, 0, File.GND_ENTRY_KICK, File.GND_PUNCH_GRAPHIC, 0, 0x48C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_GND, Stages.id.BTP_GND, Stages.id.BTT_FALCON, Stages.id.BTP_YOSHI, sound_type.U, variant_type.SPECIAL)
     // 0x53 - MAJORA LINK
     define_character(MJLINK, LINK, File.LINK_MAJORA_MAIN, 0x0E0, 0, File.LINK_MAJORA_CHARACTER, 0x147, 0x0E2, 0x161, 0x145, 0, 0x708, 0, OS.TRUE, OS.TRUE, Stages.id.BTT_LINK, Stages.id.BTP_LINK, Stages.id.BTT_YL, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
+    // 0x54 - COWBOY PEPPY
+    define_character(CBPEPPY, FOX, File.PEPPY_COWBOY_MAIN, 0x0D0, 0, File.PEPPY_COWBOY_CHARACTER, 0x13A, File.PEPPY_LASER_HITBOX, 0x15A, 0x0A1, File.PEPPY_LASER_GFX, 0x474, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FOX, Stages.id.BTP_FOX, sound_type.U, variant_type.SPECIAL)
     
 
     // REMIX POLYGONS

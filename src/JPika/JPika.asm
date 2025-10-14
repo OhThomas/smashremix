@@ -55,14 +55,14 @@ scope JPika {
         _return:
         OS.patch_end()
 
-        addiu   t6, r0, 0x0078              // J Pika Duration
+        addiu   t6, r0, 0x0064              // original line 1 (U Pika Duration)
 
         lw      t7, 0x0008(s1)              // t0 = character id
         ori     t9, r0, Character.id.JPIKA  // t1 = id.JPIKA
         bne     t7, t9, _end                // end if character id = JPIKA
         nop
 
-        addiu   t6, r0, 0x0064              // original line 1 (U Pika Duration)
+        addiu   t6, r0, 0x0078              // J Pika Duration
 
         _end:
         j       _return                     // return

@@ -266,6 +266,8 @@ include "src/LMGanondorf/LMGanondorf.asm"
 // PEPPY
 include "src/Peppy/PeppySpecial.asm"
 include "src/Peppy/Peppy.asm"
+// COWBOY PEPPY
+include "src/CBPeppy/CBPeppy.asm"
 // SLIPPY
 include "src/Slippy/SlippySpecial.asm"
 include "src/Slippy/Slippy.asm"

@@ -1073,6 +1073,7 @@ scope Costumes {
         db 0x05                             // Cowboy Goemon
         db 0x06                             // Link Mask Ganondorf
         db 0x03                             // Majora Link
+        db 0x05                             // Cowboy Peppy
         // Polygons
         db 0x05                             // Polygon Wario
         db 0x05                             // Polygon Lucas

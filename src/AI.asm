@@ -256,6 +256,8 @@ scope AI {
         beq     t6, at, _dsamus
         addiu   at, r0, Character.id.PEPPY
         beq     t6, at, _peppy
+        addiu   at, r0, Character.id.CBPEPPY
+        beq     t6, at, _peppy
         addiu   at, r0, Character.id.MTWO
         beq     t6, at, _mewtwo
         addiu   at, r0, Character.id.WOLF
@@ -927,6 +929,8 @@ scope AI {
         beq     at, v0, _check_needle
         lli     at, Character.id.PEPPY
         beq     at, v0, _check_revolver
+        lli     at, Character.id.CBPEPPY
+        beq     at, v0, _check_revolver
         // check if DSAMUS or MEWTWO
         lli     at, Character.id.MTWO
         beq     at, v0, _check_charge_shot
@@ -1337,6 +1341,8 @@ scope AI {
         addiu    at, r0, Character.id.JFOX
         beq      t9, at, _fox      // branch to Fox usp action check
         addiu    at, r0, Character.id.PEPPY
+        beq      t9, at, _fox      // branch to Goemon usp action check
+        addiu    at, r0, Character.id.CBPEPPY
         beq      t9, at, _fox      // branch to Goemon usp action check
         addiu    at, r0, Character.id.GOEMON
         beq      t9, at, _goemon   // branch to Goemon usp action check

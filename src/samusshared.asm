@@ -145,6 +145,8 @@ scope SamusShared {
         beq     v1, at, _dedede             // if DEDEDE, take Mewtwo branch
         lli     at, Character.id.PEPPY      // at = PEPPY
         beq     v1, at, _peppy
+        lli     at, Character.id.CBPEPPY    // at = CBPEPPY
+        beq     v1, at, _peppy
         nop
 
         jr      ra
@@ -227,6 +229,8 @@ scope SamusShared {
         beq     v0, at, j_0x80161EE4        // if SHEIK, take Samus branch (Sheik uses 0xAE0 as well)
         lli     at, Character.id.PEPPY      // at = PEPPY
         beq     v0, at, j_0x80161EE4        // if PEPPY, take Samus branch (Peppy uses 0xAE0 as well)
+        lli     at, Character.id.CBPEPPY    // at = CBPEPPY
+        beq     v0, at, j_0x80161EE4        // if CBPEPPY, take Samus branch (Cowboy Peppy uses 0xAE0 as well)
         nop
 
         j       _kirby_power_change_return
