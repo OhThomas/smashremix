@@ -3362,81 +3362,81 @@ scope Stages {
     // Stage IDs in order
     stage_table_normal:
     // page 1 (vanilla and "smash" stages)
-    db id.PEACHS_CASTLE                     // 00
-    db id.CONGO_JUNGLE                      // 01
-    db id.HYRULE_CASTLE                     // 02
-    db id.PLANET_ZEBES                      // 03
-    db id.MUSHROOM_KINGDOM                  // 04
-    db id.META_CRYSTAL                      // 05
-    db id.YOSHIS_ISLAND                     // 06
-    db id.DREAM_LAND                        // 07
-    db id.SECTOR_Z                          // 08
-    db id.SAFFRON_CITY                      // 09
-    db id.DUEL_ZONE                         // 0A
-    db id.FINAL_DESTINATION                 // 0B
-    db id.DRAGONKING                        // 0C
-    db id.FIRST_DESTINATION                 // 0D
-    db id.DREAM_LAND_BETA_1                 // 0E
-    db id.HOW_TO_PLAY                       // 0F
-    db id.BATTLEFIELD                       // 10
+    db id.BATTLEFIELD                       // 00
+    db id.SMASHVILLE2                       // 01
+    db id.POKEMON_STADIUM                   // 02
+    db id.WARIOWARE                         // 03
+    db id.GERUDO                            // 04
+    db id.GOOMBA_ROAD                       // 05
+    db id.PEACHS_CASTLE                     // 06
+    db id.CONGO_JUNGLE                      // 07
+    db id.HYRULE_CASTLE                     // 08
+    db id.PLANET_ZEBES                      // 09
+    db id.MUSHROOM_KINGDOM                  // 0A
+    db id.META_CRYSTAL                      // 0B
+    db id.YOSHIS_ISLAND                     // 0C
+    db id.DREAM_LAND                        // 0D
+    db id.SECTOR_Z                          // 0E
+    db id.SAFFRON_CITY                      // 0F
+    db id.DUEL_ZONE                         // 10
     db id.RANDOM                            // 11
     // page 2 (original design stages)
-    db id.ZLANDING                          // 12
-    db id.GANONS_TOWER                      // 13
-    db id.SPIRALM                           // 14
-    db id.COOLCOOL                          // 15
-    db id.DR_MARIO                          // 16
-    db id.BOWSERB                           // 17
-    db id.N64                               // 18
-    db id.DEKU_TREE                         // 19
-    db id.MADMM                             // 1A
-    db id.GB_LAND                           // 1B
-    db id.MUTE                              // 1C
-    db id.KITCHEN                           // 1D
-    db id.FROSTY                            // 1E
-    db id.FRAYS_STAGE                       // 1F
-    db id.WARIOWARE                         // 20
-    db id.GYM_LEADER_CASTLE                 // 21
-    db id.POKEMON_STADIUM                   // 22
-    db id.RANDOM                            // 23
+    db id.FINAL_DESTINATION                 // 12
+    db id.DRAGONKING                        // 13
+    db id.FIRST_DESTINATION                 // 14
+    db id.DREAM_LAND_BETA_1                 // 15
+    db id.HOW_TO_PLAY                       // 16
+    db id.ZLANDING                          // 17
+    db id.GANONS_TOWER                      // 18
+    db id.SPIRALM                           // 19
+    db id.COOLCOOL                          // 1A
+    db id.DR_MARIO                          // 1B
+    db id.BOWSERB                           // 1C
+    db id.N64                               // 1D
+    db id.DEKU_TREE                         // 1E
+    db id.MADMM                             // 1F
+    db id.GB_LAND                           // 21
+    db id.MUTE                              // 22
+    db id.KITCHEN                           // 23
+    db id.RANDOM                            // 24
     // page 3 (guest stages)
-    db id.TALTAL                            // 24
-    db id.SMASHVILLE2                       // 25
-    db id.REAPERS                           // 26
-    db id.RAIDBLUE                          // 27
-    db id.GREAT_BAY                         // 29
-    db id.FOD                               // 2A
-    db id.TOH                               // 2B
-    db id.SMASHKETBALL                      // 2C
-    db id.NORFAIR                           // 2D
-    db id.DELFINO                           // 2E
-    db id.PEACH2                            // 2F
-    db id.BLUE                              // 30
-    db id.ONETT                             // 31
-    db id.GLACIAL                           // 32
-    db id.HTEMPLE                           // 33
-    db id.NPC                               // 34
-    db id.FALLS                             // 35
-    db id.RANDOM                            // 36
+    db id.FROSTY                            // 24
+    db id.FRAYS_STAGE                       // 25
+    db id.GYM_LEADER_CASTLE                 // 26
+    db id.TALTAL                            // 27
+    db id.REAPERS                           // 28
+    db id.RAIDBLUE                          // 29
+    db id.GREAT_BAY                         // 2A
+    db id.FOD                               // 2B
+    db id.TOH                               // 2C
+    db id.SMASHKETBALL                      // 2D
+    db id.NORFAIR                           // 2E
+    db id.DELFINO                           // 2F
+    db id.PEACH2                            // 30
+    db id.BLUE                              // 31
+    db id.ONETT                             // 32
+    db id.GLACIAL                           // 33
+    db id.HTEMPLE                           // 34
+    db id.RANDOM                            // 35
     // page 4 (more stages)
-    db id.FLAT_ZONE                         // 37
-    db id.OSOHE                             // 38
-    db id.YOSHI_STORY_2                     // 39
-    db id.GERUDO                            // 3A
-    db id.GOOMBA_ROAD                       // 3B
-    db id.BOWSERS_KEEP                      // 3C
-    db id.RITH_ESSA                         // 3D
-    db id.VENOM                             // 3E
-    db id.WINDY                             // 3F
-    db id.DATA                              // 40
-    db id.CLANCER                           // 41
-    db id.JAPES                             // 42
-    db id.CSIEGE                            // 43
-    db id.YOSHIS_ISLAND_II                  // 44
-    db id.GHZ                               // 45
-    db id.SUBCON                            // 46
-    db id.PIRATE                            // 47
-    db id.RANDOM                            // 48
+    db id.NPC                               // 36
+    db id.FALLS                             // 37
+    db id.FLAT_ZONE                         // 38
+    db id.OSOHE                             // 39
+    db id.YOSHI_STORY_2                     // 3A
+    db id.BOWSERS_KEEP                      // 3B
+    db id.RITH_ESSA                         // 3C
+    db id.VENOM                             // 3D
+    db id.WINDY                             // 3E
+    db id.DATA                              // 3F
+    db id.CLANCER                           // 40
+    db id.JAPES                             // 41
+    db id.CSIEGE                            // 42
+    db id.YOSHIS_ISLAND_II                  // 43
+    db id.GHZ                               // 44
+    db id.SUBCON                            // 45
+    db id.PIRATE                            // 46
+    db id.RANDOM                            // 47
     // page 5 (more stages)
     db id.CASINO                            // 49
     db id.MMADNESS                          // 4A
@@ -3463,27 +3463,27 @@ scope Stages {
     // Stage IDs in order
     stage_table_tournament:
     // Page 1 - Main Stages
-    db id.DREAM_LAND                        // 00       <-- Hazards ON
-    db id.FRAYS_STAGE                       // 01
-    db id.FRAYS_STAGE_NIGHT                 // 02
-    db id.FIRST_DESTINATION                 // 03
-    db id.POKEMON_STADIUM                   // 04
-    db id.POKEMON_STADIUM_2                 // 05
-    db id.SMASHVILLE2                       // 06       <-- Movement ON
-    db id.GOOMBA_ROAD                       // 07
-    db id.GYM_LEADER_CASTLE                 // 08
-    db id.SAFFRON_DL                        // 09       <-- Movement ON
-    db id.GANONS_TOWER                      // 0A
-    db id.GLACIAL_REMIX                     // 0B
-    db id.DR_MARIO                          // 0C
-    db id.TALTAL                            // 0D       <-- Hazards OFF
-    db id.MELRODE                           // 0E
-    db id.YOSHI_STORY_2                     // 0F       <-- Movement ON
-    db id.BATTLEFIELD                       // 10
+    db id.BATTLEFIELD                       // 00
+    db id.SMASHVILLE2                       // 01       <-- Movement ON
+    db id.POKEMON_STADIUM                   // 02
+    db id.WARIOWARE                         // 03
+    db id.GERUDO                            // 04
+    db id.GOOMBA_ROAD                       // 05
+    db id.DREAM_LAND                        // 06       <-- Hazards ON
+    db id.FRAYS_STAGE                       // 07
+    db id.FRAYS_STAGE_NIGHT                 // 08
+    db id.FIRST_DESTINATION                 // 09
+    db id.POKEMON_STADIUM_2                 // 0A
+    db id.GYM_LEADER_CASTLE                 // 0B
+    db id.SAFFRON_DL                        // 0C       <-- Movement ON
+    db id.GANONS_TOWER                      // 0D
+    db id.GLACIAL_REMIX                     // 0E
+    db id.DR_MARIO                          // 0F
+    db id.TALTAL                            // 10       <-- Hazards OFF
     db id.RANDOM                            // 11
     // Page 2 - Viable Stages
-    db id.GERUDO                            // 12
-    db id.WARIOWARE                         // 13
+    db id.MELRODE                           // 12
+    db id.YOSHI_STORY_2                     // 13       <-- Movement ON
     db id.DELFINO                           // 14       <-- Movement ON
     db id.CSIEGE                            // 15
     db id.SPIRALM                           // 16       <-- Movement ON
