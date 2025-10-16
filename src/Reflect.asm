@@ -42,6 +42,8 @@ scope Reflect {
     db    	OS.TRUE;     OS.patch_end();
     Character.table_patch_start(fighter_reflect, Character.id.DEDEDE, 0x1)
     db    	OS.TRUE;     OS.patch_end();
+    Character.table_patch_start(fighter_reflect, Character.id.CBDEDEDE, 0x1)
+    db    	OS.TRUE;     OS.patch_end();
     Character.table_patch_start(fighter_reflect, Character.id.PIANO, 0x1)
     db    	OS.TRUE;     OS.patch_end();
     Character.table_patch_start(fighter_reflect, Character.id.SLIPPY, 0x1)

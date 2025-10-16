@@ -3,7 +3,6 @@
 // This file contains file inclusions, action edits, and assembly for Dedede.
 
 scope Dedede {
-    // insert BALD_MODEL,"0FFE_bald_bulge.bin"
 
 	// Image commands used by moveset files
 	scope EYES: {
@@ -534,17 +533,6 @@ Character.edit_action_parameters(DEDEDE, Action.LandingAirX,            File.DED
     Character.edit_menu_action_parameters(DEDEDE, 0x9,           File.DEDEDE_PUPPET_FALL,       -1,                         -1)
     Character.edit_menu_action_parameters(DEDEDE, 0xA,           File.DEDEDE_PUPPET_UP,         -1,                         -1)
 
-    // Character.edit_menu_action_parameters(DEDEDECB, 0x0,           File.DEDEDE_IDLE,              IDLE,                       -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0x1,           File.DEDEDE_VICTORY_1,         0x80000000,                 -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0x2,           File.DEDEDE_VICTORY_3,         VICTORY_3,                  -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0x3,           File.DEDEDE_VICTORY_2,         VICTORY_2,                  -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0x4,           File.DEDEDE_VICTORY_1,         0x80000000,                 -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0x5,           File.DEDEDE_CLAP,              CLAP,                       -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0xD,           File.DEDEDE_1P_POSE,           0x80000000,                 -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0xE,           File.DEDEDE_CPU_POSE,          0x80000000,                 -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0x9,           File.DEDEDE_PUPPET_FALL,       -1,                         -1)
-    // Character.edit_menu_action_parameters(DEDEDECB, 0xA,           File.DEDEDE_PUPPET_UP,         -1,                         -1)
-
 
 //    // Add Action Parameters                // Action Name             // Base Action  // Animation                 // Moveset Data            // Flags
     Character.add_new_action_params(DEDEDE, DEDEDE_NSP_END_GROUND,       -1,             File.DEDEDE_NSP_END,          0x80000000,                  0)
@@ -594,6 +582,13 @@ Character.edit_action_parameters(DEDEDE, Action.LandingAirX,            File.DED
     Character.add_new_action(DEDEDE, DEDEDE_STARRING_RIGHT,      -1,           ActionParams.DEDEDE_STARRING_RIGHT,          0x0,             0x8013DA94,            0x00000000,                             0x8013DB2C,                 0x800DE348)
     Character.add_new_action(DEDEDE, DEDEDE_STARRING_LEFT,       -1,           ActionParams.DEDEDE_STARRING_LEFT,           0x0,             0x8013DA94,            0x00000000,                             0x8013DB2C,                 0x800DE348)
 
+	Character.table_patch_start(variants, Character.id.DEDEDE, 0x4)
+    db      Character.id.CBDEDEDE
+    db      Character.id.NDEDEDE
+    db      Character.id.NONE
+    db      Character.id.NONE
+    OS.patch_end()
+
 	// Set action strings
     Character.table_patch_start(action_string, Character.id.DEDEDE, 0x4)
     dw  Action.action_string_table
@@ -633,11 +628,6 @@ Character.edit_action_parameters(DEDEDE, Action.LandingAirX,            File.DED
     Character.table_patch_start(menu_zoom, Character.id.DEDEDE, 0x4)
     float32 0.85
     OS.patch_end()
-
-    // Set menu zoom size.
-    // Character.table_patch_start(menu_zoom, Character.id.DEDEDECB, 0x4)
-    // float32 0.85
-    // OS.patch_end()
 
     // Patches for full charge DSP effect removal.
     Character.table_patch_start(gfx_routine_end, Character.id.DEDEDE, 0x4)
@@ -696,8 +686,8 @@ Character.edit_action_parameters(DEDEDE, Action.LandingAirX,            File.DED
     Teams.add_team_costume(YELLOW, DEDEDE, 0x2)
 
     // Set default costume shield colors
-    // Character.set_costume_shield_colors(DEDEDE, RED, PINK, ORANGE, BLUE, GREEN, WHITE, NA, NA)
-    Character.set_costume_shield_colors(DEDEDE, RED, PINK, ORANGE, BLUE, GREEN, WHITE, RED, PINK, ORANGE, BLUE, WHITE, ORANGE)
+    Character.set_costume_shield_colors(DEDEDE, RED, PINK, ORANGE, BLUE, GREEN, WHITE, NA, NA)
+    // Character.set_costume_shield_colors(DEDEDE, RED, PINK, ORANGE, BLUE, GREEN, WHITE, RED, PINK, ORANGE, BLUE, WHITE, ORANGE)
 
 	Character.table_patch_start(initial_script, Character.id.DEDEDE, 0x4)
 	dw		initial_script_
@@ -712,24 +702,6 @@ Character.edit_action_parameters(DEDEDE, Action.LandingAirX,            File.DED
     Character.table_patch_start(remix_1p_end_bgm, Character.id.DEDEDE, 0x2)
     dh {MIDI.id.DEDEDE}
     OS.patch_end()
-
-
-    
-    // Character.table_patch_start(variants, Character.id.DEDEDE, 0x4)
-    // db      Character.id.DEDEDECB // set as SPECIAL variant for SONIC
-    // db      Character.id.NONE     // set as POLYGON variant for SONIC
-    // db      Character.id.NONE
-    // db      Character.id.NONE
-    // OS.patch_end()
-
-    
-    // Character.table_patch_start(variant_original, Character.id.DEDEDECB, 0x4)
-    // dw      Character.id.DEDEDE // set Sonic as original character (not Fox, who SSONIC is a clone of)
-    // OS.patch_end()
-    
-    // // Set default costumes
-    // Character.set_default_costumes(Character.id.DEDEDECB, 0, 1, 2, 5, 0, 3, 4)
-    // Teams.add_team_costume(YELLOW, DEDEDECB, 0x2)
 
     // @ Description
     // cleanup script is performed when spawning in
@@ -788,6 +760,10 @@ Character.edit_action_parameters(DEDEDE, Action.LandingAirX,            File.DED
 
         lw      t6, 0x0008(t6)              // load player id
         addiu   a2, r0, Character.id.DEDEDE
+        beq     t6, a2, _dedede_inhale
+        lhu     t6, 0x002A(v1)              // original line 1
+
+        addiu   a2, r0, Character.id.CBDEDEDE
         beq     t6, a2, _dedede_inhale
         lhu     t6, 0x002A(v1)              // original line 1
 
@@ -877,6 +853,10 @@ Character.edit_action_parameters(DEDEDE, Action.LandingAirX,            File.DED
 		beq		at, v0, _end				// return v0 as Character.id.DEDEDE if DEDEDE
 		lb		at, 0x0980(a0)				// at = current hat ID
 
+		addiu   at, r0, Character.id.CBDEDEDE // at = CBDEDEDE
+		beq		at, v0, _end				// return v0 as Character.id.CBDEDEDE if COWBOY DEDEDE
+		lb		at, 0x0980(a0)				// at = current hat ID
+
 		_kirby_check:
 		sltiu	at, at, 0x0020				// at = 0 or 1
 		beqz	v0, _end
@@ -886,58 +866,5 @@ Character.edit_action_parameters(DEDEDE, Action.LandingAirX,            File.DED
 		jr		ra
 		nop
 	}
-
-
-    // bald_table:
-    // db 0x00; db 0x00; db 0x00; db 0x00      // p1, p2, p3, p4
-
-    // // classic_flag_1p:
-    // // dw 0x00000000                           // hmn
-
-    // // classic_flags_training:
-    // // dh 0x0000; dh 0x0000                    // hmn, cpu
-
-    // bald_flags_vs:
-    // db 0x00; db 0x00; db 0x00; db 0x00      // p1, p2, p3, p4
-
-    // select_anim_frame:
-    // float32 0                               // p1
-    // float32 0                               // p2
-    // float32 0                               // p3
-    // float32 0                               // p4
-    
-	// @ Description
-	// Loads bald ddd VS CSS
-    // 1ad14da = ddd model in rom
-    // 67A640 (not 5641e4) = ddd model in ram
-	// scope bald_dedede_insert_: {
-    //     dw 0x0; dw 0x0; dw 0x0 // aligning
-    //     insert DEDEDE_BALD_MAIN_I,"costumes/insert_0FFD_output.bin"
-    //     insert DEDEDE_BALD_CHARACTER_I,"costumes/insert_0FFE_output.bin"
-    //     insert DEDEDE_SHIELD_POSE_I, "costumes/insert_103C_output.bin"
-    //     dw 0x8057D0D0 //0x8057CF90                       // address for dedede main file
-	// }
-    
-	// @ Description
-	// Loads cowboy model
-	// scope ddd_cowboy_load_: {
-	// 	OS.patch_start(0x4954C, 0x800CDB6C)
-	// 	j		ddd_cowboy_load_
-	// 	nop
-	// 	_return:
-	// 	OS.patch_end()
-
-    //     addu    s3, v1, t9          // original line 1
-    //     sltu    at, s0, s3          // original line 2
-    //     li      t2, 0x1AD14DA       // t2 = 1AD14DA
-    //     beql    s3, t2, _cb_model   // if s3 = 1AD14DA, change it
-    //     nop
-    //     j       _return
-    //     nop
-    //     _cb_model:
-    //     li		s3, 0x24689EE		// s3 = loading new model
-    //     j       _return
-    //     nop
-	// }
 
 }

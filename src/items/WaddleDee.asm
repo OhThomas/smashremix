@@ -1818,9 +1818,14 @@ scope minion_free_: {
     // possible tag team fix, ensure this player struct = DEDEDE
     addiu   at, r0, Character.id.DEDEDE
     lw      t2, 0x0008(v1)                  // t2 = character id
-    bne     at, t2, _end                    // skip if this fighter != DEDEDE
+    beq     at, t2, _dedede_continue        // continue if this fighter == DEDEDE
     nop
 
+    addiu   at, r0, Character.id.CBDEDEDE
+    bne     at, t2, _end                    // skip if this fighter != CBDEDEDE
+    nop
+
+	_dedede_continue:
     lw      at, 0x0B20(v1)                  // get held minion ptr
     beql    at, a0, _continue               // branch if...
     sw      r0, 0x0B20(v1)                  // ...held minion = this minion

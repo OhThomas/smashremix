@@ -768,9 +768,11 @@ scope Costumes {
         lli     a2, Character.id.SONIC      // a2 = id.SONIC
         beq     t8, a2, _costume_check      // if Sonic, check to see if we need to change model
         nop
-        lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
-        beq     t8, a2, _costume_check      // if Dedede, check to see if we need to change model
-        nop
+        
+        // UNCOMMENT THIS TO TURN EXTRA DDD COSTUMES BACK ON
+        // lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
+        // beq     t8, a2, _costume_check      // if Dedede, check to see if we need to change model
+        // nop
 
         b       _determine_screen           // if not character with alt models, skip
         lw      at, 0x0018(sp)              // at = direction pressed (up = 0, right = 1, down = 2, left = 3)
@@ -825,7 +827,8 @@ scope Costumes {
         nop
 
         // if Dedede then use bald_table (uncomment and append new characters)
-        li      a1, Sonic.bald_table        // a1 = bald_table
+        li      a1, Sonic.bald_table        // uncomment lines below to set a1 for a new character
+
         // lli     a2, Character.id.DEDEDE     // a2 = id.DEDEDE
         // beq     t8, a2, _change_costume_table// if Dedede, set a1 to bald_table
         // nop
@@ -1065,7 +1068,7 @@ scope Costumes {
         db 0x05                             // Roy
         db 0x07                             // Dr. Luigi
         db 0x07                             // Lanky Kong
-        // db 0x01                             // DDDCB
+        db 0x05                             // Cowboy Dedede
         db 0x03                             // Headband Pikachu
         db 0x03                             // Headphones Fox
         db 0x03                             // Dale Luigi

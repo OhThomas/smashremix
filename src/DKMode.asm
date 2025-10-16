@@ -142,6 +142,8 @@ scope DKMode {
     // ddd
     Character.table_patch_start(fighter_DK_mode, Character.id.DEDEDE, 0x4)
     db 0x8, 0x4, 0xB, 0x0;   OS.patch_end();   // DDD
+    Character.table_patch_start(fighter_DK_mode, Character.id.CBDEDEDE, 0x4)
+    db 0x8, 0x4, 0xB, 0x0;   OS.patch_end();   // CBDDD
     Character.table_patch_start(fighter_DK_mode, Character.id.NDEDEDE, 0x4)
     db 0x8, 0x4, 0xB, 0x0;   OS.patch_end();   // NDDD
     // peach

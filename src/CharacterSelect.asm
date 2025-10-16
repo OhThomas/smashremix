@@ -263,8 +263,8 @@ scope CharacterSelect {
     dw  0xC900 + 0x200                      // 0x3D - SUPER SONIC
     dw  0x122E8 + 0x200                     // 0x3E - SHEIK
     dw  0x136E8 + 0x200                     // 0x3F - MARINA
-    // dw  0x173C8 + 0x200                     // 0x40 - DEDEDE
-    dw  0x173C8 + 0x191F0 + 0x18820 + 0x200 // 0x40 - DEDEDE w/ COWBOY
+    dw  0x173C8 + 0x200                     // 0x40 - DEDEDE
+    // dw  0x173C8 + 0x191F0 + 0x18820 + 0x200 // 0x40 - DEDEDE w/ COWBOY
     dw  0x12EA0 + 0x1BE0 + 0x200            // 0x41 - GOEMON
     dw  0x5A50 + 0x200                      // 0x42 - PEPPY
     dw  0xA310 + 0x200                      // 0x43 - SLIPPY
@@ -280,15 +280,15 @@ scope CharacterSelect {
     // ADD NEW CHARACTERS HERE
 
     // COSTUMES
-    // dw  0x173C8 + 0x223C8 + 0x12100 + 0x173C8 + 0x200                     // DEDEDE COWBOY
-    dw  0xA340 + 0x200                      // 0x4D - PIKACHU w/ HEADBAND
-    dw  0x8C40 + 0x200                      // 0x4E - FOX w/ HEADPHONES
-    dw  0x8A90                              // 0x4F - LUIGI w/ DALE HAT
-    dw  0x8860 + 0x200                      // 0x50 - JIGGLYPUFF w/ MICROPHONE
-    dw  0x13C00 + 0x1BE0 + 0x200            // 0x51 - COWBOY GOEMON
-    dw  0x16C50 + 0x200                     // 0x52 - GANONDORF w/ LINK MASK
-    dw  0x128B0 + 0x200                     // 0x53 - LINK w/ MAJORA MASK
-    dw  0x80D0 + 0x200                      // 0x54 - COWBOY PEPPY
+    dw  0x191F0 + 0x200                     // 0x4D - COWBOY DEDEDE
+    dw  0xA340 + 0x200                      // 0x4E - PIKACHU w/ HEADBAND
+    dw  0x8C40 + 0x200                      // 0x4F - FOX w/ HEADPHONES
+    dw  0x8A90                              // 0x50 - LUIGI w/ DALE HAT
+    dw  0x8860 + 0x200                      // 0x51 - JIGGLYPUFF w/ MICROPHONE
+    dw  0x13C00 + 0x1BE0 + 0x200            // 0x52 - COWBOY GOEMON
+    dw  0x16C50 + 0x200                     // 0x53 - GANONDORF w/ LINK MASK
+    dw  0x128B0 + 0x200                     // 0x54 - LINK w/ MAJORA MASK
+    dw  0x80D0 + 0x200                      // 0x55 - COWBOY PEPPY
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -431,7 +431,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.LANKY, req/LANKY_MODEL)
 
     // COSTUMES
-    // add_alt_req_list(Character.id.DEDEDECB, req/DEDEDECB_MODEL)
+    add_alt_req_list(Character.id.CBDEDEDE, req/CBDEDEDE_MODEL)
     add_alt_req_list(Character.id.HBPIKA, req/HBPIKA_MODEL)
     add_alt_req_list(Character.id.HPFOX, req/FOX_HEADPHONES_MODEL)
     add_alt_req_list(Character.id.DLUIGI, req/DLUIGI_MODEL)
@@ -3062,6 +3062,7 @@ scope CharacterSelect {
         constant EBI(0x00027C28 + 0x10)
         constant METALLUIGI(0x00028CE0 + 0x10)
         constant DRAGONKING(0x00029D98 + 0x10)
+        constant CBDEDEDE(0x00022878)
         constant HBPIKA(0x0000A738)
         constant HPFOX(0x00002138)
         constant DLUIGI(0x00005378)
@@ -3088,7 +3089,6 @@ scope CharacterSelect {
         constant SHEIK(0x000206F8)
         constant MARINA(0x000217B8)
         constant DEDEDE(0x00022878)
-        // constant DEDEDECB(0x00022878)
         constant GOEMON(0x00023938)
         constant BANJO(0x00026B68 + 0x10)
         constant CRASH(0x0002AE58 + 0x10)
@@ -3442,6 +3442,7 @@ scope CharacterSelect {
         constant ROY(0x00026840 + 0x10)
         constant DRL(0x00026C58 + 0x10)
         constant LANKY(0x00027130 + 0x10)
+        constant CBDEDEDE(0x0001C648)
         constant HBPIKA(0x000032F8)
         constant HPFOX(0x000025B8)
         constant DLUIGI(0x00001B18)
@@ -5040,6 +5041,7 @@ scope CharacterSelect {
         constant DSAMUS(0x2D10 + 0x10)
         constant LUCAS(0x2DE8 + 0x10)
         constant ROY(0x2EC0 + 0x10)
+        constant CBDEDEDE(0x67B8 + 0x10)
         constant HBPIKA(0x61D8 + 0x10)
         constant HPFOX(0x62A8 + 0x10)
         constant DLUIGI(0x6100 + 0x10)
@@ -5130,6 +5132,9 @@ scope CharacterSelect {
         lli     t2, Character.id.ROY
         beql    a1, t2, _draw_icon          // If ROY, then draw ROY stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.ROY // a1 = ROY footer struct
+        lli     t2, Character.id.CBDEDEDE
+        beql    a1, t2, _draw_icon          // If CBDEDEDE, then draw CBDEDEDE stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.CBDEDEDE // a1 = CBDEDEDE footer struct
         lli     t2, Character.id.HBPIKA
         beql    a1, t2, _draw_icon          // If HBPIKA, then draw HBPIKA stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.HBPIKA // a1 = HBPIKA footer struct
@@ -7149,8 +7154,9 @@ scope CharacterSelect {
     add_to_css(Character.id.ROY,    FGM.announcer.names.ROY,            1.50,         0x00010004, FIRE_EMBLEM,  name_texture.ROY,            portrait_offsets.ROY,            BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.DRL,    FGM.announcer.names.DRL,            1.50,         0x00010001, DR_MARIO,     name_texture.DRL,            portrait_offsets.DRL,            BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.LANKY,  FGM.announcer.names.LANKY,          2,            0x00010004, DONKEY_KONG,  name_texture.LANKY,          portrait_offsets.LANKY,          BOOKEND_BONUS_PORTRAIT)
-    // add_to_css(Character.id.DEDEDECB, FGM.announcer.names.DEDEDE,         2,            0x00010001, KIRBY,        name_texture.DEDEDE,         portrait_offsets.DEDEDE,         10)
+    
     // ADD NEW CHARACTERS HERE
+    add_to_css(Character.id.CBDEDEDE, FGM.announcer.names.DEDEDE,       2,            0x00010001, KIRBY,        name_texture.DEDEDE,         portrait_offsets.CBDEDEDE,       10)
     add_to_css(Character.id.HBPIKA, FGM.announcer.names.PIKACHU,        1.50,         0x00010001, POKEMON,      name_texture.PIKACHU,        portrait_offsets.HBPIKA,         16)
     add_to_css(Character.id.HPFOX,  FGM.announcer.names.FOX,            1.50,         0x00010004, STARFOX,      name_texture.FOX,            portrait_offsets.HPFOX,          15)
     add_to_css(Character.id.DLUIGI, FGM.announcer.names.LUIGI,          1.50,         0x00010001, MARIO_BROS,   name_texture.LUIGI,          portrait_offsets.DLUIGI,         2)

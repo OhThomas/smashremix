@@ -52,3 +52,23 @@ OS.patch_end()
 Character.table_patch_start(nsp_shoot_custom_move, Character.id.DEDEDE, 0x4)
 dw    	AI.ROUTINE.DSP
 OS.patch_end()
+
+// Set CPU behaviour
+Character.table_patch_start(ai_behaviour, Character.id.CBDEDEDE, 0x4)
+dw      CPU_ATTACKS
+OS.patch_end()
+
+// Set CPU SD prevent routine
+Character.table_patch_start(ai_attack_prevent, Character.id.CBDEDEDE, 0x4)
+dw    	AI.PREVENT_ATTACK.ROUTINE.USP		// skip USP if unsafe
+OS.patch_end()
+
+// Set CPU NSP long range behaviour
+Character.table_patch_start(ai_long_range, Character.id.CBDEDEDE, 0x4)
+dw    	AI.LONG_RANGE.ROUTINE.NSP_SHOOT
+OS.patch_end()
+
+// Custom custom long range action input
+Character.table_patch_start(nsp_shoot_custom_move, Character.id.CBDEDEDE, 0x4)
+dw    	AI.ROUTINE.DSP
+OS.patch_end()

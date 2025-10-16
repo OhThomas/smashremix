@@ -741,6 +741,9 @@ scope DededeNSP {
 		lw		t0, 0x0008(v0)				// t0 = character id
 		beq 	at, t0, _dedede				// branch if dedede
         lw      t6, 0x014C(v0)              // t6 = kinetic state
+		addiu	at, r0, Character.id.CBDEDEDE // at = id.CBDEDEDE
+		beq 	at, t0, _dedede				// branch if dedede
+        lw      t6, 0x014C(v0)              // t6 = kinetic state
 
 		_kirby:
 		lli     a1, Kirby.Action.DEDEDE_NSP_SPIT_GROUND // a1(action id) = NSP_SPIT_GROUND
@@ -784,6 +787,9 @@ scope DededeNSP {
 		lw		t0, 0x0008(v0)				// t0 = character id
 		beql	at, t0, _change_action		// branch if dedede
         lli     a1, Dedede.Action.NSP_BEGIN_GROUND // a1(action id) = NSP_BEGIN_GROUND
+		addiu	at, r0, Character.id.CBDEDEDE   // at = id.CBDEDEDE
+		beql	at, t0, _change_action		// branch if dedede
+        lli     a1, Dedede.Action.NSP_BEGIN_GROUND // a1(action id) = NSP_BEGIN_GROUND
 		// kirby
 		lli     a1, Kirby.Action.DEDEDE_NSP_BEGIN_GROUND
 
@@ -823,6 +829,9 @@ scope DededeNSP {
 	    lw      v0, 0x0084(a0)              // v0 = player struct
 		addiu	at, r0, Character.id.DEDEDE		// at = id.DEDEDE
 		lw		t0, 0x0008(v0)				// t0 = character id
+		beql	at, t0, _change_action		// branch if dedede
+		lli     a1, Dedede.Action.NSP_BEGIN_AIR // action id =  DEDEDE.NSP_BEGIN_AIR
+		addiu	at, r0, Character.id.CBDEDEDE   // at = id.CBDEDEDE
 		beql	at, t0, _change_action		// branch if dedede
 		lli     a1, Dedede.Action.NSP_BEGIN_AIR // action id =  DEDEDE.NSP_BEGIN_AIR
 		// kirby
@@ -868,9 +877,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change   	// branch if Dedede
 		nop
 
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_BEGIN_AIR
 
@@ -899,9 +913,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change   	// branch if Dedede
 		nop
 
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	  // branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_BEGIN_GROUND
 
@@ -984,6 +1003,10 @@ scope DededeNSP {
 		lw		t0, 0x0008(v0)				// t0 = character id
 		beql	at, t0, _change_action		// branch if dedede
         addiu   a1, r0, Dedede.Action.NSP_LOOP_GROUND   // action id
+
+		addiu	at, r0, Character.id.CBDEDEDE	// at = id.CBDEDEDE
+		beql	at, t0, _change_action		// branch if dedede
+        addiu   a1, r0, Dedede.Action.NSP_LOOP_GROUND   // action id
 		// kirby
 		lli     a1, Kirby.Action.DEDEDE_NSP_LOOP_GROUND
 
@@ -1019,6 +1042,10 @@ scope DededeNSP {
 	    lw      v0, 0x0084(a0)              // v0 = player struct
 		addiu	at, r0, Character.id.DEDEDE		// at = id.DEDEDE
 		lw		t0, 0x0008(v0)				// t0 = character id
+		beql	at, t0, _change_action		// branch if dedede
+        addiu   a1, r0, Dedede.Action.NSP_LOOP_AIR      // action id
+
+		addiu	at, r0, Character.id.CBDEDEDE	// at = id.CBDEDEDE
 		beql	at, t0, _change_action		// branch if dedede
         addiu   a1, r0, Dedede.Action.NSP_LOOP_AIR      // action id
 		// kirby
@@ -1061,6 +1088,10 @@ scope DededeNSP {
 		lw		t0, 0x0008(v0)				// t0 = character id
 		beql	at, t0, _change_action		// branch if dedede
         addiu   a1, r0, Dedede.Action.NSP_LOOP_GROUND // action id
+
+		addiu	at, r0, Character.id.CBDEDEDE	// at = id.CBDEDEDE
+		beql	at, t0, _change_action		// branch if dedede
+        addiu   a1, r0, Dedede.Action.NSP_LOOP_GROUND // action id
 		// kirby
 		lli     a1, Kirby.Action.DEDEDE_NSP_LOOP_GROUND
 
@@ -1099,6 +1130,10 @@ scope DededeNSP {
 		lw		t0, 0x0008(v0)				// t0 = character id
 		beql	at, t0, _change_action		// branch if dedede
         addiu   a1, r0, Dedede.Action.NSP_LOOP_AIR // action id
+
+		addiu	at, r0, Character.id.CBDEDEDE	// at = id.CBDEDEDE
+		beql	at, t0, _change_action		// branch if dedede
+        addiu   a1, r0, Dedede.Action.NSP_LOOP_AIR // action id
 		// kirby
 		lli     a1, Kirby.Action.DEDEDE_NSP_LOOP_AIR
 
@@ -1130,8 +1165,14 @@ scope DededeNSP {
 
 		// v1 = player struct
 		lw		a1, 0x0008(v1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
 		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_END_GROUND
 
@@ -1160,8 +1201,14 @@ scope DededeNSP {
 
 		// v1 = player struct
 		lw		a1, 0x0008(v1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change		// branch if Dedede
 		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_END_AIR
 
@@ -1190,8 +1237,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
 		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_END_GROUND
 
@@ -1219,9 +1272,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change		// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_END_AIR
 
@@ -1250,9 +1308,14 @@ scope DededeNSP {
 
 		// s0 = player struct
 		lw		a1, 0x0008(s0)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_PULL_GROUND
 
@@ -1284,9 +1347,14 @@ scope DededeNSP {
 
 		// s0 = player struct
 		lw		a1, 0x0008(s0)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
 		nop
 
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_PULL_AIR
 
@@ -1317,9 +1385,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_PULL_AIR
 
@@ -1347,9 +1420,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change      // branch if Dedede
 		nop
 
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_PULL_GROUND
 
@@ -1377,9 +1455,14 @@ scope DededeNSP {
 
 		// s0 = player struct
 		lw		a1, 0x0008(s0)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change   	// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_SWALLOW_GROUND
 
@@ -1410,9 +1493,14 @@ scope DededeNSP {
 
 		// s0 = player struct
 		lw		a1, 0x0008(s0)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change   	// branch if Dedede
 		nop
 
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_SWALLOW_AIR
 
@@ -1443,9 +1531,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change  	// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_SWALLOW_GROUND
 
@@ -1473,9 +1566,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change  	// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_SWALLOW_AIR
 
@@ -1503,9 +1601,14 @@ scope DededeNSP {
 
 		// a2 = player struct
 		lw		a1, 0x0008(a2)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change		// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check    // branch if not Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_IDLE_GROUND
 
@@ -1534,9 +1637,15 @@ scope DededeNSP {
 
 		// ?? = player struct
 		//lw		a1, 0x0008()			// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+
+		beq		at, a1, _dedede_change	// branch if Dedede
 		nop
 
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_IDLE_GROUND
 
@@ -1568,9 +1677,14 @@ scope DededeNSP {
 		// s1 = captured players struct
 		lw		a2, 0x0084(a0) 				// a2 = capturing players struct
 		lw		a1, 0x0008(a2)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_FALL
 
@@ -1598,9 +1712,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change	// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_IDLE_GROUND
 
@@ -1628,9 +1747,14 @@ scope DededeNSP {
 
 		// t6 = player struct
 		lw		a1, 0x0008(t6)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change  	// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_FALL
 
@@ -1778,6 +1902,11 @@ scope DededeNSP {
 		lw		v1, 0x0008(v1)						// v1 = character id
 		beql	at, v1, _continue
 		addiu	a1, v0, Dedede.Action.NSP_WALK_1 - 0x0B // a1 = NSP walk action id to use (DEDEDE)
+
+		addiu   at, r0, Character.id.CBDEDEDE
+		beql	at, v1, _continue
+		addiu	a1, v0, Dedede.Action.NSP_WALK_1 - 0x0B // a1 = NSP walk action id to use (COWBOY DEDEDE)
+
 		// kirby hat action
 		addiu	a1, v0, Kirby.Action.DEDEDE_NSP_WALK_1 - 0x0B // a1 = NSP walk action id to use (KIRBY)
 
@@ -1853,6 +1982,11 @@ scope DededeNSP {
 		addiu	at, r0, Character.id.DEDEDE	// at = dedede character id
 		beql	at, v1, _continue
 		addiu  	v1, v0, Dedede.Action.NSP_WALK_1 - 0xB 			// v1 = dededes walk
+
+		addiu	at, r0, Character.id.CBDEDEDE	// at = cowboy dedede character id
+		beql	at, v1, _continue
+		addiu  	v1, v0, Dedede.Action.NSP_WALK_1 - 0xB 			// v1 = dededes walk
+
 		// if here, kirby wearing a hat
 		addiu  	v1, v0, Kirby.Action.DEDEDE_NSP_WALK_1 - 0xB	// v1 = kirbys walk
 		_continue:
@@ -1935,6 +2069,11 @@ scope DededeNSP {
 		lw 		v0, 0x0008(a1)		// v0 = characters id
 		beql	at, v0, _change_action
 		addiu	a1, r0, Dedede.Action.NSP_IDLE_GROUND	// a1 = action id (nsp inhaled idle)
+
+		lli     at, Character.id.CBDEDEDE
+		beql	at, v0, _change_action
+		addiu	a1, r0, Dedede.Action.NSP_IDLE_GROUND	// a1 = action id (nsp inhaled idle)
+
 		// kirby action
 		addiu	a1, r0, Kirby.Action.DEDEDE_NSP_IDLE_GROUND	// a1 = action id (nsp inhaled idle)
 
@@ -1981,6 +2120,11 @@ scope DededeNSP {
 		lw 		v0, 0x0008(a1)		// v0 = characters id
 		beql	at, v0, _change_action
 		addiu   a1, r0, Dedede.Action.NSP_FALL	// action to change to
+
+		addiu   at, r0, Character.id.CBDEDEDE // at = CBDEDEDE
+		beql	at, v0, _change_action
+		addiu   a1, r0, Dedede.Action.NSP_FALL	// action to change to
+
 		// kirby action
 		addiu	a1, r0, Kirby.Action.DEDEDE_NSP_FALL // a1 = action id (nsp inhaled idle)
 
@@ -2014,6 +2158,11 @@ scope DededeNSP {
 		lli		at, Character.id.DEDEDE
 		beql	at, t7, _change_action
         addiu   a1, r0, Dedede.Action.NSP_SPIT_GROUND    // action to transition to
+
+		lli		at, Character.id.CBDEDEDE
+		beql	at, t7, _change_action
+        addiu   a1, r0, Dedede.Action.NSP_SPIT_GROUND    // action to transition to
+
 		// kirby
         addiu   a1, r0, Kirby.Action.DEDEDE_NSP_SPIT_GROUND
 
@@ -2051,6 +2200,11 @@ scope DededeNSP {
 		lli		at, Character.id.DEDEDE
 		beql	at, t7, _change_action
         addiu   a1, r0, Dedede.Action.NSP_SPIT_AIR // action to transition to
+
+		lli		at, Character.id.CBDEDEDE
+		beql	at, t7, _change_action
+        addiu   a1, r0, Dedede.Action.NSP_SPIT_AIR // action to transition to
+
 		// kirby
         addiu   a1, r0, Kirby.Action.DEDEDE_NSP_SPIT_AIR
 
@@ -2235,9 +2389,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_SPIT_AIR
 
@@ -2265,9 +2424,14 @@ scope DededeNSP {
 
 		// a2 = player struct
 		lw		a1, 0x0008(a2)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
 		nop
 
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_FALL
 
@@ -2295,9 +2459,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check	// branch if not Dedede
+		beq		at, a1, _dedede_change	    // branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_SPIT_GROUND
 
@@ -2325,9 +2494,14 @@ scope DededeNSP {
 
 		// t6 = player struct
 		lw		a1, 0x0008(t6)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change		// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_TURN_GROUND
 
@@ -2355,9 +2529,14 @@ scope DededeNSP {
 
 		// v0 = player struct
 		lw		a1, 0x0008(v0)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change		// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_IDLE_GROUND
 
@@ -2385,9 +2564,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change		// branch if Dedede
+		nop
+        
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check	// branch if not Cowboy Dedede
 		nop
 
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_TURN_AIR
 
@@ -2415,9 +2599,14 @@ scope DededeNSP {
 
 		// s1 = player struct
 		lw		a1, 0x0008(s1)				// a1 = characters id
-		bne		at, a1, _kirby_hat_check				// branch if not Dedede
+		beq		at, a1, _dedede_change		// branch if Dedede
 		nop
 
+		addiu	at, r0, Character.id.CBDEDEDE // at = CBDEDEDE character id
+		bne		at, a1, _kirby_hat_check    // branch if not Cowboy Dedede
+		nop
+
+        _dedede_change:
 		b		_change_action
 		addiu	a1, r0, Dedede.Action.NSP_TURN_GROUND
 

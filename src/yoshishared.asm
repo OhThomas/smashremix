@@ -356,6 +356,9 @@ scope YoshiShared {
         addiu   t1, r0, Character.id.DEDEDE     // DEDEDE ID
         li      a1, downspecial_struct_dedede   // DEDEDE File Pointer placed in correct location
         beq     t1, t2, _end
+        addiu   t1, r0, Character.id.CBDEDEDE   // COWBOY DEDEDE ID
+        li      a1, downspecial_struct_cbdedede // COWBOY DEDEDE File Pointer placed in correct location
+        beq     t1, t2, _end
         nop
 
         lui     a1, 0x8019                  // original line 1
@@ -390,6 +393,13 @@ scope YoshiShared {
     dw 0x00000000
     dw 0x00000006
     dw Character.DEDEDE_file_7_ptr
+    OS.copy_segment(0x103D6C, 0x40)
+
+    OS.align(16)
+    downspecial_struct_cbdedede:
+    dw 0x00000000
+    dw 0x00000006
+    dw Character.CBDEDEDE_file_7_ptr
     OS.copy_segment(0x103D6C, 0x40)
 
     }
