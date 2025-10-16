@@ -143,6 +143,8 @@ scope SamusShared {
         beq     v1, at, _sheik              // if SHEIK, take Mewtwo branch
         lli     at, Character.id.DEDEDE     // at = DEDEDE
         beq     v1, at, _dedede             // if DEDEDE, take Mewtwo branch
+        lli     at, Character.id.CBDEDEDE   // at = COWBOY DEDEDE
+        beq     v1, at, _dedede             // if COWBOY DEDEDE, take Mewtwo branch
         lli     at, Character.id.PEPPY      // at = PEPPY
         beq     v1, at, _peppy
         lli     at, Character.id.CBPEPPY    // at = CBPEPPY

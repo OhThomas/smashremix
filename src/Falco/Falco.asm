@@ -261,6 +261,9 @@ scope Falco {
         ori     t0, r0, Character.id.PEPPY  // t0 = PEPPY
         beql    t0, t6, _end                // branch if chracter = PEPPY
         addiu   t6, r0, 16                  // up special delay = 16
+        ori     t0, r0, Character.id.CBPEPPY // t0 = CBPEPPY
+        beql    t0, t6, _end                // branch if chracter = CBPEPPY
+        addiu   t6, r0, 16                  // up special delay = 16
 
         addiu   t6, r0, 0x0023              // up special delay = 0x23 (original line 2)
         _end:
@@ -289,6 +292,9 @@ scope Falco {
         lui     at, 0x42C4                  // up special velocity = 0x42C40000
         ori     t1, r0, Character.id.PEPPY  // t1 = PEPPY
         beql    t0, t1, _end                // branch if character = PEPPY
+        lui     at, 0x42FA                  // up special velocity = 0x42FA0000
+        ori     t1, r0, Character.id.CBPEPPY // t1 = CBPEPPY
+        beql    t0, t1, _end                // branch if character = CBPEPPY
         lui     at, 0x42FA                  // up special velocity = 0x42FA0000
 
         lui     at, 0x42E6                  // up special velocity = 0x42E60000 (original line 1)
@@ -321,6 +327,9 @@ scope Falco {
         ori     t1, r0, Character.id.PEPPY  // t1 = PEPPY
         beql    t0, t1, _end                // branch if character = PEPPY
         lui     at, 0x42FA                  // up special velocity = 0x42FA0000
+        ori     t1, r0, Character.id.CBPEPPY // t1 = CBPEPPY
+        beql    t0, t1, _end                // branch if character = CBPEPPY
+        lui     at, 0x42FA                  // up special velocity = 0x42FA0000
 
         lui     at, 0x42E6                  // up special velocity = 0x42E60000 (original line 1)
         _end:
@@ -351,6 +360,9 @@ scope Falco {
         lui     at, 0x42C4                  // up special velocity = 0x42C40000
         ori     t1, r0, Character.id.PEPPY  // t1 = PEPPY
         beql    t0, t1, _end                // branch if character = PEPPY
+        lui     at, 0x42FA                  // up special velocity = 0x42FA0000
+        ori     t1, r0, Character.id.CBPEPPY // t1 = CBPEPPY
+        beql    t0, t1, _end                // branch if character = CBPEPPY
         lui     at, 0x42FA                  // up special velocity = 0x42FA0000
 
         lui     at, 0x42E6                  // up special velocity = 0x42E60000 (original line 1)

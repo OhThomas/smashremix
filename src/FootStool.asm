@@ -388,6 +388,8 @@ scope FootStool {
         beq     v0, at, _kirby_puff_dedede_jump_check
         addiu   at, r0, Character.id.DEDEDE
         beq     v0, at, _kirby_puff_dedede_jump_check
+        addiu   at, r0, Character.id.CBDEDEDE
+        beq     v0, at, _kirby_puff_dedede_jump_check
         nop
         // TODO: polygon Dedede if added
         // addiu   at, r0, Character.id.NDEDEDE

@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(76)
+    constant ADD_CHARACTERS(77)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -3718,9 +3718,9 @@ scope Character {
     // 0x3F - MARINA
     define_character(MARINA, CAPTAIN, File.MARINA_MAIN, 0x0EB, 0, File.MARINA_CHARACTER, File.MARINA_SHIELD_POSE, 0, 0x15E, File.MARINA_GEM_HITBOX, File.MARINA_ENTRY_GFX, 0x560, 30, OS.TRUE, OS.TRUE, Stages.id.BTT_MARINA, Stages.id.BTP_MARINA, Stages.id.BTT_DRM, Stages.id.BTP_SONIC, sound_type.U, variant_type.NA)
     // 0x40 - DEDEDE
-    // define_character(DEDEDE, CAPTAIN, File.DEDEDE_MAIN, 0x0EB, 0, File.DEDEDE_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, File.DEDEDE_BALD_MAIN, File.DEDEDE_COWBOY_MAIN, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.NA) // both
-    define_character(DEDEDE, CAPTAIN, File.DEDEDE_MAIN, 0x0EB, 0, File.DEDEDE_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, File.DEDEDE_COWBOY_MAIN, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.NA) // just cowboy
+    define_character(DEDEDE, CAPTAIN, File.DEDEDE_MAIN, 0x0EB, 0, File.DEDEDE_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.NA)
     copy_gfx_parameters(DEDEDE, KIRBY)
+    //define_character(DEDEDE, CAPTAIN, File.DEDEDE_MAIN, 0x0EB, 0, File.DEDEDE_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, File.DEDEDE_COWBOY_MAIN, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.NA) // just cowboy
     // 0x41 - GOEMON
     define_character(GOEMON, MARIO, File.GOEMON_MAIN, 0x0CA, 0, File.GOEMON_CHARACTER, File.GOEMON_SHIELD_POSE, File.GOEMON_RYO_HITBOX, File.GOEMON_CLOUD_INFO, File.GOEMON_RYO_GRAPHIC, File.GOEMON_ENTRY_GFX, 0x91C, 22, OS.TRUE, OS.TRUE, Stages.id.BTT_GOEMON, Stages.id.BTP_GOEMON, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF,sound_type.U, variant_type.NA)
     // 0x42 - PEPPY
@@ -3747,23 +3747,24 @@ scope Character {
     define_character(LANKY, MARIO, File.LANKY_MAIN, 0x0CA, 0, File.LANKY_CHARACTER, File.LANKY_SHIELD_POSE,  File.LANKY_PROJECTILE_HITBOX, File.LANKY_ENTRY, File.LANKY_PROJECTILE_GRAPHIC, 0, 0x580, 21, OS.TRUE, OS.TRUE, Stages.id.BTT_DONKEY_KONG, Stages.id.BTP_DONKEY_KONG, Stages.id.BTT_DONKEY_KONG, Stages.id.BTP_DONKEY_KONG,sound_type.U, variant_type.SPECIAL)
     // ADD NEW CHARACTERS HERE
 
-    // DEDEDECB
-    // define_character(DEDEDECB, CAPTAIN,  File.DEDEDE_COWBOY_MAIN, 0x0EB, 0, File.DEDEDE_COWBOY_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
-    // 0x4D - HEADBAND PIKACHU
+    // 0x4D - COWBOY DEDEDE
+    define_character(CBDEDEDE, CAPTAIN,  File.DEDEDE_COWBOY_MAIN, 0x0EB, 0, File.DEDEDE_COWBOY_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
+    copy_gfx_parameters(CBDEDEDE, KIRBY)
+    // 0x4E - HEADBAND PIKACHU
     define_character(HBPIKA, PIKACHU, File.PIKACHU_HEADBAND_MAIN, 0x0F2, 0, File.PIKACHU_HEADBAND_CHARACTER, 0x157, 0x0F4, 0x15B, 0x156, 0, 0x41C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_PIKACHU, Stages.id.BTP_PIKACHU, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF, sound_type.U, variant_type.SPECIAL)
-    // 0x4E - HEADPHONES FOX
+    // 0x4F - HEADPHONES FOX
     define_character(HPFOX, FOX, File.FOX_HEADPHONES_MAIN, 0x0D0, 0, File.FOX_HEADPHONES_CHARACTER, 0x13A, 0x0D2, 0x15A, 0x0A1, 0x013C, 0x46C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FALCO, Stages.id.BTP_FALCO, sound_type.U, variant_type.SPECIAL)
-    // 0x4F - DALE LUIGI
+    // 0x50 - DALE LUIGI
     define_character(DLUIGI, LUIGI, File.LUIGI_DALE_MAIN, 0x0DC, 0, File.LUIGI_DALE_CHARACTER, 0x12A, 0x0DE , 0x164, 0x129, 0, 0x580, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_LUIGI, Stages.id.BTP_LUIGI, Stages.id.BTT_MARIO, Stages.id.BTP_MARIO, sound_type.U, variant_type.SPECIAL)
-    // 0x50 - MICROPHONE JIGGLYPUFF
+    // 0x51 - MICROPHONE JIGGLYPUFF
     define_character(MPPUFF, JIGGLYPUFF, File.JIGGLYPUFF_MICROPHONE_MAIN, 0x0E8, 0, File.JIGGLYPUFF_MICROPHONE_CHARACTER, 0x14B, 0, 0x15F, 0, 0, 0x474, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF, Stages.id.BTT_FALCO, Stages.id.BTP_MARIO, sound_type.U, variant_type.SPECIAL)
-    // 0x51 - COWBOY GOEMON
+    // 0x52 - COWBOY GOEMON
     define_character(CBGOEMON, MARIO, File.GOEMON_COWBOY_MAIN, 0x0CA, 0, File.GOEMON_COWBOY_CHARACTER, File.GOEMON_SHIELD_POSE, File.GOEMON_RYO_HITBOX, File.GOEMON_CLOUD_INFO, File.GOEMON_RYO_GRAPHIC, File.GOEMON_ENTRY_GFX, 0x91C, 22, OS.TRUE, OS.TRUE, Stages.id.BTT_GOEMON, Stages.id.BTP_GOEMON, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF,sound_type.U, variant_type.SPECIAL)
-    // 0x52 - LINK MASK GANONDORF
+    // 0x53 - LINK MASK GANONDORF
     define_character(LMGND, CAPTAIN, File.GND_LINK_MASK_MAIN, 0x0EB, 0, File.GND_LINK_MASK_CHARACTER, 0x14E, 0, File.GND_ENTRY_KICK, File.GND_PUNCH_GRAPHIC, 0, 0x48C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_GND, Stages.id.BTP_GND, Stages.id.BTT_FALCON, Stages.id.BTP_YOSHI, sound_type.U, variant_type.SPECIAL)
-    // 0x53 - MAJORA LINK
+    // 0x54 - MAJORA LINK
     define_character(MJLINK, LINK, File.LINK_MAJORA_MAIN, 0x0E0, 0, File.LINK_MAJORA_CHARACTER, 0x147, 0x0E2, 0x161, 0x145, 0, 0x708, 0, OS.TRUE, OS.TRUE, Stages.id.BTT_LINK, Stages.id.BTP_LINK, Stages.id.BTT_YL, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
-    // 0x54 - COWBOY PEPPY
+    // 0x55 - COWBOY PEPPY
     define_character(CBPEPPY, FOX, File.PEPPY_COWBOY_MAIN, 0x0D0, 0, File.PEPPY_COWBOY_CHARACTER, 0x13A, File.PEPPY_LASER_HITBOX, 0x15A, 0x0A1, File.PEPPY_LASER_GFX, 0x474, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FOX, Stages.id.BTP_FOX, sound_type.U, variant_type.SPECIAL)
     
 

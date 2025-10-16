@@ -250,6 +250,8 @@ include "src/NSheik/NSheik.asm"
 // DEDEDE
 include "src/Dedede/DededeSpecial.asm"
 include "src/Dedede/Dedede.asm"
+// COWBOY DEDEDE
+include "src/CBDedede/CBDedede.asm"
 // NMARINA
 include "src/NMarina/NMarina.asm"
 // GOEMON

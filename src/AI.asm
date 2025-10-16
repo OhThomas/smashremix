@@ -4260,6 +4260,8 @@ scope AI {
                     beq at, t0, below_ledge_facing_away
                     addiu at, r0, Character.id.DEDEDE
                     beq at, t0, below_ledge_facing_away
+                    addiu at, r0, Character.id.CBDEDEDE
+                    beq at, t0, below_ledge_facing_away
                     addiu at, r0, Character.id.NDEDEDE
                     beq at, t0, below_ledge_facing_away
                     nop

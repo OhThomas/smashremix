@@ -19,6 +19,8 @@ scope JigglypuffKirbyShared {
         beq     v0, at, _puff_jump_1       // modified original line 2
         addiu   at, r0, Character.id.DEDEDE   // Dedede ID
         beq     v0, at, _kirby_jump_1
+        addiu   at, r0, Character.id.CBDEDEDE // Cowboy Dedede ID
+        beq     v0, at, _kirby_jump_1
         addiu   at, r0, Character.id.MPPUFF   // MPPuff ID
         beq     v0, at, _puff_jump_1
         addiu   at, r0, Character.id.JPUFF    // JPuff ID
@@ -53,6 +55,8 @@ scope JigglypuffKirbyShared {
 		// at = Character.id.PUFF
         beq     v0, at, _puff_jump_2            // modified original line 2
         addiu   at, r0, Character.id.DEDEDE     // Dedede ID
+        beq     v0, at, _dedede_jump_2
+        addiu   at, r0, Character.id.CBDEDEDE   // Cowboy Dedede ID
         beq     v0, at, _dedede_jump_2
         addiu   at, r0, Character.id.MPPUFF     // MPPuff ID
         beq     v0, at, _puff_jump_2
@@ -102,6 +106,8 @@ scope JigglypuffKirbyShared {
         beq     v1, at, _puff_jump_3            // modified original line 1
         addiu   at, r0, Character.id.DEDEDE     // Dedede ID
         beq     v1, at, _puff_jump_3
+        addiu   at, r0, Character.id.CBDEDEDE   // Cowboy Dedede ID
+        beq     v1, at, _puff_jump_3
         addiu   at, r0, Character.id.MPPUFF     // MPPuff ID
         beq     v1, at, _puff_jump_3
         addiu   at, r0, Character.id.JPUFF      // JPuff ID
@@ -131,6 +137,8 @@ scope JigglypuffKirbyShared {
 
         beq     v0, at, _puff_jump_4            // modified original line 1
         addiu   at, r0, Character.id.DEDEDE     // Dedede ID
+        beq     v0, at, _kirby_jump_4
+        addiu   at, r0, Character.id.CBDEDEDE   // Cowboy Dedede ID
         beq     v0, at, _kirby_jump_4
         addiu   at, r0, Character.id.MPPUFF     // MPPuff ID
         beq     v0, at, _puff_jump_4
@@ -165,6 +173,8 @@ scope JigglypuffKirbyShared {
 
         beq     v1, at, _puff_jump_5            // modified original line 1
         addiu   at, r0, Character.id.DEDEDE     // Dedede ID
+        beq     v1, at, _kirby_jump_5
+        addiu   at, r0, Character.id.CBDEDEDE   // Cowboy Dedede ID
         beq     v1, at, _kirby_jump_5
         addiu   at, r0, Character.id.MPPUFF     // MPPuff ID
         beq     v1, at, _puff_jump_5
@@ -550,6 +560,8 @@ scope JigglypuffKirbyShared {
         beq     v1, at, _kirby
         addiu   at, r0, Character.id.DEDEDE     // DEDEDE ID
         beq     v1, at, _kirby
+        addiu   at, r0, Character.id.CBDEDEDE   // COWBOY DEDEDE ID
+        beq     v1, at, _kirby
         nop
         j       0x80136C2C                  // modified line 1
         or      v0, r0, r0                  // original line 2
@@ -576,6 +588,8 @@ scope JigglypuffKirbyShared {
         beq     v0, at, _kirby
         addiu   at, r0, Character.id.DEDEDE     // DEDEDE ID
         beq     v0, at, _kirby
+        addiu   at, r0, Character.id.CBDEDEDE   // COWBOY DEDEDE ID
+        beq     v0, at, _kirby
         nop
         j       0x80138F18                  // modified line 1
         or      v1, v0, r0                  // original line 2
@@ -598,6 +612,8 @@ scope JigglypuffKirbyShared {
         addiu   at, r0, Character.id.JKIRBY     // JKIRBY ID
         beq     at, a0, _kirby
         addiu   at, r0, Character.id.DEDEDE     // DEDEDE ID
+        beq     at, a0, _dedede
+        addiu   at, r0, Character.id.CBDEDEDE   // COWBOY DEDEDE ID
         beq     at, a0, _dedede
         nop
 
@@ -654,6 +670,8 @@ scope JigglypuffKirbyShared {
         addiu   at, r0, Character.id.JKIRBY     // JKIRBY ID
         beq     at, t0, _kirby
         addiu   at, r0, Character.id.DEDEDE     // DEDEDE ID
+        beq     at, t0, _kirby
+        addiu   at, r0, Character.id.CBDEDEDE   // COWBOY DEDEDE ID
         beq     at, t0, _kirby
         nop
 
@@ -815,6 +833,8 @@ scope JigglypuffKirbyShared {
         beq      v0, at, _puff_kirby       // skip if MARINA
         addiu    at, r0, Character.id.DEDEDE
         beq      v0, at, _dedede           // skip if DEDEDE
+        addiu    at, r0, Character.id.CBDEDEDE
+        beq      v0, at, _dedede           // skip if COWBOY DEDEDE
         addiu    at, r0, Character.id.EPUFF
         beq      v0, at, _puff_kirby       // skip if E PUFF
         addiu    at, r0, Character.id.JKIRBY

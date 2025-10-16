@@ -2379,6 +2379,7 @@ scope SinglePlayer {
     set_ending_image(Character.id.EBI, File.EBI_VICTORY_IMAGE_BOTTOM)
 
     // COSTUME CLONES
+    set_ending_image(Character.id.CBDEDEDE, File.DEDEDE_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.HBPIKA, 0xAE)
     set_ending_image(Character.id.HPFOX, 0xBE)
     set_ending_image(Character.id.DLUIGI, 0xBC)
@@ -2803,6 +2804,7 @@ scope SinglePlayer {
     add_to_single_player(Character.id.EPUFF,   name_texture.EPUFF,   name_delay.EPUFF)
 
     // COSTUME CLONES    character id          name texture                name delay
+    add_to_single_player(Character.id.CBDEDEDE,name_texture.DEDEDE,        name_delay.DEDEDE)
     add_to_single_player(Character.id.HBPIKA,  name_texture.PIKACHU,       name_delay.PIKACHU)
     add_to_single_player(Character.id.HPFOX,   name_texture.FOX,           name_delay.FOX)
     add_to_single_player(Character.id.DLUIGI,  name_texture.LUIGI,         name_delay.LUIGI)

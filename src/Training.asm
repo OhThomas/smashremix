@@ -3307,14 +3307,15 @@ scope Training {
     string_roy:; char_0x4A:; db "Roy", 0x00
     string_drluigi:; char_0x4B:; db "Dr. Luigi", 0x00
     string_lanky:; char_0x4C:; db "Lanky Kong", 0x00
-    string_hbpika:; char_0x4D:; db "Headband Pikachu", 0x00
-    string_hpfox:; char_0x4E:; db "Headphones Fox", 0x00
-    string_dluigi:; char_0x4F:; db "Dale Luigi", 0x00
-    string_mppuff:; char_0x50:; db "Microphone Jigglypuff", 0x00
-    string_cbgoemon:; char_0x51:; db "Cowboy Goemon", 0x00
-    string_lmgnd:; char_0x52:; db "Masked Ganondorf", 0x00
-    string_mjlink:; char_0x53:; db "Majora Link", 0x00
-    string_cbpeppy:; char_0x54:; db "Cowboy Peppy", 0x00
+    string_cbdedede:; char_0x4D:; db "Cowboy Dedede", 0x00
+    string_hbpika:; char_0x4E:; db "Headband Pikachu", 0x00
+    string_hpfox:; char_0x4F:; db "Headphones Fox", 0x00
+    string_dluigi:; char_0x50:; db "Dale Luigi", 0x00
+    string_mppuff:; char_0x51:; db "Microphone Jigglypuff", 0x00
+    string_cbgoemon:; char_0x52:; db "Cowboy Goemon", 0x00
+    string_lmgnd:; char_0x53:; db "Masked Ganondorf", 0x00
+    string_mjlink:; char_0x54:; db "Majora Link", 0x00
+    string_cbpeppy:; char_0x55:; db "Cowboy Peppy", 0x00
     OS.align(4)
 
     string_table_char:
@@ -3378,14 +3379,15 @@ scope Training {
     dw char_0x47            // DRAGONKING
     dw char_0x46            // EBISUMARU
     dw char_0x36            // PIANO
-    dw char_0x4D            // HEADBAND PIKACHU
-    dw char_0x4E            // HEADPHONES FOX
-    dw char_0x4F            // DALE LUIGI
-    dw char_0x50            // MICROPHONE JIGGLYPUFF
-    dw char_0x51            // COWBOY GOEMON
-    dw char_0x52            // LINK MASK GANONDORF
-    dw char_0x53            // MAJORA LINK
-    dw char_0x54            // COWBOY PEPPY
+    dw char_0x4D            // COWBOY DEDEDE
+    dw char_0x4E            // HEADBAND PIKACHU
+    dw char_0x4F            // HEADPHONES FOX
+    dw char_0x50            // DALE LUIGI
+    dw char_0x51            // MICROPHONE JIGGLYPUFF
+    dw char_0x52            // COWBOY GOEMON
+    dw char_0x53            // LINK MASK GANONDORF
+    dw char_0x54            // MAJORA LINK
+    dw char_0x55            // COWBOY PEPPY
     dw char_0x0D            // METAL MARIO
     dw char_0x45            // METAL LUIGI
     dw char_0x1A            // GIANT DK
@@ -3503,6 +3505,7 @@ scope Training {
         register_character_id(DRAGONKING);
         register_character_id(EBI);
         register_character_id(PIANO);
+        register_character_id(CBDEDEDE);
         register_character_id(HBPIKA);
         register_character_id(HPFOX);
         register_character_id(DLUIGI);
@@ -3615,6 +3618,7 @@ scope Training {
     db Character.id.DRAGONKING
     db Character.id.EBI
     db Character.id.PIANO
+    db Character.id.CBDEDEDE
     db Character.id.HBPIKA
     db Character.id.HPFOX
     db Character.id.DLUIGI
@@ -3743,6 +3747,7 @@ scope Training {
     db id.DRL
     db id.LANKY
     // ADD NEW CHARACTERS Here
+    db id.CBDEDEDE
     db id.HBPIKA
     db id.HPFOX
     db id.DLUIGI

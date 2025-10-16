@@ -559,6 +559,13 @@ scope Kirby {
     dw      DededeNSP.air_begin_initial_
     OS.patch_end()
 
+    Character.table_patch_start(kirby_ground_nsp, Character.id.CBDEDEDE, 0x4)
+    dw      DededeNSP.ground_begin_initial_
+    OS.patch_end()
+    Character.table_patch_start(kirby_air_nsp, Character.id.CBDEDEDE, 0x4)
+    dw      DededeNSP.air_begin_initial_
+    OS.patch_end()
+
     Character.table_patch_start(kirby_ground_nsp, Character.id.MARINA, 0x4)
     dw      MarinaNSP.ground_initial_
     OS.patch_end()
