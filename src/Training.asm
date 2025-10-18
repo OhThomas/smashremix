@@ -3316,6 +3316,7 @@ scope Training {
     string_lmgnd:; char_0x53:; db "Masked Ganondorf", 0x00
     string_mjlink:; char_0x54:; db "Majora Link", 0x00
     string_cbpeppy:; char_0x55:; db "Cowboy Peppy", 0x00
+    string_psonic:; char_0x56:; db "Pumpkin Sonic", 0x00
     OS.align(4)
 
     string_table_char:
@@ -3388,6 +3389,7 @@ scope Training {
     dw char_0x53            // LINK MASK GANONDORF
     dw char_0x54            // MAJORA LINK
     dw char_0x55            // COWBOY PEPPY
+    dw char_0x56            // PUMPKIN SONIC
     dw char_0x0D            // METAL MARIO
     dw char_0x45            // METAL LUIGI
     dw char_0x1A            // GIANT DK
@@ -3514,6 +3516,7 @@ scope Training {
         register_character_id(LMGND);
         register_character_id(MJLINK);
         register_character_id(CBPEPPY);
+        register_character_id(PSONIC);
         // ADD BONUS CHARACTERS HERE
 
         // bosses and polygons
@@ -3627,6 +3630,7 @@ scope Training {
     db Character.id.LMGND
     db Character.id.MJLINK
     db Character.id.CBPEPPY
+    db Character.id.PSONIC
 
     db Character.id.METAL
     db Character.id.MLUIGI
@@ -3756,6 +3760,7 @@ scope Training {
     db id.LMGND
     db id.MJLINK
     db id.CBPEPPY
+    db id.PSONIC
 
     // REMIX POLYGONS
     db id.NWARIO

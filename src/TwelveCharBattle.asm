@@ -3170,6 +3170,7 @@ scope TwelveCharBattle {
     add_defeat_parameters(0x617,                        defeated_moveset_captain,   0)          // 0x53 - LINK MASK GANONDORF
     add_defeat_parameters(0x48A,                        defeated_moveset_fox_link,  0)          // 0x54 - MAJORA LINK
     add_defeat_parameters(0x2B1,                        defeated_moveset_fox_link,  0)          // 0x55 - COWBOY PEPPY
+    add_defeat_parameters(File.SONIC_DOWNSTANDU,        defeated_moveset_sonic,     0)          // 0x56 - PUMPKIN SONIC
 
     // REMIX POLYGONS
     add_defeat_parameters(0x222,                        defeated_moveset_mario,     0)          // - NWARIO

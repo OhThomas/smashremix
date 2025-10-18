@@ -3336,6 +3336,8 @@ scope File {
     constant LINK_MAJORA_CHARACTER(0x154F)
     constant PEPPY_COWBOY_MAIN(0x1550)
     constant PEPPY_COWBOY_CHARACTER(0x1551)
+    constant SONIC_PUMPKIN_MAIN(0x1552)
+    constant SONIC_PUMPKIN_CHARACTER(0x1553)
 
  }
 

@@ -3344,6 +3344,8 @@
 154F Link Majora Character
 1550 Peppy Cowboy Main
 1551 Peppy Cowboy Character
+1552 Sonic Pumpkin Main
+1553 Sonic Pumpkin Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

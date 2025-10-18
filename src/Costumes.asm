@@ -1077,6 +1077,7 @@ scope Costumes {
         db 0x06                             // Link Mask Ganondorf
         db 0x03                             // Majora Link
         db 0x05                             // Cowboy Peppy
+        db 0x05                             // Pumpkin Sonic
         // Polygons
         db 0x05                             // Polygon Wario
         db 0x05                             // Polygon Lucas

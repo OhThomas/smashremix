@@ -745,7 +745,7 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.DRL,      FGM.announcer.names.DRL,                    DR_MARIO,        Character.id.LUIGI,   175,     DR. LUIGI,       25,     0.85,      {MIDI.id.DRMARIO_VICTORY})
     add_to_results_screen(Character.id.LANKY,    FGM.announcer.names.LANKY,                  DONKEY_KONG,     Character.id.DK,      185,     LAN2KY KONG,      25,     0.55,     {MIDI.id.LANKY_VICTORY})
     // ADD NEW CHARACTERS HERE
-    add_to_results_screen(Character.id.CBDEDEDE,   FGM.announcer.names.DEDEDE,               KIRBY,           Character.id.CAPTAIN, 175,     DEDEDE,          25,     0.9,       {MIDI.id.DEDEDE_VICTORY})
+    add_to_results_screen(Character.id.CBDEDEDE, FGM.announcer.names.DEDEDE,                 KIRBY,           Character.id.CAPTAIN, 175,     DEDEDE,          25,     0.9,       {MIDI.id.DEDEDE_VICTORY})
     add_to_results_screen(Character.id.HBPIKA,   FGM.announcer.names.PIKACHU,                POKEMON,         Character.id.PIKACHU, 185,     PIKACHU,         25,     0.85,      0x14)
     add_to_results_screen(Character.id.HPFOX,    FGM.announcer.names.FOX,                    STARFOX,         Character.id.FOX,     155,     FOX,             50,     1,         0x10)
     add_to_results_screen(Character.id.DLUIGI,   FGM.announcer.names.LUIGI,                  MARIO_BROS,      Character.id.LUIGI,   185,     DALE LUIGI,      25,     0.70,      0x0C)
@@ -754,6 +754,7 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.LMGND,    FGM.announcer.names.GANONDORF,              ZELDA,           Character.id.CAPTAIN, 185,     GANONDORF,       20,     0.6,       {MIDI.id.GANON_VICTORY})
     add_to_results_screen(Character.id.MJLINK,   FGM.announcer.names.LINK,                   ZELDA,           Character.id.LINK,    160,     LINK,            50,     1,         0x15)
     add_to_results_screen(Character.id.CBPEPPY,  FGM.announcer.names.PEPPY,                  STARFOX,         Character.id.FOX,     170,     PEPPY,           30,     1,         0x10)
+    add_to_results_screen(Character.id.PSONIC,   FGM.announcer.names.SONIC,                  SONIC,           Character.id.FOX,     165,     SONIC,           35,     1,         {MIDI.id.SONIC_VICTORY})
 
     // REMIX POLYGONS
     add_to_results_screen(Character.id.NFALCO,   FGM.announcer.names.NFIGHTER,               SMASH,           Character.id.FOX,     185,     POLY FALCO,      20,     0.6,       0x0B)
