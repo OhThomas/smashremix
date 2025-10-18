@@ -1159,6 +1159,8 @@ scope SonicNSP {
         lw      t2, 0x0008(t1)              // t2 = character id
         lli     at, Character.id.SSONIC     // at = id.SSONIC
         beq     t2, at, _sonic              // branch if character = SSONIC
+        lli     at, Character.id.PSONIC     // at = id.PSONIC
+        beq     t2, at, _sonic              // branch if character = PSONIC
         lli     at, Character.id.SONIC      // at = id.SONIC
         bne     t2, at, _loop_end           // skip if character != SONIC
         nop
@@ -1188,6 +1190,10 @@ scope SonicUSPRefresh: {
 }
 
 Character.table_patch_start(on_hit, Character.id.SONIC, 0x4)
+dw SonicUSPRefresh;
+OS.patch_end()
+
+Character.table_patch_start(on_hit, Character.id.PSONIC, 0x4)
 dw SonicUSPRefresh;
 OS.patch_end()
 
@@ -1406,6 +1412,8 @@ scope SonicUSP {
         // lli     at, Character.id.SSONIC     // at = id.SSONIC
 
         // beq     t6, at, _sonic              // branch if character = SSonic
+        lli     at, Character.id.PSONIC     // at = id.PSONIC
+        beq     t6, at, _sonic              // branch if character = Pumpkin Sonic
         lli     at, Character.id.SONIC      // at = id.SONIC
 
         bne     t6, at, _end                // skip if character != Sonic
@@ -1968,6 +1976,9 @@ scope SonicUSP {
         lw      t4, 0x0008(t3)      // t4 = char_id
         lli     at, Character.id.SONIC
         beql    t4, at, _next       // if Sonic, restore specials
+        sw      r0, 0x0ADC(t3)      // set up special bool to FALSE
+        lli     at, Character.id.PSONIC
+        beql    t4, at, _next       // if Pumpkin Sonic, restore specials
         sw      r0, 0x0ADC(t3)      // set up special bool to FALSE
         lli     at, Character.id.SSONIC
         beql    t4, at, _next       // if Super Sonic, restore specials

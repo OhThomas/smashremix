@@ -340,6 +340,8 @@ scope DKShared {
 
         lw      t6, 0x0008(s0)              // load character ID
         beq     t6, at, _sonic              // branch if character = Sonic
+        addiu   at, r0, Character.id.PSONIC // PSONIC ID (branch here if specific character file pointer needed)
+        beq     t6, at, _sonic              // branch if character = Pumpkin Sonic
         lli     at, Character.id.LANKY      // at = id.LANKY
         beq     t6, at, _lanky              // branch if character = Lanky
         addiu   at, r0, Character.id.SSONIC // SSONIC ID

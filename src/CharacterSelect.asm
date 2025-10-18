@@ -289,6 +289,7 @@ scope CharacterSelect {
     dw  0x16C50 + 0x200                     // 0x53 - GANONDORF w/ LINK MASK
     dw  0x128B0 + 0x200                     // 0x54 - LINK w/ MAJORA MASK
     dw  0x80D0 + 0x200                      // 0x55 - COWBOY PEPPY
+    dw  0x17900 + 0x200                     // 0x56 - PUMPKIN SONIC
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -440,6 +441,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.LMGND, req/LMGND_MODEL)
     add_alt_req_list(Character.id.MJLINK, req/MJLINK_MODEL)
     add_alt_req_list(Character.id.CBPEPPY, req/CBPEPPY_MODEL)
+    add_alt_req_list(Character.id.PSONIC, req/PSONIC_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -3071,6 +3073,7 @@ scope CharacterSelect {
         constant LMGND(0x0000EA38)
         constant MJLINK(0x00006438)
         constant CBPEPPY(0x000249E8 + 0x10)
+        constant PSONIC(0x0001E578)
         // custom
         constant FALCO(0x0000D978)
         constant GND(0x0000EA38)
@@ -3451,6 +3454,7 @@ scope CharacterSelect {
         constant LMGND(0x00011AA8)
         constant MJLINK(0x00002BA0)
         constant CBPEPPY(0x0001FFF8)
+        constant PSONIC(0x0001B2C8)
         // POLYGONS
         constant NWARIO(0x0001CB28)
         constant NLUCAS(0x0001D008)
@@ -5050,6 +5054,7 @@ scope CharacterSelect {
         constant LMGND(0x6530 + 0x10)
         constant MJLINK(0x6608 + 0x10)
         constant CBPEPPY(0x66E0 + 0x10)
+        constant PSONIC(0x6890 + 0x10)
     }
 
     // @ Description
@@ -5159,6 +5164,9 @@ scope CharacterSelect {
         lli     t2, Character.id.CBPEPPY
         beql    a1, t2, _draw_icon          // If CBPEPPY, then draw CBPEPPY stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.CBPEPPY // a1 = CBPEPPY footer struct
+        lli     t2, Character.id.PSONIC
+        beql    a1, t2, _draw_icon          // If PSONIC, then draw PSONIC stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.PSONIC // a1 = PSONIC footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7165,6 +7173,7 @@ scope CharacterSelect {
     add_to_css(Character.id.LMGND,  FGM.announcer.names.GANONDORF,      1.50,         0x00010002, ZELDA,        name_texture.GND,            portrait_offsets.LMGND,          8)
     add_to_css(Character.id.MJLINK, FGM.announcer.names.LINK,           1.50,         0x00010001, ZELDA,        name_texture.LINK,           portrait_offsets.MJLINK,         5)
     add_to_css(Character.id.CBPEPPY,FGM.announcer.names.PEPPY,          1.50,         0x00010004, STARFOX,      name_texture.PEPPY,          portrait_offsets.CBPEPPY,        BOOKEND_BONUS_PORTRAIT)
+    add_to_css(Character.id.PSONIC, FGM.announcer.names.SONIC,          1.50,         0x00010004, SONIC,        name_texture.SONIC,          portrait_offsets.PSONIC,         9)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

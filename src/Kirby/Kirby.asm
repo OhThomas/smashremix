@@ -538,6 +538,13 @@ scope Kirby {
     dw      SonicNSP.begin_initial_
     OS.patch_end()
 
+    Character.table_patch_start(kirby_ground_nsp, Character.id.PSONIC, 0x4)
+    dw      SonicNSP.begin_initial_
+    OS.patch_end()
+    Character.table_patch_start(kirby_air_nsp, Character.id.PSONIC, 0x4)
+    dw      SonicNSP.begin_initial_
+    OS.patch_end()
+
     Character.table_patch_start(kirby_ground_nsp, Character.id.SSONIC, 0x4)
     dw      SonicNSP.ssonic_begin_initial_
     OS.patch_end()

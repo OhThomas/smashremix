@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(77)
+    constant ADD_CHARACTERS(78)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -3714,6 +3714,8 @@ scope Character {
     define_character(MJLINK, LINK, File.LINK_MAJORA_MAIN, 0x0E0, 0, File.LINK_MAJORA_CHARACTER, 0x147, 0x0E2, 0x161, 0x145, 0, 0x708, 0, OS.TRUE, OS.TRUE, Stages.id.BTT_LINK, Stages.id.BTP_LINK, Stages.id.BTT_YL, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
     // 0x55 - COWBOY PEPPY
     define_character(CBPEPPY, FOX, File.PEPPY_COWBOY_MAIN, 0x0D0, 0, File.PEPPY_COWBOY_CHARACTER, 0x13A, File.PEPPY_LASER_HITBOX, 0x15A, 0x0A1, File.PEPPY_LASER_GFX, 0x474, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FOX, Stages.id.BTP_FOX, sound_type.U, variant_type.SPECIAL)
+    // 0x56 - PUMPKIN SONIC
+    define_character(PSONIC, FOX, File.SONIC_PUMPKIN_MAIN, 0x0D0, 0, File.SONIC_PUMPKIN_CHARACTER, File.SONIC_SHIELD_POSE, File.SONIC_SPRING_HITBOX, File.CSONIC_MAIN, File.SONIC_ENTRY, File.SONIC_SPRING_GRAPHIC, 0x58C, 18, OS.TRUE, OS.TRUE, Stages.id.BTT_SONIC, Stages.id.BTP_SONIC, Stages.id.BTT_WARIO, Stages.id.BTP_DS, sound_type.U, variant_type.SPECIAL)
     
 
     // REMIX POLYGONS

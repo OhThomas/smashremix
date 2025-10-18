@@ -223,6 +223,8 @@ include "src/Marth/Marth.asm"
 // SONIC
 include "src/Sonic/SonicSpecial.asm"
 include "src/Sonic/Sonic.asm"
+// PUMPKIN SONIC
+include "src/PSonic/PSonic.asm"
 // SANDBAG
 include "src/Sandbag/Sandbag.asm"
 // SUPER SONIC

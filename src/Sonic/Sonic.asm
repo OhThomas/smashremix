@@ -345,7 +345,7 @@ scope Sonic {
     Character.table_patch_start(variants, Character.id.SONIC, 0x4)
     db      Character.id.SSONIC // set as SPECIAL variant for SONIC
     db      Character.id.NSONIC // set as POLYGON variant for SONIC
-    db      Character.id.NONE
+    db      Character.id.PSONIC
     db      Character.id.NONE
     OS.patch_end()
 
@@ -1266,6 +1266,8 @@ scope Sonic {
         _sonic_check:
         addiu   at, r0, Character.id.SONIC  // SSONIC ID
 
+        beq     t6, at, _end                // modified original line 1
+        addiu   at, r0, Character.id.PSONIC // PSONIC ID
         beq     t6, at, _end                // modified original line 1
         addiu   at, r0, Character.id.SSONIC // SSONIC ID
         bnel    t6, at, _end
