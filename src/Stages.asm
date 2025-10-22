@@ -1798,7 +1798,7 @@ scope Stages {
         addiu   a0, r0, 0x0002               // a0 = 2 (lighter blue)
 
         color_cursor:
-                // checking if banned
+        // checking if banned
         jal     get_index_                  // v0 = index
         nop
         li      t0, bans_table              // checking if in bans_table
@@ -2179,8 +2179,10 @@ scope Stages {
         // resetting all ban values (table and icon)
         // need to make this a subroutine (used below)
         li      t0, bans_table              // t0 = pointer to bans_table
-        sd      r0, 0x0000(t0)              // setting bans 1-8 as 0 to reset
-        sd      r0, 0x0008(t0)              // setting bans 9-16 as 0 to reset
+        sw      r0, 0x0000(t0)              // setting bans 1-4 as 0 to reset
+        sw      r0, 0x0004(t0)              // setting bans 5-8 as 0 to reset
+        sw      r0, 0x0008(t0)              // setting bans 9-12 as 0 to reset
+        sw      r0, 0x000C(t0)              // setting bans 13-16 as 0 to reset
         sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         // t4 = MAX_BANS * 4, (to go through ban_icon pointers)
@@ -2369,8 +2371,10 @@ scope Stages {
         // resetting all ban values (table and icon)
         // resetting ban table
         li      t0, bans_table              // t0 = pointer to bans_table
-        sd      r0, 0x0000(t0)              // setting bans 1-8 as 0 to reset
-        sd      r0, 0x0008(t0)              // setting bans 9-16 as 0 to reset
+        sw      r0, 0x0000(t0)              // setting bans 1-4 as 0 to reset
+        sw      r0, 0x0004(t0)              // setting bans 5-8 as 0 to reset
+        sw      r0, 0x0008(t0)              // setting bans 9-12 as 0 to reset
+        sw      r0, 0x000C(t0)              // setting bans 13-16 as 0 to reset
         sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         // t3 = MAX_BANS * 4, (for dw pointers in ban_icon)
@@ -3273,8 +3277,10 @@ scope Stages {
         
         // resetting bans table        
         li      t0, bans_table              // t0 = pointer to bans_table
-        sd      r0, 0x0000(t0)              // setting bans 1-8 as 0 to reset
-        sd      r0, 0x0008(t0)              // setting bans 9-16 as 0 to reset
+        sw      r0, 0x0000(t0)              // setting bans 1-4 as 0 to reset
+        sw      r0, 0x0004(t0)              // setting bans 5-8 as 0 to reset
+        sw      r0, 0x0008(t0)              // setting bans 9-12 as 0 to reset
+        sw      r0, 0x000C(t0)              // setting bans 13-16 as 0 to reset
         sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         Render.draw_string(2, 0xD, string_hazards, Render.NOOP, 0x43780000, 0x43350000, 0xFFFFFFFF, 0x3F400000, Render.alignment.RIGHT)
@@ -3520,7 +3526,7 @@ scope Stages {
     db id.BATTLEFIELD_DL                    // 35
     db id.RANDOM                            // 36
     // Page 4 - Additional Viable Stages
-    db id.TOH                               // 37       
+    db id.TOH                               // 37
     db id.N64_REMIX                         // 38
     db id.RAINBOWROAD                       // 39       <-- Movement OFF
     db id.RAIDBLUE                          // 3A
@@ -5845,45 +5851,12 @@ scope Stages {
     dw 0
 
     ban_icon:
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
-    dw 0
+    fill 18 * 4, 0
+
     bans_table:
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0
-    db 0 // extra (all need to be dw otherwise)
-    db 0 // extra (all need to be dw otherwise)
+    fill 18, 0
+    OS.align(4)
+
 }
 
 } // __STAGES__
