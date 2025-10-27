@@ -320,6 +320,8 @@ include "src/Lanky/Lanky.asm"
 include "src/NPeach/NPeach.asm"
 // NCrash
 include "src/NCrash/NCrash.asm"
+// METAL SONIC
+include "src/MSSonic/MSSonic.asm"
 
 // KIRBY
 include "src/Kirby/Kirby.asm"

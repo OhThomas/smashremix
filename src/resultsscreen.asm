@@ -755,6 +755,7 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.MJLINK,   FGM.announcer.names.LINK,                   ZELDA,           Character.id.LINK,    160,     LINK,            50,     1,         0x15)
     add_to_results_screen(Character.id.CBPEPPY,  FGM.announcer.names.PEPPY,                  STARFOX,         Character.id.FOX,     170,     PEPPY,           30,     1,         0x10)
     add_to_results_screen(Character.id.PSONIC,   FGM.announcer.names.SONIC,                  SONIC,           Character.id.FOX,     165,     SONIC,           35,     1,         {MIDI.id.SONIC_VICTORY})
+    add_to_results_screen(Character.id.MSSONIC,  FGM.announcer.names.SONIC,                  SONIC,           Character.id.FOX,     170,     METAL SONIC,     20,     0.55,      {MIDI.id.SONIC_VICTORY})
 
     // REMIX POLYGONS
     add_to_results_screen(Character.id.NFALCO,   FGM.announcer.names.NFIGHTER,               SMASH,           Character.id.FOX,     185,     POLY FALCO,      20,     0.6,       0x0B)
