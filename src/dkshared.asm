@@ -344,6 +344,8 @@ scope DKShared {
         beq     t6, at, _sonic              // branch if character = Pumpkin Sonic
         lli     at, Character.id.LANKY      // at = id.LANKY
         beq     t6, at, _lanky              // branch if character = Lanky
+        lli     at, Character.id.MSSONIC    // at = id.MSSONIC
+        beq     t6, at, _ssonic             // branch if character = Metal Sonic
         addiu   at, r0, Character.id.SSONIC // SSONIC ID
         bnel    t6, at, _end
         addiu   a0, a0, 0xE654              // original line 2

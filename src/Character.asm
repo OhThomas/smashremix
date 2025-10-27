@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(78)
+    constant ADD_CHARACTERS(79)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -3768,6 +3768,8 @@ scope Character {
     define_character(CBPEPPY, FOX, File.PEPPY_COWBOY_MAIN, 0x0D0, 0, File.PEPPY_COWBOY_CHARACTER, 0x13A, File.PEPPY_LASER_HITBOX, 0x15A, 0x0A1, File.PEPPY_LASER_GFX, 0x474, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_FOX, Stages.id.BTP_FOX, Stages.id.BTT_FOX, Stages.id.BTP_FOX, sound_type.U, variant_type.SPECIAL)
     // 0x56 - PUMPKIN SONIC
     define_character(PSONIC, FOX, File.SONIC_PUMPKIN_MAIN, 0x0D0, 0, File.SONIC_PUMPKIN_CHARACTER, File.SONIC_SHIELD_POSE, File.SONIC_SPRING_HITBOX, File.CSONIC_MAIN, File.SONIC_ENTRY, File.SONIC_SPRING_GRAPHIC, 0x58C, 18, OS.TRUE, OS.TRUE, Stages.id.BTT_SONIC, Stages.id.BTP_SONIC, Stages.id.BTT_WARIO, Stages.id.BTP_DS, sound_type.U, variant_type.SPECIAL)
+    // 0x57 - METAL SONIC
+    define_character(MSSONIC, FOX, File.METAL_SUPER_SONIC_MAIN, 0x0D0, 0, File.METAL_SUPER_SONIC_CHARACTER, File.SONIC_SHIELD_POSE,  0x0D2, File.SSONIC_EMERALDS, File.SONIC_ENTRY, 0x013C, 0x58C, 24, OS.TRUE, OS.TRUE, Stages.id.BTT_SONIC, Stages.id.BTP_SONIC, Stages.id.BTT_WARIO, Stages.id.BTP_DS, sound_type.U, variant_type.SPECIAL)
     
 
     // REMIX POLYGONS

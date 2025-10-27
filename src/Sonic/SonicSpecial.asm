@@ -1201,6 +1201,10 @@ Character.table_patch_start(on_hit, Character.id.SSONIC, 0x4)
 dw SonicUSPRefresh;
 OS.patch_end()
 
+Character.table_patch_start(on_hit, Character.id.MSSONIC, 0x4)
+dw SonicUSPRefresh;
+OS.patch_end()
+
 scope SonicUSP {
     constant Y_SPEED(0x4301)                // current setting - float: 129.0
 
@@ -2042,6 +2046,9 @@ scope SonicDSP {
     constant BASE_SPEED_SS(0x428C)          // current setting (Super Sonic) - float: 70.0
     constant MIN_SPEED_SS(0x41C8)           // current setting (Super Sonic) - float: 25.0
     constant JUMP_SPEED_SS(0x4296)          // current setting (Super Sonic) - float: 75.0
+    constant BASE_SPEED_MSS(0x4220)         // current setting (Metal Sonic) - float: 40.0
+    constant MIN_SPEED_MSS(0x4190)          // current setting (Metal Sonic) - float: 18.0
+    constant JUMP_SPEED_MSS(0x4285)         // current setting (Metal Sonic) - float: 66.5
     constant GRAVITY(0x4010)                // current setting - float: 2.25
     constant SLOPE_ACCELERATION(0x4060)     // current setting - float: 3.5
     constant MAX_FALL_SPEED(0x4248)         // current setting - float: 50.0
@@ -2123,6 +2130,12 @@ scope SonicDSP {
         sw      a0, 0x0018(sp)              // ~
         sw      s0, 0x001C(sp)              // store ra, a0, s0
         lw      s0, 0x0084(a0)              // s0 = player struct
+
+        // check if Metal Sonic, skip if so
+        lw      t6, 0x0008(a0)              // t6 = character id
+        lli     t7, Character.id.MSSONIC    // t7 = id.MSSONIC
+        bne     t6, t7, _check_movement     // branch if character = Metal Sonic
+        nop
 
         // check if the a or b button are pressed to add charge level
         _check_button_press:
@@ -2208,6 +2221,12 @@ scope SonicDSP {
         sw      a0, 0x0018(sp)              // ~
         sw      s0, 0x001C(sp)              // store ra, a0, s0
         lw      s0, 0x0084(a0)              // s0 = player struct
+        
+        // check if Metal Sonic, skip if so
+        lw      t6, 0x0008(a0)              // t6 = character id
+        lli     t7, Character.id.MSSONIC    // t7 = id.MSSONIC
+        bne     t6, t7, _check_cancel       // branch if character = Metal Sonic
+        nop
 
         // check if the a or b button are pressed to add charge level
         _check_button_press:
@@ -2396,6 +2415,9 @@ scope SonicDSP {
         lw      t8, 0x0008(a0)              // load character id
         beql    t8, at, _move_base
         lui     at, BASE_SPEED_SS           // ~
+        ori     at, r0, Character.id.MSSONIC// at = MSSONIC
+        beql    t8, at, _move_base
+        lui     at, BASE_SPEED_MSS           // ~
         lui     at, BASE_SPEED              // ~
         _move_base:
         mtc1    at, f2                      // f2 = BASE_SPEED
@@ -2486,6 +2508,9 @@ scope SonicDSP {
         lui     t0, MIN_SPEED               // t0 = MIN_SPEED
         beql    t8, at, pc() + 8            // if character = SSONIC...
         lui     t0, MIN_SPEED_SS            // ...use MIN_SPEED_SS insead
+        ori     at, r0, Character.id.MSSONIC// at = id.MSSONIC
+        beql    t8, at, pc() + 8            // if character = MSSONIC...
+        lui     t0, MIN_SPEED_MSS           // ...use MIN_SPEED_MSS insead
         mtc1    t0, f2                      // f2 = MIN_SPEED
         lwc1    f4, 0x0060(s0)              // f4 = ground x velocity
         c.le.s  f4, f2                      // ~
@@ -2780,6 +2805,10 @@ scope SonicDSP {
         lw      t8, 0x0008(a0)              // load character id
         beql    t8, at, _move_jump
         lui     at, JUMP_SPEED_SS           // ~
+
+        ori     at, r0, Character.id.MSSONIC// at = MSSONIC
+        beql    t8, at, _move_jump
+        lui     at, JUMP_SPEED_MSS          // ~
         lui     at, JUMP_SPEED              // at = JUMP_SPEED
 
         _move_jump:
@@ -3658,6 +3687,17 @@ scope SSonicDSP {
         lli     a1, Action.FOX.ReflectorStart // a1(action id) = ReflectorStart
         or      a2, r0, r0                  // a2(starting frame) = 0
         lui     a3, 0x3F80                  // a3(frame speed multiplier) = 1.0
+
+        // // changing speed of animation for Metal Sonic
+        // lw      t0, 0x0018(sp)              // t0 = player object
+        // lw      t1, 0x0084(t0)              // t1 = player struct
+        // lw      t0, 0x0008(t1)              // t0 = current character ID
+        // lli     t1, Character.id.MSSONIC    // t1 = MSSONIC
+        // beql    t1, t0, _emerald_generate   // if Metal Sonic set a3(frame speed multiplier) = 2
+        // lui     a3, 0x4000                  // ~
+        // lui     a3, 0x4060                  // a3 = 3.5
+
+        _emerald_generate:
         jal     0x800E6F24                  // change action
         sw      r0, 0x0010(sp)              // argument 4 = 0
         jal     0x800E0830                  // known common subroutine (plays first animation frame)
@@ -3697,6 +3737,16 @@ scope SSonicDSP {
         lli     a1, Action.FOX.ReflectorStartAir // a1(action id) = ReflectorStart
         or      a2, r0, r0                  // a2(starting frame) = 0
         lui     a3, 0x3F80                  // a3(frame speed multiplier) = 1.0
+
+        // changing speed of animation for Metal Sonic
+        // lw      t0, 0x0018(sp)              // t0 = player object
+        // lw      t1, 0x0084(t0)              // t1 = player struct
+        // lw      t0, 0x0008(t1)              // t0 = current character ID
+        // lli     t1, Character.id.MSSONIC    // a1 = MSSONIC
+        // beql    t1, t0, _emerald_generate      // ~
+        // lui     a3, 0x4060                  // a3(frame speed multiplier) = 3.5
+
+        _emerald_generate:
         jal     0x800E6F24                  // change action
         sw      r0, 0x0010(sp)              // argument 4 = 0
         jal     0x800E0830                  // known common subroutine (plays first animation frame)
@@ -3715,7 +3765,19 @@ scope SSonicDSP {
         lwc1    f2, 0x0048(v1)              // f2 = x velocity
         mul.s   f2, f2, f0                  // ~
         swc1    f2, 0x0048(v1)              // multiply x velocity by 1.25 and update
-        sw      r0, 0x004C(v1)              // y velocity = 0
+
+        // changing y velocity and gravity delay for Metal Sonic
+        lw      t1, 0x0008(v1)              // t1 = current character ID
+        lli     t2, Character.id.MSSONIC    // t2 = MSSONIC
+        lli     t3, 10
+        bnel    t1, t2, _y_velocity_set     // if not Metal Sonic, set y velocity = 0
+        sw      r0, 0x004C(v1)              // ~
+
+        sw      t3, 0x004C(v1)              // if Metal Sonic, y velocity = 10
+        lli     t3, 3                       // &
+        sw      t3, 0x0B28(v1)              // set gravity delay = 3
+
+        _y_velocity_set:
         beqz    v0, _end                    // branch if no gfx object created
         sw      v0, 0x0B24(v1)              // store gfx object
         lbu     t0, 0x018F(v1)              // ~
