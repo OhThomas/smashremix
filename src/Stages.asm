@@ -1677,7 +1677,7 @@ scope Stages {
         _dht_movement:
         jal     Render.toggle_group_display_
         lli     a0, 0xE                     // a0 = group
-        
+
         // checking if tournament layout to put bans text
         li      t0, Toggles.entry_sss_layout
         lw      t0, 0x0004(t0)              // t0 = stage table index
@@ -1705,7 +1705,7 @@ scope Stages {
         sw      a2, 0x0000(a0)              // update pointer
         jal     get_stage_id_               // v0 = stage_id
         nop
-        
+
         // checking for random to not draw ban string
         lli     t0, id.RANDOM               // t0 = id.RANDOM
         beql    v0, t0, _tourney_ban        // if (stage_id = !id.RANDOM), hide
@@ -2183,7 +2183,7 @@ scope Stages {
         sw      r0, 0x0004(t0)              // setting bans 5-8 as 0 to reset
         sw      r0, 0x0008(t0)              // setting bans 9-12 as 0 to reset
         sw      r0, 0x000C(t0)              // setting bans 13-16 as 0 to reset
-        sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
+        sh      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         // t4 = MAX_BANS * 4, (to go through ban_icon pointers)
         li      t3, 4                       // t3 = 4
@@ -2195,8 +2195,9 @@ scope Stages {
 
         _reset_ban_icon_e:
         lw      t1, 0x0000(t0)              // t1 = ban icon
-        sw      0xFF, 0x0030(t1)            // Set X Position
-        sw      0xFF, 0x0034(t1)            // Set Y Position
+        lli     at, 0x00FF                  // at = 0xFF
+        sw      at, 0x0030(t1)              // Set X Position
+        sw      at, 0x0034(t1)              // Set Y Position
         addiu   t0, t0, 4                   // incrementing to next ban_icon
         addiu   t3, t3, 4
         blt     t3, t4, _reset_ban_icon_e   // if t3 <= MAX_BANS, make more ban icons
@@ -2234,7 +2235,7 @@ scope Stages {
         sw      t0, 0x0000(a1)              // update cursor id
         j       right_._return              // use right_'s preview update
         nop
-        
+
         // ban stage logic
         _ban_stage:
         // checking for L release to reset bans
@@ -2341,9 +2342,9 @@ scope Stages {
         // removing icon
         li      t0, ban_icon                // t0 = pointer to ban_icon
         addu    t0, t0, t3                  // t3 is the offset so we unban the right stage
-        lw      t1, 0x0000(t0)              // t1 = ban icon
-        sw      0xFF, 0x0030(t1)            // Set X Position
-        sw      0xFF, 0x0034(t1)            // Set Y Position
+        lli     at, 0x00FF                  // at = 0xFF
+        sw      at, 0x0030(t1)              // Set X Position
+        sw      at, 0x0034(t1)              // Set Y Position
         b       _end
         nop
 
@@ -2358,7 +2359,7 @@ scope Stages {
         or      t1, t1, t2                  // seeing if any are banned
         lw      t2, 0x000C(t0)              // loading ban stages 13-16 
         or      t1, t1, t2                  // seeing if any are banned
-        lw      t2, 0x0010(t0)              // loading ban stages 17,18 
+        lh      t2, 0x0010(t0)              // loading ban stages 17,18
         or      t1, t1, t2                  // seeing if any are banned
         beqz    t1, _end                    // t1 = 0, no stages are banned so end
         nop
@@ -2375,7 +2376,7 @@ scope Stages {
         sw      r0, 0x0004(t0)              // setting bans 5-8 as 0 to reset
         sw      r0, 0x0008(t0)              // setting bans 9-12 as 0 to reset
         sw      r0, 0x000C(t0)              // setting bans 13-16 as 0 to reset
-        sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
+        sh      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         // t3 = MAX_BANS * 4, (for dw pointers in ban_icon)
         li      t3, 4                       // t3 = 4
@@ -2388,8 +2389,9 @@ scope Stages {
         // resetting ban icons
         _reset_ban_icon:
         lw      t1, 0x0000(t0)              // t1 = ban icon object
-        sw      0xFF, 0x0030(t1)            // Set X Position
-        sw      0xFF, 0x0034(t1)            // Set Y Position
+        lli     at, 0x00FF                  // at = 0xFF
+        sw      at, 0x0030(t1)              // Set X Position
+        sw      at, 0x0034(t1)              // Set Y Position
         addiu   t0, t0, 4                   // incrementing to next ban_icon
         addiu   t3, t3, 4
         blt     t3, t4, _reset_ban_icon     // if t3 <= MAX_BANS, reset more ban icons
@@ -2421,7 +2423,8 @@ scope Stages {
         li      t0, bans_table              // t0 = pointer to bans_table
         li      t1, -1                      // t1 = -1 (banned)
         sh      t1, 0x0006(t0)              // banning stage 7,8
-        sd      t1, 0x0008(t0)              // banning stages 9-16
+        sw      r0, 0x0008(t0)              // setting bans 9-12 as 0 to reset
+        sw      r0, 0x000C(t0)              // setting bans 13-16 as 0 to reset
         sb      t1, 0x0010(t0)              // banning stage 17
 
         // t8 = Y, setting up for first row to ban
@@ -2666,7 +2669,7 @@ scope Stages {
         j       _return
         nop
     }
-    
+
     // start
     scope start_: {
         OS.patch_start(0x0014F9E4, 0x80133E74)
@@ -2754,7 +2757,7 @@ scope Stages {
         or      t1, r0, v0                  // t1 = v0
         li      t0, row                     // t0 = ROW address
         sb      t1, 0x0000(t0)              // update row
-        
+
         // checking if banned
         li      t3, bans_table              // t3 = bans_table pointer to see if banned
         lli     t4, NUM_COLUMNS             // t4 = NUM_COLUMNS
@@ -3245,7 +3248,7 @@ scope Stages {
         li      t0, string_movement
         sb      t3, 0x0008(t0)
         sb      t4, 0x0009(t0)
-        
+
         // draw ban icons
         //Render.draw_texture_at_offset(2, 0xD, Render.file_pointer_2, 0x12DF8, Render.NOOP, 0x436A0000, 0x432A0000, 0xFFFFFFFF, 0x303030FF, 0x3F400000)
         //Render.draw_texture_at_offset(1, 0x4, Render.file_pointer_2, 0x12DF8, Render.NOOP, 0x436A0000, 0x432A0000, 0xFFFFFFFF, 0x303030FF, 0x3F400000)
@@ -3281,7 +3284,7 @@ scope Stages {
         sw      r0, 0x0004(t0)              // setting bans 5-8 as 0 to reset
         sw      r0, 0x0008(t0)              // setting bans 9-12 as 0 to reset
         sw      r0, 0x000C(t0)              // setting bans 13-16 as 0 to reset
-        sw      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
+        sh      r0, 0x0010(t0)              // setting bans 17,18 as 0 to reset
 
         Render.draw_string(2, 0xD, string_hazards, Render.NOOP, 0x43780000, 0x43350000, 0xFFFFFFFF, 0x3F400000, Render.alignment.RIGHT)
         Render.draw_string_pointer(2, 0xD, hazards_onoff, Render.update_live_string_, 0x437C0000, 0x43350000, 0xFFFFFFFF, 0x3F400000, Render.alignment.LEFT)
@@ -3299,7 +3302,7 @@ scope Stages {
         lui     t0, 0x3F38                  // t0 = x scale
         lw      t1, 0x0074(v0)              // t1 = image struct
         sw      t0, 0x0018(t1)              // set x scale
-        
+
         // Shown when tournament layout for ban indicator
         Render.draw_string_pointer(2, 0xB, layout_pointer, Render.update_live_string_, 0x437C0000, 0x43470000, 0xFFFFFFFF, 0x3F400000, Render.alignment.RIGHT)
         Render.draw_texture_at_offset(2, 0xB, Render.file_pointer_3, 0x0688, Render.NOOP, 0x43720000, 0x43468000, 0xC0CC00FF, 0x000000FF, 0x3F400000)
