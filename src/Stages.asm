@@ -2243,7 +2243,7 @@ scope Stages {
 
         // checking for C-Up press to ban non legal stages
         li      a0, Joypad.CU               // a0 - C-Up button mask 
-        li      a2, Joypad.PRESSED          // a2 - type
+        li      a2, Joypad.RELEASED         // a2 - type
         jal     Joypad.check_buttons_all_   // v0 = C-Up pressed
         nop
         bnez    v0, _non_legal_ban          // if pressed, ban non legal stages
@@ -2251,7 +2251,7 @@ scope Stages {
         
         // checking for C-Down press to ban stage
         li      a0, Joypad.CD               // a0 - C-Down button mask 
-        li      a2, Joypad.PRESSED          // a2 - type
+        li      a2, Joypad.RELEASED         // a2 - type
         jal     Joypad.check_buttons_all_   // v0 = C-Down pressed
         nop
         beqz    v0, _end                    // if not pressed, skip
@@ -2419,8 +2419,8 @@ scope Stages {
         li      t0, bans_table              // t0 = pointer to bans_table
         li      t1, -1                      // t1 = -1 (banned)
         sh      t1, 0x0006(t0)              // banning stage 7,8
-        sw      r0, 0x0008(t0)              // setting bans 9-12 as 0 to reset
-        sw      r0, 0x000C(t0)              // setting bans 13-16 as 0 to reset
+        sw      t1, 0x0008(t0)              // banning stages 9-12
+        sw      t1, 0x000C(t0)              // banning stages 13-16
         sb      t1, 0x0010(t0)              // banning stage 17
 
         // t8 = Y, setting up for first row to ban
