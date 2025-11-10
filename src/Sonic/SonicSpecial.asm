@@ -2132,10 +2132,10 @@ scope SonicDSP {
         lw      s0, 0x0084(a0)              // s0 = player struct
 
         // check if Metal Sonic, skip if so
-        lw      t6, 0x0008(a0)              // t6 = character id
-        lli     t7, Character.id.MSSONIC    // t7 = id.MSSONIC
-        bne     t6, t7, _check_movement     // branch if character = Metal Sonic
-        nop
+        // lw      t6, 0x0008(a0)              // t6 = character id
+        // lli     t7, Character.id.MSSONIC    // t7 = id.MSSONIC
+        // beq     t6, t7, _check_movement     // branch if character = Metal Sonic
+        // nop
 
         // check if the a or b button are pressed to add charge level
         _check_button_press:
@@ -2223,10 +2223,10 @@ scope SonicDSP {
         lw      s0, 0x0084(a0)              // s0 = player struct
         
         // check if Metal Sonic, skip if so
-        lw      t6, 0x0008(a0)              // t6 = character id
-        lli     t7, Character.id.MSSONIC    // t7 = id.MSSONIC
-        bne     t6, t7, _check_cancel       // branch if character = Metal Sonic
-        nop
+        // lw      t6, 0x0008(a0)              // t6 = character id
+        // lli     t7, Character.id.MSSONIC    // t7 = id.MSSONIC
+        // beq     t6, t7, _check_cancel       // branch if character = Metal Sonic
+        // nop
 
         // check if the a or b button are pressed to add charge level
         _check_button_press:
