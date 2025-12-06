@@ -220,6 +220,8 @@ include "src/Mewtwo/Mewtwo.asm"
 // MARTH
 include "src/Marth/MarthSpecial.asm"
 include "src/Marth/Marth.asm"
+// ISAAC
+include "src/Isaac/Isaac.asm"
 // SONIC
 include "src/Sonic/SonicSpecial.asm"
 include "src/Sonic/Sonic.asm"

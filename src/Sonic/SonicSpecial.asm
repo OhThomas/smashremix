@@ -1804,6 +1804,8 @@ scope SonicUSP {
         beq     t4, at, _conker         // if Conker, need to do action checks
         lli     at, Character.id.MARTH
         beq     t4, at, _marth          // if Marth, need to do action checks
+        lli     at, Character.id.ISAAC
+        beq     t4, at, _marth          // if Isaac, need to do action checks
         nop
 
         b       _draw_smoke_gfx

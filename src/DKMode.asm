@@ -134,6 +134,8 @@ scope DKMode {
     db 0x8, 0x4, 0xB, 0x0;   OS.patch_end();   // Marth
     Character.table_patch_start(fighter_DK_mode, Character.id.NMARTH, 0x4)
     db 0x8, 0x4, 0xB, 0x0;   OS.patch_end();   // NMarth
+    Character.table_patch_start(fighter_DK_mode, Character.id.ISAAC, 0x4)
+    db 0x8, 0x4, 0xB, 0x0;   OS.patch_end();   // Isaac
      Character.table_patch_start(fighter_DK_mode, Character.id.ROY, 0x4)
     db 0x8, 0x4, 0xB, 0x0;   OS.patch_end();   // Roy
     // piano

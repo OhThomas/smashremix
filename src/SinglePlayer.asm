@@ -2390,6 +2390,7 @@ scope SinglePlayer {
     set_ending_image(Character.id.CBPEPPY, File.PEPPY_SLIPPY_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.PSONIC, File.SONIC_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.MSSONIC, File.SONIC_VICTORY_IMAGE_BOTTOM)
+    set_ending_image(Character.id.ISAAC, File.MARTH_VICTORY_IMAGE_BOTTOM)
 
     // @ Description
     // Patch which substitutes the victory picture with a custom one for all non-original characters.
@@ -2816,4 +2817,5 @@ scope SinglePlayer {
     add_to_single_player(Character.id.CBPEPPY, name_texture.PEPPY,         name_delay.PEPPY)
     add_to_single_player(Character.id.PSONIC,  name_texture.SONIC,         name_delay.SONIC)
     add_to_single_player(Character.id.MSSONIC, name_texture.MSSONIC,       name_delay.SONIC)
+    add_to_single_player(Character.id.ISAAC,   name_texture.MARTH,         name_delay.MARTH)
 } // __SINGLE_PLAYER__

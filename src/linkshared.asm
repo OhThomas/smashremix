@@ -108,6 +108,24 @@ scope LinkShared {
     dw  0x0000076C
     dw  0x000007B4
 
+    entry_anim_struct_1_ISAAC:
+    dw  0x040A0000
+    dw  Character.ISAAC_file_8_ptr
+    OS.copy_segment(0xA9CEC, 0x10)
+	dw	0x00000110					        // Isaac entry alters these
+	dw  0x00000218
+    dw  0x00000344
+    dw  0x000003A0
+
+    entry_anim_struct_2_ISAAC:
+    dw  0x040A0000
+    dw  Character.ISAAC_file_8_ptr
+    OS.copy_segment(0xA9D14, 0x10)
+	dw	0x00000638					        // Isaac entry alters these
+	dw  0x00000740
+    dw  0x0000076C
+    dw  0x000007B4
+
     entry_anim_struct_1_ROY:
     dw  0x040A0000
     dw  Character.ROY_file_8_ptr
@@ -207,6 +225,9 @@ scope LinkShared {
         ori     t1, r0, Character.id.MARTH  // t1 = id.MARTH
         li      a0, entry_anim_struct_1_MARTH       // a0 = entry_anim_struct
         beq     t0, t1, _custom             // branch if Marth
+        ori     t1, r0, Character.id.ISAAC  // t1 = id.ISAAC
+        li      a0, entry_anim_struct_1_ISAAC       // a0 = entry_anim_struct
+        beq     t0, t1, _custom             // branch if Isaac
         ori     t1, r0, Character.id.ROY  // t1 = id.ROY
         li      a0, entry_anim_struct_1_ROY         // a0 = entry_anim_struct
         beq     t0, t1, _custom             // branch if Roy
@@ -266,6 +287,9 @@ scope LinkShared {
         ori     t1, r0, Character.id.MARTH  // t1 = id.MARTH
         li      a0, entry_anim_struct_2_MARTH       // a0 = entry_anim_struct
         beq     t0, t1, _custom             // branch if Marth
+        ori     t1, r0, Character.id.ISAAC  // t1 = id.ISAAC
+        li      a0, entry_anim_struct_2_ISAAC       // a0 = entry_anim_struct
+        beq     t0, t1, _custom             // branch if Isaac
         ori     t1, r0, Character.id.ROY  // t1 = id.ROY
         li      a0, entry_anim_struct_2_ROY         // a0 = entry_anim_struct
         beq     t0, t1, _custom             // branch if Roy

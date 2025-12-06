@@ -227,6 +227,8 @@ scope SamusShared {
         beq     v0, at, j_0x80161EE4        // if MTWO, take Samus branch (Mewtwo uses 0xAE0 as well)
         lli     at, Character.id.MARTH      // at = MARTH
         beq     v0, at, j_0x80161EE4        // if MARTH, take Samus branch (Marth uses 0xAE0 as well)
+        lli     at, Character.id.ISAAC      // at = ISAAC
+        beq     v0, at, j_0x80161EE4        // if ISAAC, take Samus branch (Isaac uses 0xAE0 as well)
         lli     at, Character.id.SHEIK      // at = SHEIK
         beq     v0, at, j_0x80161EE4        // if SHEIK, take Samus branch (Sheik uses 0xAE0 as well)
         lli     at, Character.id.PEPPY      // at = PEPPY

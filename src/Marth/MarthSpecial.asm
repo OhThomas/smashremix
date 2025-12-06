@@ -1163,6 +1163,9 @@ scope MarthDSP {
         sw      ra, 0x0014(sp)              // original line 2
 
         lw      t8, 0x0008(a0)              // t8 = character id
+        lli     t9, Character.id.ISAAC      // t9 = id.ISAAC
+        beq     t8, t9, _check_action       // skip if character != ISAAC
+        nop
         lli     t9, Character.id.MARTH      // t9 = id.MARTH
         bne     t8, t9, _end                // skip if character != MARTH
         // comment out the above and uncomment the below to give Roy a counter lmao

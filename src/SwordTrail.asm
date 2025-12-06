@@ -111,9 +111,7 @@ scope SwordTrail {
     add_sword_trail(sonic_trail, -1, 0x1A, AXIS_Z, 0x00D0FF00, 0x0090FF00, -190, 190)
     add_sword_trail(ssonic_trail, -1, 0x1A, AXIS_Z, 0xeeff5f00, 0xe4d72600, -190, 190)
 	add_sword_trail(dedede_hammer, Character.id.DEDEDE, 0xE, AXIS_Z, 0xEEEEEE00, 0xB68E5600, -576, -192)
-	add_sword_trail(dedede_hammer, Character.id.CBDEDEDE, 0xE, AXIS_Z, 0xEEEEEE00, 0xB68E5600, -576, -192)
     add_sword_trail(goemon_trail, Character.id.GOEMON, 0xD, AXIS_Y, 0xE0B00000, 0xFFFFFF00, -64, 220)
-    add_sword_trail(goemon_trail, Character.id.CBGOEMON, 0xD, AXIS_Y, 0xE0B00000, 0xFFFFFF00, -64, 220)
     add_sword_trail(falco_trail, Character.id.FALCO, 0x0, AXIS_Y, 0x00FFFF00, 0x00FFFF00, -150, 250)
     add_sword_trail(falco_trail2, Character.id.FALCO, 0x1, AXIS_Y, 0x00FFFF00, 0x00FFFF00, -150, 250)
     add_sword_trail(kirby_falco_trail, Character.id.KIRBY, 0x0, AXIS_Y, 0x00FFFF00, 0x00FFFF00, -140, 240)
@@ -165,6 +163,22 @@ scope SwordTrail {
         lli     t8, 0xFFFF                  // t8 = -1
         beq     a1, t8, _continue           // continue if no character is specified
         lw      t8, 0x0008(s0)              // t8 = current character id
+
+        // duplicate character trails (temporary fix)
+        lli     t7, 0x004D                  // t7 = Cowboy DDD ID
+        beq     t7, t8, _continue           // continue if DDD clone
+        lli     t7, 0x0052                  // t7 = Cowboy Goemon ID
+        beq     t7, t8, _continue           // continue if Goemon clone
+        lli     t7, 0x0054                  // t7 = Majora Link ID
+        beq     t7, t8, _continue           // continue if Link clone
+        lli     t7, 0x0056                  // t7 = Pumpkin Sonic ID
+        beq     t7, t8, _continue           // continue if Sonic clone
+        lli     t7, 0x0057                  // t7 = Metal Sonic ID
+        beq     t7, t8, _continue           // continue if SSonic clone
+        lli     t7, 0x0058                  // t7 = Isaac ID
+        beq     t7, t8, _continue           // continue if Marth clone
+        nop
+
         bnel    a1, t8, _original           // branch if character id does not match
         addiu   at, r0, 0x0001              // original line 2
 

@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(79)
+    constant ADD_CHARACTERS(80)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -3718,6 +3718,8 @@ scope Character {
     define_character(PSONIC, FOX, File.SONIC_PUMPKIN_MAIN, 0x0D0, 0, File.SONIC_PUMPKIN_CHARACTER, File.SONIC_SHIELD_POSE, File.SONIC_SPRING_HITBOX, File.CSONIC_MAIN, File.SONIC_ENTRY, File.SONIC_SPRING_GRAPHIC, 0x58C, 18, OS.TRUE, OS.TRUE, Stages.id.BTT_SONIC, Stages.id.BTP_SONIC, Stages.id.BTT_WARIO, Stages.id.BTP_DS, sound_type.U, variant_type.SPECIAL)
     // 0x57 - METAL SONIC
     define_character(MSSONIC, FOX, File.METAL_SUPER_SONIC_MAIN, 0x0D0, 0, File.METAL_SUPER_SONIC_CHARACTER, File.SONIC_SHIELD_POSE,  0x0D2, File.SSONIC_EMERALDS, File.SONIC_ENTRY, 0x013C, 0x58C, 24, OS.TRUE, OS.TRUE, Stages.id.BTT_SONIC, Stages.id.BTP_SONIC, Stages.id.BTT_WARIO, Stages.id.BTP_DS, sound_type.U, variant_type.SPECIAL)
+    // 0x58 - ISAAC
+    define_character(ISAAC, CAPTAIN, File.ISAAC_MAIN, 0x0EB, 0, File.ISAAC_CHARACTER, File.MARTH_SHIELD, 0, 0x15E, File.MARTH_ENTRY_EFFECTS, 0, 0x524, 8, OS.FALSE, OS.TRUE, Stages.id.BTT_MARTH, Stages.id.BTP_MARTH, Stages.id.BTT_DRM, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
     
 
     // REMIX POLYGONS

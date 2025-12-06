@@ -3340,6 +3340,8 @@ scope File {
     constant SONIC_PUMPKIN_CHARACTER(0x1553)
     constant METAL_SUPER_SONIC_MAIN(0x1554)
     constant METAL_SUPER_SONIC_CHARACTER(0x1555)
+    constant ISAAC_MAIN(0x1556)
+    constant ISAAC_CHARACTER(0x1557)
 
  }
 
