@@ -3348,6 +3348,8 @@
 1553 Sonic Pumpkin Character
 1554 Metal Super Sonic Main
 1555 Metal Super Sonic Character
+1556 Isaac Main
+1557 Isaac Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

@@ -531,6 +531,13 @@ scope Kirby {
     dw      MarthNSP.air_1_initial_
     OS.patch_end()
 
+    Character.table_patch_start(kirby_ground_nsp, Character.id.ISAAC, 0x4)
+    dw      MarthNSP.ground_1_initial_
+    OS.patch_end()
+    Character.table_patch_start(kirby_air_nsp, Character.id.ISAAC, 0x4)
+    dw      MarthNSP.air_1_initial_
+    OS.patch_end()
+
     Character.table_patch_start(kirby_ground_nsp, Character.id.SONIC, 0x4)
     dw      SonicNSP.begin_initial_
     OS.patch_end()
@@ -1152,6 +1159,9 @@ scope Kirby {
         lw      t0, 0x0ADC(v0)              // t0 = character id of copied power
         lli     at, Character.id.MARTH      // at = id.MARTH
         beql    at, t0, _end                // branch if copied character is Marth...
+        sw      r0, 0x0AE0(v0)              // ...and clear pseudo-jump flag
+        lli     at, Character.id.ISAAC      // at = id.ISAAC
+        beql    at, t0, _end                // branch if copied character is Isaac...
         sw      r0, 0x0AE0(v0)              // ...and clear pseudo-jump flag
         lli     at, Character.id.ROY        // at = id.ROY
         beql    at, t0, _end                // branch if copied character is Roy...
