@@ -117,7 +117,6 @@ scope MSSonic {
     Character.edit_action_parameters(MSSONIC, Action.DSmash,          File.SONIC_DSMASH,          Sonic.DSMASH,                     -1)
     Character.edit_action_parameters(MSSONIC, Action.AttackAirN,      File.SONIC_NAIR,            Sonic.NAIR,                       -1)
     // Character.edit_action_parameters(MSSONIC, Action.AttackAirF,      File.SONIC_FAIR,            Sonic.FAIR,                       -1)
-    // Character.edit_action_parameters(MSSONIC, Action.AttackAirB,      File.SONIC_BAIR,            Sonic.BAIR,                       -1)
     Character.edit_action_parameters(MSSONIC, Action.AttackAirB,      File.LUCAS_BAIR,            Lucas.BAIR,                       -1)
     Character.edit_action_parameters(MSSONIC, Action.AttackAirU,      File.SONIC_UAIR,            UAIR,                       -1)
     Character.edit_action_parameters(MSSONIC, Action.AttackAirD,      File.SONIC_DAIR,            Sonic.DAIR,                       -1)
@@ -141,7 +140,6 @@ scope MSSonic {
     Character.edit_action_parameters(MSSONIC, Action.DownForwardU,    File.SONIC_DOWNFORWARDU,    -1,                        -1)
     // Character.edit_action_parameters(MSSONIC, 0xE4,                   File.SONIC_USP_SPRING,      Sonic.USP,                  0x00000000)
     Character.edit_action_parameters(MSSONIC, 0xEC,                   File.SSONIC_DSP,            DSP_EMERALDS_GROUND,              0)
-    // Character.edit_action_parameters(MSSONIC, 0xF1,                   File.SSONIC_DSPA,           SSonic.DSP_EMERALDS,              0)
 
     Character.edit_action_parameters(MSSONIC, Action.Teeter,          File.SSONIC_TEETER,         SSonic.TEETERING,                  -1)
     Character.edit_action_parameters(MSSONIC, Action.TeeterStart,     File.SSONIC_TEETER_START,   -1,                         -1)
@@ -232,7 +230,6 @@ scope MSSonic {
  	Character.edit_action_parameters(MSSONIC, 0xE2,                   File.SSONIC_USPG_END,       -1,                         0) // Air NSP
 
     // DSP
-	// Character.edit_action_parameters(MSSONIC,  0xEC,                       -1,         		        Wolf.DSP_INITIAL,               	-1)
 	Character.edit_action_parameters(MSSONIC,  0xEE,                  File.WOLF_DSP_END_GRND,     -1,               	      -1)
     Character.edit_action_parameters(MSSONIC,  0xF1,          		  File.SSONIC_DSPA,           DSP_EMERALDS,               -1)
     Character.edit_action_parameters(MSSONIC,  0xF3,                  File.WOLF_DSP_END_AIR,      -1,               	      -1)
