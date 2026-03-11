@@ -169,11 +169,11 @@ scope Tripping {
         // a2 is player struct
         // t6, v0, v1 are safe to edit
         li      t6, Toggles.entry_punish_on_failed_z_cancel
-        lw      t6, 0x0004(t6)              // a2 = entry_tripping (10 if ON)
-        addiu   v0, r0, 0x000A              // ~
-        beq     t6, v0, _continue           // if trip punishment selected, continue
-        addiu   v0, r0, 0x000C              // ~
-        beq     t6, v0, _continue           // if random punishment selected, continue
+        lw      t6, 0x0004(t6)              // t6 = entry_punish_on_failed_z_cancel (10 if Trip)
+        addiu   v0, r0, ZCancel._cruel_z_cancel.CRUEL_Z_CANCEL_MODE.TRIP
+        beq     t6, v0, _continue           // if trip or random punishment selected, continue regardless of Tripping toggle
+        addiu   v0, r0, ZCancel._cruel_z_cancel.CRUEL_Z_CANCEL_MODE.RANDOM
+        beq     t6, v0, _continue           // ~
 
         li      t6, Toggles.entry_tripping
         lw      t6, 0x0004(t6)              // t6 = entry_tripping (0 if OFF, 1 if LOW, 2 if HIGH, 3 if "BRAWL")

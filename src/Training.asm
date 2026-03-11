@@ -895,6 +895,14 @@ scope Training {
         li      t0, spam_practice_.timer
         sw      r0, 0x0000(t0)              // clear spam_practice_.timer
 
+        li      t0, zcg_port_indicator_.timer
+        sb      r0, 0x0000(t0)              // reset timer
+        li      t0, zcg_port_indicator_.shade
+        sb      r0, 0x0000(t0)              // reset shade
+        li      t0, zcg_port_indicator_.port
+        addiu   t1, r0, -1                  // t1 = initial value for port
+        sb      t1, 0x0000(t0)              // reset port
+
         li      t0, reset_counter           // t0 = reset_counter
         lw      t1, 0x0000(t0)              // t1 = reset_counter value
         addiu   t1, t1, 0x00001             // t1 = reset counter value + 1
@@ -943,6 +951,49 @@ scope Training {
         j       0x80190654
         nop
     }
+
+    // @ Description
+    // Disables HUD from drawing if entry_disable_hud = ALL
+    // Note: Menu is still accessible
+    scope disable_hud_: {
+        OS.patch_start(0x116D70, 0x80190550)
+        j       disable_hud_._init
+        lui     t6, 0x8019                      // original line 1
+        _init_return:
+        OS.patch_end()
+
+        OS.patch_start(0x113A4C, 0x8018D22C)
+        j       disable_hud_._leave_menu
+        nop
+        _leave_menu_return:
+        OS.patch_end()
+
+        _init:
+        // check HUD toggle
+        OS.read_word(Toggles.entry_disable_hud + 0x4, a0) // a0 = entry_disable_hud (0 if OFF, 1 if PAUSE, 2 if ALL)
+        andi    a0, a0, 0x0002                  // a0 = 1 if entry_disable_hud = 2
+        beqz    a0, _init_end                   // branch if not 'ALL' hud disabled
+        nop                                     // otherwise, disable drawing of hud
+        jal     0x80113F74                      // subroutine disables drawing of game hud
+        addiu   a0, r0, 0x0001                  // argument = don't draw
+
+        _init_end:
+        j       _init_return                    // return
+        addiu   t6, t6, 0x086c                  // original line 2
+
+        _leave_menu:
+        // check HUD toggle
+        OS.read_word(Toggles.entry_disable_hud + 0x4, v0) // v0 = entry_disable_hud (0 if OFF, 1 if PAUSE, 2 if ALL)
+        andi    v0, v0, 0x0002                  // v0 = 1 if entry_disable_hud = 2
+        bnez    v0, _leave_menu_end             // skip showing hud if 'ALL' hud disabled
+        sw      v1, 0x0018(sp)                  // original line 2 (need to save register regardless)
+        jal     0x80113f74                      // original line 1 (show hud)
+        nop
+
+        _leave_menu_end:
+        j       _leave_menu_return
+        nop
+}
 
     //init_struct_p1:; fill 0x40
     //init_struct_p2:; fill 0x40
@@ -1023,7 +1074,7 @@ scope Training {
         li      t0, allow_reset             // ~
         lw      t1, 0x0000(t0)              // t1 = current allow_reset flag
         lli     t2, OS.TRUE                 // t2 = TRUE
-        bne     t1, t2, _check_dd           // if allow_reset != TRUE, skip
+        bne     t1, t2, _check_frame_advance// if allow_reset != TRUE, skip
         sw      t2, 0x0000(t0)              // allow_reset = TRUE
         // check for a DPAD LEFT press, reset if detected
         lli     a0, Joypad.DL               // a0 - button_mask
@@ -1031,7 +1082,7 @@ scope Training {
         lli     a2, Joypad.PRESSED          // a2 - type
         jal     Joypad.check_buttons_all_   // v0 - bool dd_pressed
         nop
-        beqz    v0, _check_dd               // if (!dl_pressed), skip
+        beqz    v0, _check_frame_advance    // if (!dl_pressed), skip
         nop
 
         _quick_reset:
@@ -1048,6 +1099,8 @@ scope Training {
         sb      t1, 0x0C2A(t0)              // set this to 1 for reset instead of exit
         li      t0, Global.screen_interrupt // ~
         sw      t1, 0x0000(t0)              // generate screen_interrupt
+        b       _skip_input                 // skip checking for other dpad presses
+        nop
 
         // TODO: Experimental quick reset function, disabled since it's not stable for now.
         // TODO: If you run this function while a player is dead, their percent will no longer be drawn.
@@ -1141,30 +1194,6 @@ scope Training {
         // lwc1    f6, 0x0014(sp)              // load f4, f6
         // addiu   sp, sp, 0x0018              // deallocate stack space
 
-        _check_dd:
-        li      t0, entry_dpad_menu
-        lw      t0, 0x0004(t0)              // t0 = 0 if dpad options for du, dr and dd are enabled
-        bnez    t0, _check_frame_advance    // don't check dpad presses if dpad menu is off
-        nop
-
-        // check for a DPAD DOWN press, cycles through special model display if detected
-        lli     a0, Joypad.DD               // a0 - button_mask
-        lli     a1, 000069                  // a1 - whatever you like!
-        lli     a2, Joypad.PRESSED          // a2 - type
-        jal     Joypad.check_buttons_all_   // v0 - bool dd_pressed
-        nop
-        beqz    v0, _check_frame_advance    // if (!dd_pressed), skip
-        nop
-        li      t1, Toggles.entry_special_model
-        lw      t0, 0x0004(t1)              // t0 = 0 for off, 1 for hitbox_mode, 2 for hitbox+model, 3 for ecb
-        addiu   t0, t0, 0x0001              // t0 = 1, 2, 3, or 4
-        lli     t2, 0x0004                  // t2 = 4
-        beql    t0, t2, _update_model_display
-        addu    t0, r0, r0                  // turn off special model display
-
-        _update_model_display:
-        sw      t0, 0x0004(t1)              // store updated model display
-
         _check_frame_advance:
         li      t1, freeze                  // t1 = freeze
         li      t2, du_pressed              // t2 = du_pressed
@@ -1179,6 +1208,18 @@ scope Training {
         bnezl   t0, _skip_input             // don't check dpad presses if dpad menu is off
         sw      r0, 0x0000(t1)              // clear freeze if these dpad controls are off
 
+        _check_dr:
+        // check for a DPAD RIGHT press and store the result
+        // note: we prioritize DPAD RIGHT in cases where multiple are pressed at once
+        lli     a0, Joypad.DR               // a0 - button_mask
+        lli     a1, 000069                  // a1 - whatever you like!
+        lli     a2, Joypad.TURBO            // a2 - type
+        jal     Joypad.check_buttons_all_   // v0 - bool dr_pressed
+        nop
+        sw      v0, 0x0000(t3)              // store bool dr_pressed
+        bnez    v0, _skip_input             // skip checking for other dpad presses if DR is pressed
+        nop
+
         _check_du:
         // check for a DPAD UP press and store the result
         lli     a0, Joypad.DU               // a0 - button_mask
@@ -1188,14 +1229,24 @@ scope Training {
         nop
         sw      v0, 0x0000(t2)              // store bool du_pressed
 
-        _check_dr:
-        // check for a DPAD RIGHT press and store the result
-        lli     a0, Joypad.DR               // a0 - button_mask
+        _check_dd:
+        // check for a DPAD DOWN press, cycles through special model display if detected
+        lli     a0, Joypad.DD               // a0 - button_mask
         lli     a1, 000069                  // a1 - whatever you like!
-        lli     a2, Joypad.TURBO            // a2 - type
-        jal     Joypad.check_buttons_all_   // v0 - bool dr_pressed
+        lli     a2, Joypad.PRESSED          // a2 - type
+        jal     Joypad.check_buttons_all_   // v0 - bool dd_pressed
         nop
-        sw      v0, 0x0000(t3)              // store bool dr_pressed
+        beqz    v0, _skip_input             // if (!dd_pressed), skip
+        nop
+        li      t1, Toggles.entry_special_model
+        lw      t0, 0x0004(t1)              // t0 = 0 for off, 1 for hitbox_mode, 2 for hitbox+model, 3 for ecb
+        addiu   t0, t0, 0x0001              // t0 = 1, 2, 3, or 4
+        lli     t2, 0x0004                  // t2 = 4
+        beql    t0, t2, _update_model_display
+        addu    t0, r0, r0                  // turn off special model display
+
+        _update_model_display:
+        sw      t0, 0x0004(t1)              // store updated model display
 
         _skip_input:
         // replicate the original branch if skip_advance = true
@@ -1204,6 +1255,9 @@ scope Training {
         sw      ra, 0x006C(sp)              // save ra
 
         _load_du:
+        li      t1, freeze                  // t1 = freeze
+        li      t2, du_pressed              // t2 = du_pressed
+        li      t3, dr_pressed              // t3 = dr_pressed
         // toggle freeze if a dpad up input is given
         lw      t4, 0x0000(t2)              // t4 = bool du_pressed
         beqz    t4, _load_dr                // if (!du_pressed), load_dr
@@ -1517,120 +1571,6 @@ scope Training {
         jr      ra
         nop
     }
-    
-    // @ Description
-    // Runs every frame to update Z-Cancel Guide's port indicator colour
-    scope _port_indicator_update: {
-        addiu   sp, sp,-0x0020              // allocate stack space
-        sw      ra, 0x0004(sp)              // ~
-        sw      at, 0x0008(sp)              // store at
-        sw      t0, 0x000C(sp)              // store t0
-        sw      t2, 0x0010(sp)              // store t2
-        sw      t4, 0x0014(sp)              // store t4
-
-        constant TIMER_LENGTH(10)  // 10 frames
-
-        constant P1_HI(0xD87272FF) // red
-        constant P2_HI(0x6678C1FF) // blue
-        constant P3_HI(0xD8D072FF) // yellow
-        constant P4_HI(0x71D679FF) // green
-
-        constant P1_LO(0xAF1818FF) // red
-        constant P2_LO(0x1824ADFF) // blue
-        constant P3_LO(0xAFA318FF) // yellow
-        constant P4_LO(0x17A520FF) // green
-
-        li      t0, timer                   // t0 = address of timer
-        li      t2, current_shade           // t2 = address of current shade
-        lbu     t4, 0x0000(t0)              // t4 = timer
-        addiu   at, t4, -0x0001             // at = timer - 1
-        bnezl   t4, _check_port             // branch if timer still has frames..
-        sb      at, 0x0000(t0)              // store updated timer
-
-        // ..else alternate the port shade and reset timer
-        lbu     at, 0x0000(t2)              // at = current shade
-        xori    at, at, 0x0001              // 0 -> 1 or 1 -> 0 (flip bool)
-        sb      at, 0x0000(t2)              // store flipped shade
-        addiu   at, r0, TIMER_LENGTH        // timer = 10 frames
-        sb      at, 0x0000(t0)              // store timer
-
-        _check_port:
-        li      t0, port                    // t0 = address of port
-        lbu     t4, 0x0000(t0)              // t4 = port (1-4), 0 if no one has landed from an aerial yet
-        beqz    t4, _end                    // branch to end if no port
-        addiu   t4, t4, -0x0001             // t4 = port (0-3)
-
-        _get_colour:
-        lbu     at, 0x0000(t2)              // at = current shade
-        bnez    at, _hi                     // branch if current shade is light
-        sll     at, t4, 0x0004              // at = player index * 16
-
-        _lo:
-        li      t0, _lo_branches            // ~
-        addu    t0, t0, at                  // t0 = branch address for this index
-        jr      t0                          // branch to corresponding port's colour selection
-        nop
-
-        _hi:
-        li      t0, _hi_branches            // ~
-        addu    t0, t0, at                  // t0 = branch address for this index
-        jr      t0                          // branch to corresponding port's colour selection
-        nop
-
-        _lo_branches:
-        li      at, P1_LO
-        b       _update_colour
-        nop
-        li      at, P2_LO
-        b       _update_colour
-        nop
-        li      at, P3_LO
-        b       _update_colour
-        nop
-        li      at, P4_LO
-        b       _update_colour
-        nop
-
-        _hi_branches:
-        li      at, P1_HI
-        b       _update_colour
-        nop
-        li      at, P2_HI
-        b       _update_colour
-        nop
-        li      at, P3_HI
-        b       _update_colour
-        nop
-        li      at, P4_HI
-        b       _update_colour
-        nop
-
-        _update_colour:
-        li      t0, z_cancel_object         // t0 = address of z cancel object
-        lw      t0, 0x0004(t0)              // t0 = port indicator object
-        sw      at, 0x0040(t0)              // store updated port indicator colour
-
-        _end:
-        lw      at, 0x0008(sp)              // restore at
-        lw      t0, 0x000C(sp)              // restore t0
-        lw      t2, 0x0010(sp)              // restore t2
-        lw      t4, 0x0014(sp)              // restore t4
-        lw      ra, 0x0004(sp)              // restore ra
-        addiu   sp, sp, 0x0020              // deallocate stack space
-        jr      ra                          // return
-        nop
-
-        variables:
-        timer:
-        db  TIMER_LENGTH
-
-        port:
-        db  0
-
-        current_shade:
-        db  0
-        OS.align(4)
-    }
 
     // @ Description
     // Sets up the custom objects for the custom menu
@@ -1657,6 +1597,11 @@ scope Training {
         li      s1, hold_A_rect_width       // s1 = address of hold_A_rect_width
         sw      r0, 0x0000(s1)              // hold_A_rect_width = 0
 
+        li      s1, zcg_frame_marker_object // s1 = address of zcg_frame_marker_object
+        sw      r0, 0x0000(s1)              // zcg_frame_marker_object = 0
+        li      s1, zcg_port_object         // s1 = address of zcg_port_object
+        sw      r0, 0x0000(s1)              // zcg_port_object = 0
+
         li      t9, Toggles.entry_hold_to_exit_training
         lw      t9, 0x0004(t9)              // t9 = 1 if hold to exit training mode is enabled, else 0
         beqzl   t9, _no_hold_A_text         // if hold to exit is disabled, skip
@@ -1681,36 +1626,63 @@ scope Training {
         sw      r0, 0x0000(s1)              // hold_A_rect_width = 0
 
         _no_hold_A_text:
-                li      t9, entry_z_cancel_guide    // t9 = our menu toggle
+        li      t9, entry_z_cancel_guide
         lw      t9, 0x0004(t9)              // t9 = 1 if z cancel guide is enabled, else 0
         beqzl   t9, _none_enabled           // if z cancel guide is disabled, skip
         nop
 
-        // draw z-cancel guide
-        Render.draw_rectangle(0x16, 0xB, 245, 39, 4, 10, 0x202020FF, OS.FALSE) // port indicator
-        li      s1, z_cancel_object         // s1 = address of z_cancel_object
-        sw      v0, 0x0004(s1)              // z_cancel_object tint bar = v0, the return value of Render.draw_rectangle_
-        Render.register_routine(_port_indicator_update)
+        // Port indicator
+        Render.draw_rectangle(0x16, 0xB, 245, 39, 4, 10, 0x202020FF, OS.FALSE)
+        li      s1, zcg_port_object         // s1 = address of zcg_port_object
+        sw      v0, 0x0000(s1)              // zcg_port_object = v0, the return value of Render.draw_rectangle()
 
-        Render.draw_rectangle(0x16, 0xB, 88, 41, 162, 6, 0x202020FF, OS.FALSE) // bar background
+        // Background bar
+        Render.draw_rectangle(0x16, 0xB, 88, 41, 162, 6, 0x202020FF, OS.FALSE)
 
-        define n(0)
-        while ({n} < 25) {
-            if (25 - {n}) > 11 {
-                evaluate rect_colour(0xFB4523FF) // red
-            } else {
-                evaluate rect_colour(0x4BFF3EFF) // green
-            }
+        // Frame blocks
+        lli     s1, 239                     // s1 = starting ulx
+        lli     s7, 0                       // s7 = frame block count
 
-            Render.draw_rectangle(0x16, 0xB, 95 + (6 * {n}), 42, 4, 4, {rect_colour}, OS.FALSE) // draw frame blocks
-            evaluate n({n} + 1)
-        }
+        _zcg_frame_block_loop:
+        li      t9, Toggles.entry_z_cancel_opts
+        lw      t9, 0x0004(t9)              // t9 = 0 for DEFAULT, 1 for Disabled, 2 for Melee, 3 for Auto, 4 for Glide
+        lli     t0, 0x0002                  // t0 = 2 (Melee)
+        beql    t0, t9, _zcg_frame_block_color // branch if Melee
+        lli     t0, 7                       // t0 = melee cancel window (7 frames)
 
-        Render.draw_rectangle(0x16, 0xB, 89, 43, 4, 2, 0x909090FF, OS.FALSE) // left-most thin grey block
-        Render.draw_rectangle(0x16, 0xB, 245, 43, 4, 2, 0x909090FF, OS.FALSE) // right-most thin grey block
-        Render.draw_rectangle(0x16, 0xB, 246, 40, 2, 8, 0xF0F0F0FF, OS.FALSE) // frame marker bar
-        li      s1, z_cancel_object         // s1 = address of z_cancel_object
-        sw      v0, 0x0000(s1)              // z_cancel_object frame marker bar = v0, the return value of Render.draw_rectangle_
+        lli     t0, 11                      // t0 = default cancel window (11 frames)
+
+        _zcg_frame_block_color:
+        sltu    t9, s7, t0                  // t9 = 0 if frame block > cancel window
+        lui     s5, 0xFB45                  // ~
+        beqzl   t9, _zcg_frame_block_draw   // branch if frame block > cancel window
+        ori     s5, s5, 0x23FF              // s5 = color (red)
+
+        li      s5, 0x4BFF3EFF              // s5 = color (green)
+
+        // based on Render.draw_rectangle() macro
+        _zcg_frame_block_draw:
+        lli     a0, 0x16                    // a0 = room
+        lli     a1, 0xB                     // a1 = group
+        lli     s2, 42                      // s2 = uly
+        lli     s3, 4                       // s3 = width
+        lli     s4, 4                       // s4 = height
+        jal     Render.draw_rectangle_
+        lli     s6, OS.FALSE                // s6 = enable_alpha
+
+        addiu   s7, s7, 1                   // frame block count++
+        sltiu   t9, s7, 25                  // t9 = 1 if not finished looping
+        bnezl   t9, _zcg_frame_block_loop   // branch if less than 25 frame blocks drawn
+        addiu   s1, s1, -6                  // s1 = previous ulx - 6
+
+        // Frame blocks outside of guide range (too early/late)
+        Render.draw_rectangle(0x16, 0xB, 89, 43, 4, 2, 0x909090FF, OS.FALSE)
+        Render.draw_rectangle(0x16, 0xB, 245, 43, 4, 2, 0x909090FF, OS.FALSE)
+
+        // Frame marker bar
+        Render.draw_rectangle(0x16, 0xB, 246, 40, 2, 8, 0xF0F0F0FF, OS.FALSE)
+        li      s1, zcg_frame_marker_object // s1 = address of zcg_frame_marker_object
+        sw      v0, 0x0000(s1)              // zcg_frame_marker_object = v0, the return value of Render.draw_rectangle()
 
         _none_enabled:
         // Reset counter
@@ -1800,6 +1772,14 @@ scope Training {
         addiu   sp, sp, -0x0030             // create stack space
         addiu   sp, sp, 0x0030              // restore stack
 
+        lw      a0, 0x0010(sp)              // a0 = object
+        li      a1, zcg_port_indicator_     // a1 = routine
+        lli     a2, 0x0001                  // a2 = ?
+        lli     a3, 0x0000                  // a3 = last group to run
+        jal     Render.REGISTER_OBJECT_ROUTINE_
+        addiu   sp, sp, -0x0030             // create stack space
+        addiu   sp, sp, 0x0030              // restore stack
+
         li      t0, struct.port_1.type
         lw      t0, 0x0000(t0)              // t0 = port 1 type
         lli     t1, 0x0002                  // t1 = 2 (type N/A)
@@ -1873,9 +1853,6 @@ scope Training {
         xori    a1, a1, 0x0001              // a1 = initial display state
         jal     Render.toggle_group_display_
         lli     a0, 0x0017                  // a0 = action & frame group
-        
-        li      t0, _port_indicator_update.variables
-        sw      r0, 0x0000(t0)              // reset port indicator variables
 
         // Ensure BGM volume is correct level.
         // Fixes bug where music is quiet if you do a quick reset while paused.
@@ -2170,105 +2147,6 @@ scope Training {
         jal     Render.toggle_group_display_
         lli     a1, 0x0001                  // a1 = display off
 
-        _z_cancel_guide:
-        li      t9, entry_z_cancel_guide
-        lw      t9, 0x0004(t9)              // t9 = 1 if z cancel guide is enabled, else 0
-        beqzl   t9, _hold_to_exit_check     // if z cancel guide disabled
-        nop
-
-        li      t9, ZCancel.z_cancel_status
-        lbu     at, 0x0005(t9)              // at = z-cancel landed status
-        beqzl   at, _hold_to_exit_check     // branch if no one has landed from an aerial just now
-        nop
-
-        // if we're here, a player has just landed from an aerial
-        lbu     t8, 0x0006(t9)              // t8 = player index (0 - 3)
-        sll     t8, t8, 0x0005              // t8 = player index * 32
-        li      t7, _port_indicator_update.variables
-        li      t0, _port_branches          // ~
-        addu    t0, t0, t8                  // t0 = branch address for this index
-        jr      t0                          // branch to corresponding player type check
-        nop
-
-        _port_branches:
-        li      t0, struct.port_1.type      // t0 = address of p1 type
-        lw      t0, 0x0000(t0)              // t0 = p1 type
-        bnez    t0, _z_cancel_guide_end     // skip updating if player isn't human
-        addiu   at, r0, 1                   // at = port
-        b       _human
-        sb      at, 0x0001(t7)              // store port
-        nop
-
-        li      t0, struct.port_2.type      // t0 = address of p2 type
-        lw      t0, 0x0000(t0)              // t0 = p2 type
-        bnez    t0, _z_cancel_guide_end     // skip updating if player isn't human
-        addiu   at, r0, 2                   // at = port
-        b       _human
-        sb      at, 0x0001(t7)              // store port
-        nop
-
-        li      t0, struct.port_3.type      // t0 = address of p3 type
-        lw      t0, 0x0000(t0)              // t0 = p3 type
-        bnez    t0, _z_cancel_guide_end     // skip updating if player isn't human
-        addiu   at, r0, 3                   // at = port
-        b       _human
-        sb      at, 0x0001(t7)              // store port
-        nop
-
-        li      t0, struct.port_4.type      // t0 = address of p4 type
-        lw      t0, 0x0000(t0)              // t0 = p4 type
-        bnez    t0, _z_cancel_guide_end     // skip updating if player isn't human
-        addiu   at, r0, 4                   // at = port
-        sb      at, 0x0001(t7)              // store port
-        nop
-
-        _human:
-        // if we're here, the player is human, so we should update the frame marker
-        li      t8, z_cancel_object         // t8 = address of z cancel objects
-        lw      t6, 0x0000(t8)              // t6 = frame marker object
-        lw      t5, 0x0004(t8)              // t5 = port indicator object
-
-        lw      t0, 0x0000(t9)              // t0 = tics since last Z press
-        li      at, 0x00010000              // tics value = 0x00010000 when a Z press never happened during aerial(?)
-        beql    t0, at, _set_ulx            // branch if Z press too late for guide's range
-        addiu   a1, r0, 0                   // ulx offset = right-most frame block
-
-        addiu   t0, t0, 0x0001              // tics since last Z press + 1
-        sltiu   a0, t0, 25                  // a0 = 0 if Z press too early for guide's range
-        beqzl   a0, _set_ulx                // branch if a0 = 0
-        addiu   a1, r0, 156                 // ulx offset = left-most frame block
-
-        mtc1    t0, f0                      // f0 = tics since last Z press
-        cvt.s.w f0, f0                      // f0 = Z tics, floating point
-
-        lli     at, 0x0006                  // at = gap per frame block (6 px)
-        mtc1    at, f2                      // f2 = gap
-        cvt.s.w f2, f2                      // f2 = gap, floating point
-        mul.s   f2, f2, f0                  // f2 = gap * Z tics
-        nop
-        cvt.w.s f2, f2                      // f2 = gap * Z tics, fixed point
-        mfc1    a1, f2                      // ulx offset = frame block Z was pressed on
-
-        _set_ulx:
-        addiu   a0, r0, 246                 // ~
-        subu    a0, a0, a1                  // a0 = right-most frame block ulx - ulx offset
-        sw      a0, 0x0030(t6)              // frame marker object ulx = adjusted ulx
-        addiu   a0, a0, -1                  // ~
-        sw      a0, 0x0030(t5)              // port indicator object ulx = adjusted ulx - 1
-
-        sb      r0, 0x0000(t7)              // reset port indicator timer
-        lbu     at, 0x0004(t9)              // at = z-cancel success status
-        beqz    at, _z_cancel_guide_end     // branch if z-cancel failed
-        sb      r0, 0x0002(t7)              // reset port indicator shade
-
-        // if we're here, there was a successful z-cancel
-        jal     FGM.play_
-        lli     a0, 0x118                   // fgm id = Target break SFX
-
-        _z_cancel_guide_end:
-        sb      r0, 0x0005(t9)              // reset z-cancel landed bool
-
-        _hold_to_exit_check:
         li      t9, Toggles.entry_hold_to_exit_training
         lw      t9, 0x0004(t9)              // t9 = 1 if hold to exit training mode is enabled, else 0
         beqzl   t9, _end                    // if hold to exit disabled
@@ -2843,6 +2721,154 @@ scope Training {
     }
 
     // @ Description
+    // Update logic for Z-Cancel Guide, called by ZCancel.asm
+    // @ Arguments
+    // s1 - player struct
+    // t6 - z cancel success bool (0 = missed, 1 = successful)
+    scope z_cancel_guide_: {
+        addiu   sp, sp, -0x0020             // allocate stack space
+        sw      t6, 0x0004(sp)              // ~
+        sw      t8, 0x0008(sp)              // ~
+        sw      a0, 0x000C(sp)              // ~
+        sw      a1, 0x0010(sp)              // ~
+        swc1    f0, 0x0014(sp)              // ~
+        swc1    f2, 0x0018(sp)              // ~
+        sw      ra, 0x001C(sp)              // save registers
+
+        // t6, at are safe
+
+        lbu     t6, 0x0023(s1)              // t6 = player type (0 = HMN, 1 = CPU, 2 = N/A)
+        bnez    t6, _end                    // end if player isn't human
+        lw      t8, 0x0160(s1)              // t8 = frames since last Z press
+
+        lui     at, 0x0001                  // at = 0x00010000 (value when a Z press never happened during aerial?)
+        beql    t8, at, _set_ulx            // branch if Z press too late for guide's range
+        lli     a1, 0                       // ulx offset = right-most frame block
+
+        addiu   t8, t8, 1                   // t8 = frames since last Z press + 1
+        sltiu   at, t8, 25                  // at = 0 if Z press too early for guide's range
+        beqzl   at, _set_ulx                // branch if a0 = 0
+        lli     a1, 156                     // ulx offset = left-most frame block
+
+        mtc1    t8, f0                      // f0 = Z frame
+        cvt.s.w f0, f0                      // f0 = Z frame, floating point
+        lli     at, 6                       // at = gap per frame block (6 px)
+        mtc1    at, f2                      // f2 = gap
+        cvt.s.w f2, f2                      // f2 = gap, floating point
+        mul.s   f2, f2, f0                  // f2 = gap * Z frame
+        nop
+        cvt.w.s f2, f2                      // f2 = gap * Z frame, fixed point
+        mfc1    a1, f2                      // ulx offset = frame block Z was pressed on
+
+        _set_ulx:
+        lli     a0, 246                     // a0 = right-most frame block ulx
+        li      t6, zcg_frame_marker_object // t6 = address of zcg_frame_marker_object
+        lw      t6, 0x0000(t6)              // t6 = zcg_frame_marker_object
+        beqz    t6, _end                    // branch if no zcg_frame_marker_object
+        subu    a0, a0, a1                  // a0 = adjusted ulx
+
+        sw      a0, 0x0030(t6)              // store adjusted ulx
+
+        li      t6, zcg_port_object         // t6 = address of zcg_port_object
+        lw      t6, 0x0000(t6)              // t6 = zcg_port_object
+        beqz    t6, _end                    // branch if no zcg_port_object
+        addiu   a0, a0, -1                  // a0 = adjusted ulx - 1
+
+        sw      a0, 0x0030(t6)              // store adjusted ulx
+
+        li      t6, zcg_port_indicator_.timer
+        sb      r0, 0x0000(t6)              // reset timer
+        li      t6, zcg_port_indicator_.shade
+        sb      r0, 0x0000(t6)              // reset shade
+        li      t6, zcg_port_indicator_.port
+        lbu     t8, 0x000D(s1)              // t8 = port (0 - 3)
+        sb      t8, 0x0000(t6)              // store port
+
+        lw      at, 0x0004(sp)              // at = z cancel success bool (0 = missed, 1 = successful)
+        beqzl   at, _end                    // branch if z cancel missed
+        nop
+
+        jal     FGM.play_
+        lli     a0, 0x118                   // fgm id = Target break SFX
+
+        _end:
+        lw      t6, 0x0004(sp)              // ~
+        lw      t8, 0x0008(sp)              // ~
+        lw      a0, 0x000C(sp)              // ~
+        lw      a1, 0x0010(sp)              // ~
+        lwc1    f0, 0x0014(sp)              // ~
+        lwc1    f2, 0x0018(sp)              // ~
+        lw      ra, 0x001C(sp)              // restore registers
+        jr      ra                          // return
+        addiu   sp, sp, 0x0020              // deallocate stack space
+    }
+
+    // @ Description
+    // Runs every frame advance in order to update Z-Cancel Guide's port indicator color
+    scope zcg_port_indicator_: {
+        constant TIMER_LENGTH(10)           // 10 frames
+
+        OS.read_byte(Global.current_screen, a1) // a1 = screen_id
+        lli     t0, Global.screen.TRAINING_MODE
+        bnel    a1, t0, _end                // skip if screen_id != training mode
+        nop
+
+        li      a1, entry_z_cancel_guide
+        lw      a1, 0x0004(a1)              // a1 = z cancel guide
+        beqzl   a1, _end                    // skip if z cancel guide off
+        nop
+
+        li      t0, timer                   // t0 = address of timer
+        lbu     t1, 0x0000(t0)              // t1 = current timer value
+        addiu   at, t1, -1                  // at = t1--
+        bgtzl   t1, _end                    // if current timer is > 0, decrement and end
+        sb      at, 0x0000(t0)              // timer--
+
+        addiu   t1, r0, TIMER_LENGTH        // t1 = TIMER_LENGTH frames
+        sb      t1, 0x0000(t0)              // restart timer
+        li      t0, shade                   // t0 = address of shade
+        lbu     t1, 0x0000(t0)              // t1 = current shade
+        xori    t1, t1, 0x0001              // 0 -> 1 or 1 -> 0 (flip bool)
+        li      t2, port                    // t2 = address of port
+        lbu     t2, 0x0000(t2)              // t2 = port (0 - 3)
+        addiu   at, r0, 0x00FF              // at = -1
+        beq     t2, at, _end                // branch to end if no port
+        sb      t1, 0x0000(t0)              // store flipped shade
+
+        sll     t1, t1, 0x0002              // t1 = offset for shade
+        sll     t2, t2, 0x0003              // t2 = offset for port
+        addu    t2, t2, t1                  // t2 = offset to color in table
+        li      t0, color_table             // t0 = address of color_table
+        addu    t0, t0, t2                  // t0 = address of color in table
+        lw      t0, 0x0000(t0)              // t0 = color in table
+        li      t2, zcg_port_object         // t2 = address of zcg_port_object
+        lw      t2, 0x0000(t2)              // t2 = zcg_port_object
+        bnezl   t2, _end                    // if zcg_port_object exists..
+        sw      t0, 0x0040(t2)              // ..store updated port indicator color
+
+        _end:
+        jr      ra                          // return
+        nop
+
+        color_table:
+        // DARK        LIGHT
+        dw 0xAF1818FF, 0xD87272FF // P1 (red)
+        dw 0x1824ADFF, 0x6678C1FF // P2 (blue)
+        dw 0xAFA318FF, 0xD8D072FF // P3 (yellow)
+        dw 0x17A520FF, 0x71D679FF // P4 (green)
+
+        timer:
+        db 0
+
+        shade:
+        db 0
+
+        port:
+        db -1
+        OS.align(4)
+    }
+
+    // @ Description
     // Fixes a crash if there are less than two players in Sector Z
     scope fix_sector_z_crashes_: {
         OS.patch_start(0x82FFC, 0x801077FC)
@@ -2997,6 +3023,41 @@ scope Training {
         _return:
         jr      ra                          // return
         nop
+    }
+
+    // @ Description
+    // This allows us to preserve menu selections when resetting (CPU option, Item selected, Speed)
+    // Note: 'View' is not trivial to retain cleanly (function checks when menu is open) so that still gets reset*
+    scope handle_reset_menu_selections_: {
+        OS.patch_start(0x1144D4, 0x8018DCB4)
+        j       handle_reset_menu_selections_
+        sw      r0, 0x0004(t0)  // original line 2 (damage)
+        _return:
+        OS.patch_end()
+
+        // nop some of these lines out (we clear within function instead)
+        OS.patch_start(0x1144E4, 0x8018DCC4)
+        nop                     // sw    r0, 0x0014(t0) reset cpu to stand
+        nop                     // sw    r0, 0x0018(t0) reset speed to 1/1
+        sw      t9, 0x001C(t0)  // original line (reset view to normal)
+        sb      r0, 0x00D3(t0)  // original line (lagtic_wait)
+        sb      r0, 0x00D4(t0)  // original line (frameadvance_wait)
+        sb      r0, 0x00D5(t0)  // original line (item_spawn_wait)
+        nop                     // sw    r0, 0x0010(t0) reset item to none
+        OS.patch_end()
+
+        li      t7, entry_preserve_menu_selections
+        lw      t7, 0x0004(t7)  // t0 = 0 if default, 1 if preserve
+        bnez    t7, _end        // skip clearing menu values if we are preserving
+        nop
+        sw      r0, 0x0000(t0)  // original line 1 (reset cursor index)
+        sw      r0, 0x0014(t0)  // reset cpu to stand
+        sw      r0, 0x0018(t0)  // reset speed to 1/1
+        sw      r0, 0x0010(t0)  // reset item to none
+
+        _end:
+        j       _return
+        lw      t7, 0x0000(a2)  // restore t7
     }
 
     // @ Description
@@ -3222,7 +3283,7 @@ scope Training {
     string_pikachu:; char_0x09:; db "Pikachu", 0x00
     string_jigglypuff:; char_0x0A:; db "Jigglypuff", 0x00
     string_ness:; char_0x0B:; db "Ness", 0x00
-    //string_boss:; char_0x0C:; db "Master Hand", 0x00
+    string_boss:; char_0x0C:; db "Master Hand", 0x00
     string_metal:; char_0x0D:; db "Metal Mario", 0x00
     string_nmario:; char_0x0E:; db "Poly Mario", 0x00
     string_nfox:; char_0x0F:; db "Poly Fox", 0x00
@@ -3351,8 +3412,8 @@ scope Training {
     dw char_0x40            // DEDEDE
     dw char_0x41            // GOEMON
     dw char_0x44            // BANJO
-    dw char_0x48            // CRASH
     dw char_0x49            // PEACH
+    dw char_0x48            // CRASH
 
     dw char_0x2A            // J MARIO
     dw char_0x29            // J FOX
@@ -3401,6 +3462,7 @@ scope Training {
     dw char_0x3D            // SUPER SONIC
 
     dw char_0x3C            // SANDBAG
+    dw char_0x0C            // MASTER HAND
     dw char_0x0E            // POLYGON MARIO
     dw char_0x0F            // POLYGON FOX
     dw char_0x10            // POLYGON DK
@@ -3433,6 +3495,8 @@ scope Training {
     dw char_Px12            // POLYGON BANJO
     dw char_Px13            // POLYGON PEACH
     dw char_Px14            // POLYGON CRASH
+
+    dw string_random        // RANDOM
 
     // @ Description
     // Training character id is really the order they are displayed in
@@ -3477,8 +3541,8 @@ scope Training {
         register_character_id(DEDEDE);
         register_character_id(GOEMON);
         register_character_id(BANJO);
-        register_character_id(CRASH);
         register_character_id(PEACH);
+        register_character_id(CRASH);
 
         // j characters
         register_character_id(JMARIO);
@@ -3532,6 +3596,7 @@ scope Training {
         register_character_id(GBOWSER);
         register_character_id(SSONIC);
         register_character_id(SANDBAG);
+        register_character_id(BOSS);
         register_character_id(NMARIO);
         register_character_id(NFOX);
         register_character_id(NDONKEY);
@@ -3596,8 +3661,8 @@ scope Training {
     db Character.id.DEDEDE
     db Character.id.GOEMON
     db Character.id.BANJO
-    db Character.id.CRASH
     db Character.id.PEACH
+    db Character.id.CRASH
 
     db Character.id.JMARIO
     db Character.id.JFOX
@@ -3680,6 +3745,8 @@ scope Training {
     db Character.id.NPEACH
     db Character.id.NCRASH
 
+    db Character.id.PLACEHOLDER // Random
+
     char_id_to_entry_id:
     db id.MARIO
     db id.FOX
@@ -3693,7 +3760,7 @@ scope Training {
     db id.PIKACHU
     db id.JIGGLYPUFF
     db id.NESS
-    db Character.id.BOSS         // Not used
+    db id.BOSS
     db id.METAL
     db id.NMARIO
     db id.NFOX
@@ -3708,7 +3775,7 @@ scope Training {
     db id.NJIGGLY
     db id.NNESS
     db id.GDONKEY
-    db Character.id.NONE         // Not used
+    db char_id_to_entry_id - entry_id_to_char_id - 1 // Random (always last)
     db Character.id.NONE         // Not used
     db id.FALCO
     db id.GND
@@ -3886,7 +3953,7 @@ scope Training {
         define spawn_func(Training.spawn_func_{player}_)
         define percent(Training.struct.port_{player}.percent)
 
-        Menu.entry("Character:", Menu.type.INT, 0, 0, char_id_to_entry_id - entry_id_to_char_id - 1, OS.NULL, OS.NULL, string_table_char, {character}, entry_costume_p{player})
+        Menu.entry("Character:", Menu.type.INT, 0, 0, char_id_to_entry_id - entry_id_to_char_id - 2, OS.NULL, OS.NULL, string_table_char, {character}, entry_costume_p{player})
         entry_costume_p{player}:; Menu.entry("Costume:", Menu.type.INT, 0, 0, 5, OS.NULL, OS.NULL, OS.NULL, {costume}, entry_type_p{player})
         entry_type_p{player}:; Menu.entry("Type:", Menu.type.INT, 2, 0, 2, OS.NULL, OS.NULL, string_table_type, {type}, entry_spawn_p{player})
         entry_spawn_p{player}:; Menu.entry("Spawn:", Menu.type.INT, 0, 0, 4, OS.NULL, OS.NULL, string_table_spawn, {spawn_id}, entry_set_custom_spawn_p{player})
@@ -3979,11 +4046,7 @@ scope Training {
     entry_port_x:
     Menu.entry("Port:", Menu.type.INT, 1, 1, 4, OS.NULL, OS.NULL, OS.NULL, OS.NULL, tail_p1)
 
-    string_training_mode:; String.insert("Training Mode")
-
-
     string_table_music:
-    dw       string_training_mode
     dw       Toggles.entry_random_music_bonus + 0x28
     dw       Toggles.entry_random_music_congo_jungle + 0x28
     dw       Toggles.entry_random_music_credits + 0x28
@@ -3999,6 +4062,7 @@ scope Training {
     dw       Toggles.entry_random_music_planet_zebes + 0x28
     dw       Toggles.entry_random_music_saffron_city + 0x28
     dw       Toggles.entry_random_music_sector_z + 0x28
+    dw       Toggles.entry_random_music_training_mode + 0x28
     dw       Toggles.entry_random_music_yoshis_island + 0x28
     evaluate total(17)
     evaluate n(0x2F)
@@ -4013,7 +4077,6 @@ scope Training {
     }
 
     bgm_table:
-    dh      BGM.special.TRAINING
     dh      BGM.menu.BONUS
     dh      BGM.stage.CONGO_JUNGLE
     dh      BGM.menu.CREDITS
@@ -4029,6 +4092,7 @@ scope Training {
     dh      BGM.stage.PLANET_ZEBES
     dh      BGM.stage.SAFFRON_CITY
     dh      BGM.stage.SECTOR_Z
+    dh      BGM.special.TRAINING
     dh      BGM.stage.YOSHIS_ISLAND
     evaluate n(0x2F)
     while {n} < MIDI.midi_count {
@@ -4121,7 +4185,7 @@ scope Training {
 
     entry_shield_break_mode:; Menu.entry("Shield Break Mode:", Menu.type.INT, 0, 0, 2, OS.NULL, OS.NULL, string_table_shield_break, OS.NULL, entry_oos_option)
     entry_oos_option:; Menu.entry("OOS Action:", Menu.type.INT, 0, 0, OOS_MAX, OS.NULL, OS.NULL, string_table_oos_options, OS.NULL, entry_music)
-    entry_music:; Menu.entry("Music:", Menu.type.INT, 0, 0, {total} - 1, play_bgm_, OS.NULL, string_table_music, OS.NULL, entry_bg)
+    entry_music:; Menu.entry("Music:", Menu.type.INT, 15, 0, {total} - 1, play_bgm_, OS.NULL, string_table_music, OS.NULL, entry_bg)
     entry_bg:; Menu.entry_bool("Stage Background:", OS.FALSE, entry_tech_behavior)
     entry_tech_behavior:; Menu.entry("CPU Teching:", Menu.type.INT, 0, 0, TECH_MAX, OS.NULL, OS.NULL, string_table_tech_options, OS.NULL, entry_di_type)
     entry_di_type:; Menu.entry("CPU DI Type:", Menu.type.INT, 0, 0, DI_TYPE_MAX, OS.NULL, OS.NULL, string_table_di_type_options, OS.NULL, entry_di_strength)
@@ -4132,7 +4196,8 @@ scope Training {
     entry_di_practice_mode:; Menu.entry_bool("DI Practice Mode:", OS.FALSE, entry_spam_practice)
     entry_spam_practice:; Menu.entry("Spam Practice:", Menu.type.INT, 0, 0, SPAM_PRACTICE_MAX, OS.NULL, OS.NULL, string_table_spam_practice, OS.NULL, entry_spam_interval)
     entry_spam_interval:; Menu.entry("Spam Interval:", Menu.type.INT, 1, 1, 999, OS.NULL, OS.NULL, OS.NULL, OS.NULL, entry_spam_interval_random)
-    entry_spam_interval_random:; Menu.entry_bool("Spam Interval Random:", OS.FALSE, entry_z_cancel_guide)
+    entry_spam_interval_random:; Menu.entry_bool("Spam Interval Random:", OS.FALSE, entry_preserve_menu_selections)
+    entry_preserve_menu_selections:; Menu.entry_bool("Preserve Menu Selections:", OS.FALSE, entry_z_cancel_guide)
     entry_z_cancel_guide:; Menu.entry_bool("Z-Cancel Guide:", OS.FALSE, OS.NULL)
 
     // @ Description
@@ -4156,10 +4221,11 @@ scope Training {
     hold_A_rect_width:
     dw 0
 
-    z_cancel_object:
-    dw 0 // frame marker
-    dw 0 // port indicator
+    zcg_frame_marker_object:
+    dw 0
 
+    zcg_port_object:
+    dw 0
 }
 
 } // __TRAINING__

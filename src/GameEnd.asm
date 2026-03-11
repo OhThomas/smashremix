@@ -105,13 +105,13 @@ scope GameEnd {
         lw      a2, 0x0000(a2)              // a2 = match info
         lbu     a2, 0x0001(a2)              // a2 = current stage ID
         lli     v0, Stages.id.GREAT_BAY     // a2 = Stages.id.GREAT_BAY
-                bne     a2, v0, _mmadness           // skip playing fgm and check for Metallic Madness if not Great Bay
+        bne     a2, v0, _mmadness           // skip playing fgm and check for Metallic Madness if not Great Bay
         nop
         jal     FGM.play_                   // play "Song of Time" easter egg
         lli     a0, 0x566                   // ~
         b       _success                    // restart
         nop
-        
+
         _mmadness:
         lli     v0, Stages.id.MMADNESS     // a2 = Stages.id.MMADNESS
         bne     a2, v0, _success

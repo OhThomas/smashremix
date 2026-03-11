@@ -1127,7 +1127,7 @@
 0CA6 Mewtwo 1p CPU Pose
 0CA7 Mewtwo Team Pose
 0CA8 Dark Samus 1p CPU Pose
-0CA9 Dark Samus Team Pose
+0CA9 Dark Samus 1p Pose
 0CAA Lucas 1p CPU Pose
 0CAB Lucas Team Pose
 0CAC Young Link 1p CPU Pose
@@ -3324,32 +3324,49 @@
 153B Kirby Super Sonic NSP Move
 153C Dragon King Ending Image 1
 153D Dragon King Ending Image 2
-153E Dedede Bald Main
-153F Dedede Bald Character
-1540 Dedede Cowboy Main
-1541 Dedede Cowboy Character
-1542 Pikachu Headband Main
-1543 Pikachu Headband Character
-1544 Fox Headphones Main
-1545 Fox Headphones Character
-1546 Luigi Dale Main
-1547 Luigi Dale Character
-1548 Jigglypuff Microphone Main
-1549 Jigglypuff Microphone Character
-154A Goemon Cowboy Main
-154B Goemon Cowboy Character
-154C Ganondorf Link Mask Main
-154D Ganondorf Link Mask Character
-154E Link Majora Main
-154F Link Majora Character
-1550 Peppy Cowboy Main
-1551 Peppy Cowboy Character
-1552 Sonic Pumpkin Main
-1553 Sonic Pumpkin Character
-1554 Metal Super Sonic Main
-1555 Metal Super Sonic Character
-1556 Isaac Main
-1557 Isaac Character
+153E Stage Icons 2
+153F Dark Samus Entry
+1540 Dark Samus AppearL
+1541 Dark Samus AppearR
+1542 Autumn How to Play Header
+1543 Autumn How to Play Stage
+1544 Giga Bowser Grab
+1545 Giga Bowser USmash
+1546 Giga Bowser DSmash
+1547 Giga Bowser AttackAirN
+1548 Giga Bowser AttackAirU
+1549 Giga Bowser AttackAirD
+154A Giga Bowser UTilt
+154B Giga Bowser FTiltHigh
+154C Giga Bowser FTilt
+154D Giga Bowser FTiltLow
+154E Giga Bowser Turn
+154F Dedede Bald Main
+1550 Dedede Bald Character
+1551 Dedede Cowboy Main
+1552 Dedede Cowboy Character
+1553 Pikachu Headband Main
+1554 Pikachu Headband Character
+1555 Fox Headphones Main
+1556 Fox Headphones Character
+1557 Luigi Dale Main
+1558 Luigi Dale Character
+1559 Jigglypuff Microphone Main
+155A Jigglypuff Microphone Character
+155B Goemon Cowboy Main
+155C Goemon Cowboy Character
+155D Ganondorf Link Mask Main
+155E Ganondorf Link Mask Character
+155F Link Majora Main
+1560 Link Majora Character
+1561 Peppy Cowboy Main
+1562 Peppy Cowboy Character
+1563 Sonic Pumpkin Main
+1564 Sonic Pumpkin Character
+1565 Metal Super Sonic Main
+1566 Metal Super Sonic Character
+1567 Isaac Main
+1568 Isaac Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

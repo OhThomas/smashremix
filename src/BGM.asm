@@ -25,11 +25,38 @@ scope BGM {
     constant stop_(0x80020A74)
 
     // @ Description
-    // Changes BGM volume
+    // Sets BGM volume
     // @ Arguments
     // a0 - unknown, set to 0
     // a1 - volume, max = 30720 (0x7800)
-    constant change_vol_(0x80020B38)
+    constant set_volume_(0x80020B38)
+
+    // @ Description
+    // Edits function 0x80020B38 (Set BGM Volume) to take into account the master BGM volume toggle
+    scope master_bgm_volume: {
+        OS.patch_start(0x2173C, 0x80020B3C)
+        sw      ra, 0x0014(sp)              // original line 2
+        jal     master_bgm_volume
+        or      a3, a0, r0                  // original line 3
+        _return:
+        OS.patch_end()
+
+        li      at, Toggles.entry_bgm_volume// at = address of master BGM volume
+        lw      at, 0x0004(at)              // at = master BGM volume (0 to 10)
+        mtc1    at, f8                      // ~
+        cvt.s.w f8, f8                      // f8 = master BGM volume fp
+        lui     at, 0x4120                  // ~
+        mtc1    at, f4                      // f4 = 10.0
+        div.s   f6, f8, f4                  // f6 = (master BGM volume / 10.0)
+        mtc1    a1, f4                      // ~
+        cvt.s.w f4, f4                      // f4 = new volume fp
+        mul.s   f4, f4, f6                  // f4 = new volume * f6 (master BGM volume / 10.0)
+        cvt.w.s f8, f4                      // f8 = (word)f4
+        mfc1    a1, f8                      // a1 = updated volume
+
+        j       _return
+        sltiu   at, a1, 0x7801              // original line 1
+    }
 
     // @ Description
     // This hook runs right after the stage file is loaded.
@@ -42,6 +69,18 @@ scope BGM {
 
         sw      ra, 0x0014(sp)              // save ra in free stack space
 
+        OS.read_word(Global.match_info, at) // at = match_info
+        lbu     at, 0x0000(at)              // at = game mode (0 if demo)
+        bnez    at, _start_apply            // if not demo, skip
+        lw      at, 0x007C(v0)              // at = default bgm_id
+
+        // If VS Demo and the default bgm_id is the Final Destination intro, then skip the intro and force the main FD music
+        addiu   at, at, -BGM.stage.MASTER_HAND_1 // at = 0 if default bgm_id is FD intro
+        bnez    at, _start_apply            // if not FD intro, skip
+        lli     at, BGM.stage.FINAL_DESTINATION // at = FD main music
+        sw      at, 0x007C(v0)              // set default bgm_id to FD main music
+
+        _start_apply:
         // t9 is never touched in the following routines, so not saving to stack
 
         li      at, random_disabled
@@ -61,58 +100,6 @@ scope BGM {
         lw      ra, 0x0014(sp)              // restore ra
         jr      ra                          // return
         lw      v1, 0x0040(t9)              // original line 2
-    }
-
-    // @ Description
-    // Edits function 0x80020B38 (Set BGM Volume) to take into account the master BGM volume
-    // a0 - unknown, set to 0
-    // a1 - volume, max = 30720 (0x7800)
-    scope master_bgm_volume: {
-        OS.patch_start(0x2173C, 0x80020B3C)
-        sw      ra, 0x0014(sp)              // original line 2
-        jal     master_bgm_volume
-        or      a3, a0, r0                  // original line 3
-        _return:
-        OS.patch_end()
-
-        li      at, Toggles.entry_bgm_volume// at = address of master BGM volume
-        lw      at, 0x0004(at)              // ~
-        addiu   at, at, 0x0001              // at = master BGM volume (1 to 10)
-        mtc1    at, f8                      // ~
-        cvt.s.w f8, f8                      // f8 = master BGM volume fp
-        lui     at, 0x4120                  // ~
-        mtc1    at, f4                      // f4 = 10.0
-        div.s   f6, f8, f4                  // f6 = (master BGM volume / 10.0)
-        mtc1    a1, f4                      // ~
-        cvt.s.w f4, f4                      // f4 = new volume fp
-        mul.s   f4, f4, f6                  // f4 = new volume * (master BGM volume / 10.0)
-        cvt.w.s f8, f4                      // f8 = (word)f4
-        mfc1    a1, f8                      // a1 = updated volume
-
-        j       _return
-        sltiu   at, a1, 0x7801              // original line 1
-    }
-
-    // @ Description
-    // Updates BGM & FGM volumes when pressing start on title screen so previously saved master volumes apply sooner
-    scope load_master_volume: {
-        OS.patch_start(0x117714, 0x80132094)
-        sw      ra, 0x001C(sp)              // original line 1
-        jal     load_master_volume
-        nop
-        _return:
-        OS.patch_end()
-
-        lli     a1, 0x7800                  // a1 = volume
-        jal     BGM.change_vol_             // update BGM volume
-        lli     a0, 0x0000                  // a0 = unknown, set to 0
-
-        jal     FGM.change_vol_             // update FGM volume
-        lli     a0, 0x7800                  // a0 = volume
-
-        addiu   t6, r0, 0x00FF              // original line 2
-        j       _return
-        sw      t6, 0x0010(sp)              // original line 3
     }
 
     default_track:
@@ -435,6 +422,7 @@ scope BGM {
         add_to_list(Toggles.entry_random_music_data, menu.DATA)
         add_to_list(Toggles.entry_random_music_bonus, menu.BONUS)
         add_to_list(Toggles.entry_random_music_credits, menu.CREDITS)
+        add_to_list(Toggles.entry_random_music_training_mode, special.TRAINING)
 
         // Add custom MIDIs
         define n(0x2F)
@@ -1236,7 +1224,7 @@ scope BGM {
     dw MIDI.game_{MIDI.GAME_ssb}_title,            Toggles.entry_random_music_credits + 0x28
     dw 0x0,                                        0x0                                                    // Secret
     dw 0x0,                                        0x0                                                    // Hidden Character
-    dw MIDI.game_{MIDI.GAME_ssb}_title,            Training.string_training_mode
+    dw MIDI.game_{MIDI.GAME_ssb}_title,            Toggles.entry_random_music_training_mode + 0x28
     dw MIDI.game_{MIDI.GAME_ssb}_title,            Toggles.entry_random_music_data + 0x28
     dw 0x0,                                        0x0                                                    // Main
     dw 0x0,                                        0x0                                                    // Hammer
