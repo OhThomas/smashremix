@@ -28,4 +28,5 @@ ADD,,.\original\1568.bin,0,0004,3FFFC,.\original\1568.txt,2
 MODIFY,0A06,.\original\0A06.bin,1,0210,3FFFC,,2
 MODIFY,000C,.\original\000C.bin,1,0130,3FFFC,,2
 MODIFY,0011,.\original\0011.bin,1,0038,3FFFC,,2
+MODIFY,0A04,.\original\0A04.bin,1,0970,3FFFC,,2
 END,,,,,,,
