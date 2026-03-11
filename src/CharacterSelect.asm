@@ -31,8 +31,9 @@ scope CharacterSelect {
     db Character.id.DRAGONKING
     db Character.id.EBI
     db Character.id.PIANO
+    db Character.id.MSSONIC
     OS.align(4)
-    constant NUM_BONUS_CHARS(10)
+    constant NUM_BONUS_CHARS(11)
 
     // @ Description
     // Points to the Bonus Character index table for the current screen
@@ -3173,7 +3174,7 @@ scope CharacterSelect {
         constant MJLINK(0x00006438)
         constant CBPEPPY(0x000249E8 + 0x10)
         constant PSONIC(0x0001E578)
-        constant MSSONIC(0x0001F638)
+        constant MSSONIC(0x000312C0)
         constant ISAAC(0x0001D4B8)
         // custom
         constant FALCO(0x0000D978)
@@ -7327,7 +7328,7 @@ scope CharacterSelect {
     add_to_css(Character.id.MJLINK, FGM.announcer.names.LINK,           1.50,         0x00010001, ZELDA,        name_texture.LINK,           portrait_offsets.MJLINK,         5)
     add_to_css(Character.id.CBPEPPY,FGM.announcer.names.PEPPY,          1.50,         0x00010004, STARFOX,      name_texture.PEPPY,          portrait_offsets.CBPEPPY,        BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.PSONIC, FGM.announcer.names.SONIC,          1.50,         0x00010004, SONIC,        name_texture.SONIC,          portrait_offsets.PSONIC,         9)
-    add_to_css(Character.id.MSSONIC,FGM.announcer.names.SONIC,          1.50,         0x00010004, SONIC,        name_texture.MSSONIC,        portrait_offsets.MSSONIC,        9)
+    add_to_css(Character.id.MSSONIC,FGM.announcer.names.SONIC,          1.50,         0x00010004, SONIC,        name_texture.MSSONIC,        portrait_offsets.MSSONIC,        BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.ISAAC,  FGM.announcer.names.MARTH,          1.50,         0x00010004, FIRE_EMBLEM,  name_texture.MARTH,          portrait_offsets.MARTH,          28)
 
     // REMIX POLYGONS

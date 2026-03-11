@@ -346,7 +346,7 @@ scope Sonic {
     db      Character.id.SSONIC // set as SPECIAL variant for SONIC
     db      Character.id.NSONIC // set as POLYGON variant for SONIC
     db      Character.id.PSONIC
-    db      Character.id.MSSONIC
+    db      Character.id.NONE
     OS.patch_end()
 
     // Set menu zoom size.
