@@ -1,2 +1,3 @@
 Mode,FileNumberHex,NewFilePath,Compressed,InternalFileTableOffsetBytes,InternalFileResourceOffsetBytes,ReqFilesFile,CompressionLevel
+MODIFY,0A04,.\original\0A04.bin,1,0970,3FFFC,,2
 END,,,,,,,
