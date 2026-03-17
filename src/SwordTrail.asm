@@ -177,6 +177,8 @@ scope SwordTrail {
         beq     t7, t8, _continue           // continue if SSonic clone
         lli     t7, 0x0058                  // t7 = Isaac ID
         beq     t7, t8, _continue           // continue if Marth clone
+        lli     t7, 0x0059                  // t7 = DKJR ID
+        beq     t7, t8, _continue           // continue if DK clone
         nop
 
         bnel    a1, t8, _original           // branch if character id does not match

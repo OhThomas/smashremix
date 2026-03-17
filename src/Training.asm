@@ -3152,6 +3152,7 @@ scope Training {
     string_psonic:; char_0x56:; db "Pumpkin Sonic", 0x00
     string_mssonic:; char_0x57:; db "Metal Sonic", 0x00
     string_isaac:; char_0x58:; db "Isaac", 0x00
+    string_dkjr:; char_0x59:; db "Donkey Kong Jr.", 0x00
     OS.align(4)
 
     string_table_char:
@@ -3227,6 +3228,7 @@ scope Training {
     dw char_0x56            // PUMPKIN SONIC
     dw char_0x57            // METAL SONIC
     dw char_0x58            // ISAAC
+    dw char_0x59            // DONKEY KONG JR
     dw char_0x0D            // METAL MARIO
     dw char_0x45            // METAL LUIGI
     dw char_0x1A            // GIANT DK
@@ -3358,6 +3360,7 @@ scope Training {
         register_character_id(PSONIC);
         register_character_id(MSSONIC);
         register_character_id(ISAAC);
+        register_character_id(DKJR);
         // ADD BONUS CHARACTERS HERE
 
         // bosses and polygons
@@ -3474,6 +3477,7 @@ scope Training {
     db Character.id.PSONIC
     db Character.id.MSSONIC
     db Character.id.ISAAC
+    db Character.id.DKJR
 
     db Character.id.METAL
     db Character.id.MLUIGI
@@ -3608,6 +3612,7 @@ scope Training {
     db id.PSONIC
     db id.MSSONIC
     db id.ISAAC
+    db id.DKJR
 
     // REMIX POLYGONS
     db id.NWARIO

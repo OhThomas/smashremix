@@ -766,6 +766,9 @@ scope Marina {
         lli     at, Character.id.JDK        // at = id.JDK
         beql    t7, at, _end                // end if character = JDK...
         lli     a0, File.DK_THROWN_MARINA   // ...override animation with DK_THROWN_MARINA
+        lli     at, Character.id.DKJR        // at = id.DKJR
+        beql    t7, at, _end                // end if character = DKJR...
+        lli     a0, File.DK_THROWN_MARINA   // ...override animation with DK_THROWN_MARINA
         lli     at, Character.id.CAPTAIN    // at = id.CAPTAIN
         beql    t7, at, _end                // end if character = CAPTAIN...
         lli     a0, File.FALCON_THROWN_MARINA // ...override animation with FALCON_THROWN_MARINA

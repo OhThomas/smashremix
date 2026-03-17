@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(80)
+    constant ADD_CHARACTERS(81)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -2532,7 +2532,7 @@ scope Character {
         //  D-UP        //  D-DOWN       //  D-LEFT     //  D-RIGHT
         db  id.METAL;   db  id.NMARIO;   db  id.JMARIO; db  id.NONE        // 0x00 - MARIO
         db  id.HPFOX;   db  id.NFOX;     db  id.JFOX;   db  id.NONE        // 0x01 - FOX
-        db  id.GDONKEY; db  id.NDONKEY;  db  id.JDK;    db  id.NONE        // 0x02 - DONKEY
+        db  id.GDONKEY; db  id.NDONKEY;  db  id.JDK;    db  id.DKJR        // 0x02 - DONKEY
         db  id.NONE;    db  id.NSAMUS;   db  id.JSAMUS; db  id.ESAMUS      // 0x03 - SAMUS
         db  id.MLUIGI;  db  id.NLUIGI;   db  id.JLUIGI; db  id.DLUIGI      // 0x04 - LUIGI
         // db  id.BOSS;    db  id.NLINK;    db  id.JLINK;  db  id.ELINK       // 0x05 - LINK
@@ -3799,6 +3799,8 @@ scope Character {
     define_character(MSSONIC, FOX, File.METAL_SUPER_SONIC_MAIN, 0x0D0, 0, File.METAL_SUPER_SONIC_CHARACTER, File.SONIC_SHIELD_POSE,  0x0D2, File.SSONIC_EMERALDS, File.SONIC_ENTRY, 0x013C, 0x58C, 24, OS.TRUE, OS.TRUE, Stages.id.BTT_SONIC, Stages.id.BTP_SONIC, Stages.id.BTT_WARIO, Stages.id.BTP_DS, sound_type.U, variant_type.SPECIAL)
     // 0x58 - ISAAC
     define_character(ISAAC, CAPTAIN, File.ISAAC_MAIN, 0x0EB, 0, File.ISAAC_CHARACTER, File.MARTH_SHIELD, 0, 0x15E, File.MARTH_ENTRY_EFFECTS, 0, 0x524, 8, OS.FALSE, OS.TRUE, Stages.id.BTT_MARTH, Stages.id.BTP_MARTH, Stages.id.BTT_DRM, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
+    // 0x59 - DONKEY KONG JR
+    define_character(DKJR, DONKEY, File.DONKEY_KONG_JR_MAIN, 0x0D4, 0, File.DONKEY_KONG_JR_CHARACTER, 0x13E, 0, 0x163, 0, 0, 0x4A4, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_DONKEY_KONG, Stages.id.BTP_DONKEY_KONG, Stages.id.BTT_BOWSER, Stages.id.BTP_BOWSER, sound_type.U, variant_type.SPECIAL)
     
 
     // REMIX POLYGONS

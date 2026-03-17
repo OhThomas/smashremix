@@ -293,6 +293,7 @@ scope CharacterSelect {
     dw  0x17900 + 0x200                     // 0x56 - PUMPKIN SONIC
     dw  0x11CD0 + 0x200                     // 0x57 - METAL SONIC
     dw  0x197D0 + 0x200                     // 0x58 - ISAAC
+    dw  0xE2C0                              // 0x59 - DONKEY KONG JR
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -447,6 +448,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.PSONIC, req/PSONIC_MODEL)
     add_alt_req_list(Character.id.MSSONIC, req/MSSONIC_MODEL)
     add_alt_req_list(Character.id.ISAAC, req/ISAAC_MODEL)
+    add_alt_req_list(Character.id.DKJR, req/DKJR_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -3176,6 +3178,7 @@ scope CharacterSelect {
         constant PSONIC(0x0001E578)
         constant MSSONIC(0x000312C0)
         constant ISAAC(0x0001D4B8)
+        constant DKJR(0x000031F8)
         // custom
         constant FALCO(0x0000D978)
         constant GND(0x0000EA38)
@@ -3559,6 +3562,7 @@ scope CharacterSelect {
         constant PSONIC(0x0001B2C8)
         constant MSSONIC(0x00028490 + 0x10)
         constant ISAAC(0x0001A428)
+        constant DKJR(0x00028968 + 0x10)
         // POLYGONS
         constant NWARIO(0x0001CB28)
         constant NLUCAS(0x0001D008)
@@ -5161,6 +5165,7 @@ scope CharacterSelect {
         constant PSONIC(0x6890 + 0x10)
         constant MSSONIC(0x6968 + 0x10)
         constant ISAAC(0x6A40 + 0x10)
+        constant DKJR(0x6B18 + 0x10)
     }
 
     // @ Description
@@ -5279,6 +5284,9 @@ scope CharacterSelect {
         lli     t2, Character.id.ISAAC
         beql    a1, t2, _draw_icon          // If ISAAC, then draw ISAAC stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.ISAAC // a1 = ISAAC footer struct
+        lli     t2, Character.id.DKJR
+        beql    a1, t2, _draw_icon          // If DKJR, then draw DKJR stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.DKJR // a1 = DKJR footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7330,6 +7338,7 @@ scope CharacterSelect {
     add_to_css(Character.id.PSONIC, FGM.announcer.names.SONIC,          1.50,         0x00010004, SONIC,        name_texture.SONIC,          portrait_offsets.PSONIC,         9)
     add_to_css(Character.id.MSSONIC,FGM.announcer.names.SONIC,          1.50,         0x00010004, SONIC,        name_texture.MSSONIC,        portrait_offsets.MSSONIC,        BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.ISAAC,  FGM.announcer.names.MARTH,          1.50,         0x00010004, FIRE_EMBLEM,  name_texture.MARTH,          portrait_offsets.MARTH,          28)
+    add_to_css(Character.id.DKJR,   FGM.announcer.names.DONKEY_KONG,    2,            0x00010001, DONKEY_KONG,  name_texture.DKJR,           portrait_offsets.DKJR,           4)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

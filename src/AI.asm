@@ -950,6 +950,8 @@ scope AI {
         beq     at, v0, _check_charge_shot
         lli     at, Character.id.JDK
         beq     at, v0, _donkey_kong
+        lli     at, Character.id.DKJR
+        beq     at, v0, _donkey_kong
         lli     at, Character.id.BOWSER
         beq     at, v0, _bowser
         lli     at, Character.id.GBOWSER
@@ -1044,6 +1046,9 @@ scope AI {
         beq     v1, at, dk
         nop
         lli     at, Character.id.JDK
+        beq     v1, at, dk
+        nop
+        lli     at, Character.id.DKJR
         beq     v1, at, dk
         nop
         lli     at, Character.id.DSAMUS

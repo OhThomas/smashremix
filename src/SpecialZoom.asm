@@ -1300,6 +1300,10 @@ scope Zoom {
         beq     t0, t2, attacker_special_move_dk
         nop
 
+        ori     t2, r0, Character.id.DKJR
+        beq     t0, t2, attacker_special_move_dk
+        nop
+
         ori     t2, r0, Character.id.LUIGI
         beq     t0, t2, attacker_special_move_luigi
         nop

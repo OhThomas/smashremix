@@ -616,6 +616,10 @@ scope Stamina {
         beq     t8, t7, _dk_start
         nop
 
+        addiu   t8, r0, Character.id.DKJR  // DKJR ID
+        beq     t8, t7, _dk_start
+        nop
+
         addiu   t8, r0, Character.id.MARINA  // MARINA ID
         bne     t8, t7, _force_action
         addiu   t8, r0, Marina.Action.Cargo
