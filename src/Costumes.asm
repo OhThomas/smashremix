@@ -1080,6 +1080,7 @@ scope Costumes {
         db 0x05                             // Pumpkin Sonic
         db 0x05                             // Metal Sonic
         db 0x05                             // Isaac
+        db 0x04                             // Donkey Kong Jr
         // Polygons
         db 0x05                             // Polygon Wario
         db 0x05                             // Polygon Lucas

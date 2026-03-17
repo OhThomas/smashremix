@@ -189,6 +189,8 @@ include "src/JLuigi/JLuigi.asm"
 include "src/DLuigi/DLuigi.asm"
 // JDK
 include "src/JDK/JDK.asm"
+// DK Jr
+include "src/DKJr/DKJr.asm"
 // EPIKA
 include "src/EPika/EPika.asm"
 // JPUFF

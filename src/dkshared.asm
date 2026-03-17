@@ -15,6 +15,8 @@ scope DKShared {
         beq     v0, at, _dkcargo_jump_1     // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
         beq     v0, at, _dkcargo_jump_1
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
+        beq     v0, at, _dkcargo_jump_1
         addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v0, at, _dkcargo_jump_1
         addiu   at, r0, Character.id.NMARINA // NMARINA ID
@@ -40,6 +42,8 @@ scope DKShared {
         beq     v0, at, _dkcargo_jump_2     // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
         beq     v0, at, _dkcargo_jump_2
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
+        beq     v0, at, _dkcargo_jump_2
         addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v0, at, _dkcargo_jump_2
         addiu   at, r0, Character.id.NMARINA // NMARINA ID
@@ -63,6 +67,8 @@ scope DKShared {
 
         beq     v0, at, _item_jump_1        // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
+        beq     v0, at, _item_jump_1
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
         beq     v0, at, _item_jump_1
         addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v0, at, _item_jump_1
@@ -88,6 +94,8 @@ scope DKShared {
         beq     v0, at, _item_jump_2        // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
         beq     v0, at, _item_jump_2
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
+        beq     v0, at, _item_jump_2
         addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v0, at, _item_jump_2
         addiu   at, r0, Character.id.NMARINA // NMARINA ID
@@ -111,6 +119,8 @@ scope DKShared {
 
         beq     v0, at, _item_jump_3        // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
+        beq     v0, at, _item_jump_3
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
         beq     v0, at, _item_jump_3
         addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v0, at, _item_jump_3
@@ -136,6 +146,8 @@ scope DKShared {
         beq     v0, at, _item_jump_4        // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
         beq     v0, at, _item_jump_4
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
+        beq     v0, at, _item_jump_4
         addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v0, at, _item_jump_4
         addiu   at, r0, Character.id.NMARINA // NMARINA ID
@@ -160,6 +172,8 @@ scope DKShared {
         beq     v0, at, _item_jump_5        // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
         beq     v0, at, _item_jump_5
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
+        beq     v0, at, _item_jump_5
         addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v0, at, _item_jump_5
         addiu   at, r0, Character.id.NMARINA // NMARINA ID
@@ -183,6 +197,8 @@ scope DKShared {
 
         beq     v0, at, _item_jump_6        // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
+        beq     v0, at, _item_jump_6
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
         beq     v0, at, _item_jump_6
         addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v0, at, _item_jump_6
@@ -209,6 +225,9 @@ scope DKShared {
         lli     at, Character.id.JDK        // at = JDK
         beq     v0, at, j_0x800EAC64        // if JDK, take DK branch
         nop
+        lli     at, Character.id.DKJR       // at = DKJR
+        beq     v0, at, j_0x800EAC64        // if DKJR, take DK branch
+        nop
 
         jr      ra
         addiu   at, r0, 0x0003              // original line 2
@@ -230,6 +249,9 @@ scope DKShared {
         beq     v1, at, j_0x800E9A18        // original line 1, modified to use jump
         lli     at, Character.id.JDK        // at = JDK
         beq     v1, at, j_0x800E9A18        // if JDK, take DK branch
+        nop
+        lli     at, Character.id.DKJR       // at = DKJR
+        beq     v1, at, j_0x800E9A18        // if DKJR, take DK branch
         nop
 
         jr      ra
@@ -253,6 +275,9 @@ scope DKShared {
         lli     at, Character.id.JDK        // at = JDK
         beq     v0, at, j_0x80161EF0        // if JDK, take DK branch
         nop
+        lli     at, Character.id.DKJR       // at = DKJR
+        beq     v0, at, j_0x80161EF0        // if DKJR, take DK branch
+        nop
 
         j       _kirby_power_change_return
         addiu   at, r0, 0x0003              // original line 2
@@ -275,6 +300,9 @@ scope DKShared {
         addiu   at, r0, Character.id.JDK    // JDK ID
         beq     v0, at, check_action_giant_punch_
         nop
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
+        beq     v0, at, check_action_giant_punch_
+        nop
         j       _return                     // return
         addiu   at, r0, 0x0003              // original line 2
 
@@ -294,6 +322,8 @@ scope DKShared {
 
         beq     v1, at, _cpu_2              // modified original line 1
         addiu   at, r0, Character.id.JDK    // JDK ID
+        beq     v1, at, _cpu_2
+        addiu   at, r0, Character.id.DKJR   // DKJR ID
         beq     v1, at, _cpu_2
 		addiu   at, r0, Character.id.MARINA // MARINA ID
         beq     v1, at, _marina				// Branch for Marina cpus
@@ -591,5 +621,7 @@ scope DKShared {
     Character.table_patch_start(cpu_post_process, Character.id.DK, 0x4)
     dw cpu_post_process; OS.patch_end()
     Character.table_patch_start(cpu_post_process, Character.id.JDK, 0x4)
+    dw cpu_post_process; OS.patch_end()
+    Character.table_patch_start(cpu_post_process, Character.id.DKJR, 0x4)
     dw cpu_post_process; OS.patch_end()
 }

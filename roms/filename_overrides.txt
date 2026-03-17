@@ -3367,6 +3367,9 @@
 1566 Metal Super Sonic Character
 1567 Isaac Main
 1568 Isaac Character
+1569 Donkey Kong Jr Main
+156A Donkey Kong Jr Character
+156B Donkey Kong Jr Stock Icon
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

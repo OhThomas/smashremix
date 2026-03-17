@@ -3380,6 +3380,7 @@ scope Training {
     string_psonic:; char_0x56:; db "Pumpkin Sonic", 0x00
     string_mssonic:; char_0x57:; db "Metal Sonic", 0x00
     string_isaac:; char_0x58:; db "Isaac", 0x00
+    string_dkjr:; char_0x59:; db "Donkey Kong Jr.", 0x00
     OS.align(4)
 
     string_table_char:
@@ -3455,6 +3456,7 @@ scope Training {
     dw char_0x56            // PUMPKIN SONIC
     dw char_0x57            // METAL SONIC
     dw char_0x58            // ISAAC
+    dw char_0x59            // DONKEY KONG JR
     dw char_0x0D            // METAL MARIO
     dw char_0x45            // METAL LUIGI
     dw char_0x1A            // GIANT DK
@@ -3587,6 +3589,7 @@ scope Training {
         register_character_id(PSONIC);
         register_character_id(MSSONIC);
         register_character_id(ISAAC);
+        register_character_id(DKJR);
         // ADD BONUS CHARACTERS HERE
 
         // bosses and polygons
@@ -3704,6 +3707,7 @@ scope Training {
     db Character.id.PSONIC
     db Character.id.MSSONIC
     db Character.id.ISAAC
+    db Character.id.DKJR
 
     db Character.id.METAL
     db Character.id.MLUIGI
@@ -3838,6 +3842,7 @@ scope Training {
     db id.PSONIC
     db id.MSSONIC
     db id.ISAAC
+    db id.DKJR
 
     // REMIX POLYGONS
     db id.NWARIO
@@ -4047,6 +4052,7 @@ scope Training {
     Menu.entry("Port:", Menu.type.INT, 1, 1, 4, OS.NULL, OS.NULL, OS.NULL, OS.NULL, tail_p1)
 
     string_table_music:
+    dw       Toggles.entry_random_music_training_mode + 0x28
     dw       Toggles.entry_random_music_bonus + 0x28
     dw       Toggles.entry_random_music_congo_jungle + 0x28
     dw       Toggles.entry_random_music_credits + 0x28
@@ -4062,7 +4068,6 @@ scope Training {
     dw       Toggles.entry_random_music_planet_zebes + 0x28
     dw       Toggles.entry_random_music_saffron_city + 0x28
     dw       Toggles.entry_random_music_sector_z + 0x28
-    dw       Toggles.entry_random_music_training_mode + 0x28
     dw       Toggles.entry_random_music_yoshis_island + 0x28
     evaluate total(17)
     evaluate n(0x2F)
@@ -4077,6 +4082,7 @@ scope Training {
     }
 
     bgm_table:
+    dh      BGM.special.TRAINING
     dh      BGM.menu.BONUS
     dh      BGM.stage.CONGO_JUNGLE
     dh      BGM.menu.CREDITS
@@ -4092,7 +4098,6 @@ scope Training {
     dh      BGM.stage.PLANET_ZEBES
     dh      BGM.stage.SAFFRON_CITY
     dh      BGM.stage.SECTOR_Z
-    dh      BGM.special.TRAINING
     dh      BGM.stage.YOSHIS_ISLAND
     evaluate n(0x2F)
     while {n} < MIDI.midi_count {
@@ -4185,7 +4190,7 @@ scope Training {
 
     entry_shield_break_mode:; Menu.entry("Shield Break Mode:", Menu.type.INT, 0, 0, 2, OS.NULL, OS.NULL, string_table_shield_break, OS.NULL, entry_oos_option)
     entry_oos_option:; Menu.entry("OOS Action:", Menu.type.INT, 0, 0, OOS_MAX, OS.NULL, OS.NULL, string_table_oos_options, OS.NULL, entry_music)
-    entry_music:; Menu.entry("Music:", Menu.type.INT, 15, 0, {total} - 1, play_bgm_, OS.NULL, string_table_music, OS.NULL, entry_bg)
+    entry_music:; Menu.entry("Music:", Menu.type.INT, 0, 0, {total} - 1, play_bgm_, OS.NULL, string_table_music, OS.NULL, entry_bg)
     entry_bg:; Menu.entry_bool("Stage Background:", OS.FALSE, entry_tech_behavior)
     entry_tech_behavior:; Menu.entry("CPU Teching:", Menu.type.INT, 0, 0, TECH_MAX, OS.NULL, OS.NULL, string_table_tech_options, OS.NULL, entry_di_type)
     entry_di_type:; Menu.entry("CPU DI Type:", Menu.type.INT, 0, 0, DI_TYPE_MAX, OS.NULL, OS.NULL, string_table_di_type_options, OS.NULL, entry_di_strength)

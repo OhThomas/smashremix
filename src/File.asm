@@ -3359,6 +3359,9 @@ scope File {
     constant METAL_SUPER_SONIC_CHARACTER(0x1566)
     constant ISAAC_MAIN(0x1567)
     constant ISAAC_CHARACTER(0x1568)
+    constant DONKEY_KONG_JR_MAIN(0x1569)
+    constant DONKEY_KONG_JR_CHARACTER(0x156A)
+    constant DONKEY_KONG_JR_STOCK_ICON(0x156B)
 
  }
 

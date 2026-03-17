@@ -237,10 +237,6 @@ scope MSSonic {
     Character.edit_action(MSSONIC,  0xF3,              -1,             -1,                         -1,                             WolfDSP.physics_,                     -1)
     Character.edit_action(MSSONIC,  0xF5,              -1,             -1,                         -1,                             WolfDSP.physics_,                     -1)
 
-    Character.table_patch_start(variant_original, Character.id.MSSONIC, 0x4)
-    dw      Character.id.SONIC // set Sonic as original character (not Fox, who MSSONIC is a clone of)
-    OS.patch_end()
-
     // Set menu zoom size.
     Character.table_patch_start(menu_zoom, Character.id.MSSONIC, 0x4)
     float32 0.95

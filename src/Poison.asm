@@ -184,6 +184,9 @@ scope Poison {
         //addiu   at, r0, Character.id.JDK  // DK ID
         //beq     at, t3, _dk_start
         //nop
+        //addiu   at, r0, Character.id.DKJR  // DKJR ID
+        //beq     at, t3, _dk_start
+        //nop
         //
         //addiu   at, r0, Character.id.MARINA  // MARINA ID
         //bne     at, t3, _ko
