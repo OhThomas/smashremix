@@ -259,7 +259,7 @@ scope CharacterSelect {
     dw  0x110F0 + 0x200                     // 0x38 - CONKER
     dw  0x184E0 + 0x200                     // 0x39 - MEWTWO
     dw  0x15200 + 0x200                     // 0x3A - MARTH
-    dw  0x16320 + 0x22260 + 0x170E8 + 0x200 // 0x3B - SONIC
+    dw  0x16320 + 0x170F0 + 0x200           // 0x3B - SONIC
     dw  0x49F8 + 0x200                      // 0x3C - SANDBAG
     dw  0xC900 + 0x200                      // 0x3D - SUPER SONIC
     dw  0x122E8 + 0x200                     // 0x3E - SHEIK
@@ -284,16 +284,16 @@ scope CharacterSelect {
     dw  0x191F0 + 0x200                     // 0x4D - COWBOY DEDEDE
     dw  0xA340 + 0x200                      // 0x4E - PIKACHU w/ HEADBAND
     dw  0x8C40 + 0x200                      // 0x4F - FOX w/ HEADPHONES
-    dw  0x8A90                              // 0x50 - LUIGI w/ DALE HAT
+    dw  0x8A90 + 0x200                      // 0x50 - LUIGI w/ DALE HAT
     dw  0x8860 + 0x200                      // 0x51 - JIGGLYPUFF w/ MICROPHONE
     dw  0x13C00 + 0x1BE0 + 0x200            // 0x52 - COWBOY GOEMON
     dw  0x16C50 + 0x200                     // 0x53 - GANONDORF w/ LINK MASK
     dw  0x128B0 + 0x200                     // 0x54 - LINK w/ MAJORA MASK
     dw  0x80D0 + 0x200                      // 0x55 - COWBOY PEPPY
     dw  0x17900 + 0x200                     // 0x56 - PUMPKIN SONIC
-    dw  0x11CD0 + 0x200                     // 0x57 - METAL SONIC
+    dw  0x123C0 + 0x200                     // 0x57 - METAL SONIC
     dw  0x197D0 + 0x200                     // 0x58 - ISAAC
-    dw  0xE2C0                              // 0x59 - DONKEY KONG JR
+    dw  0xE2C0 + 0x200                      // 0x59 - DONKEY KONG JR
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
