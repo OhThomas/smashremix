@@ -993,7 +993,7 @@ scope Training {
         _leave_menu_end:
         j       _leave_menu_return
         nop
-}
+    }
 
     //init_struct_p1:; fill 0x40
     //init_struct_p2:; fill 0x40
@@ -2522,7 +2522,6 @@ scope Training {
         _original:
         sh      a3, 0x0000(v0)              // original line 1
 
-
         lwc1    f0, 0x0004(sp)              // ~
         lwc1    f2, 0x0008(sp)              // store f0, f2
         addiu   sp, sp, 0x0010              // allocate stack space
@@ -3315,8 +3314,8 @@ scope Training {
     string_ngoemon:; char_Px11:; db "Poly Goemon", 0x00
     string_nconker:; char_Px0A:; db "Poly Conker", 0x00
     string_nbanjo:; char_Px12:; db "Poly Banjo", 0x00
-    string_npeach:; char_Px14:; db "Poly Crash", 0x00
-    string_ncrash:; char_Px13:; db "Poly Peach", 0x00
+    string_ncrash:; char_Px14:; db "Poly Crash", 0x00
+    string_npeach:; char_Px13:; db "Poly Peach", 0x00
     string_gdk:; char_0x1A:; db "Giant DK", 0x00
     //char_0x1B:; db "NONE", 0x00
     //char_0x1C:; db "NONE", 0x00
@@ -3716,6 +3715,7 @@ scope Training {
     db Character.id.SSONIC
 
     db Character.id.SANDBAG
+    db Character.id.BOSS
     db Character.id.NMARIO
     db Character.id.NFOX
     db Character.id.NDONKEY
@@ -3863,8 +3863,8 @@ scope Training {
     db id.NGOEMON
     db id.NCONKER
     db id.NBANJO
-    db id.NPEACH
     db id.NCRASH
+    db id.NPEACH
 
     // @ Description
     // Spawn Position Strings
@@ -4021,8 +4021,6 @@ scope Training {
         lli     t2, 0x0001                  // t2 = is_enabled
         sw      t2, 0x0004(t1)              // update curr_val
         lw      t1, 0x001C(t1)              // t1 = curr->next
-
-
     }
 
     scope struct_to_tail_: {
@@ -4066,6 +4064,7 @@ scope Training {
     dw       Toggles.entry_random_music_mushroom_kingdom + 0x28
     dw       Toggles.entry_random_music_peachs_castle + 0x28
     dw       Toggles.entry_random_music_planet_zebes + 0x28
+    dw       Toggles.entry_random_music_results + 0x28
     dw       Toggles.entry_random_music_saffron_city + 0x28
     dw       Toggles.entry_random_music_sector_z + 0x28
     dw       Toggles.entry_random_music_yoshis_island + 0x28
@@ -4096,6 +4095,7 @@ scope Training {
     dh      BGM.stage.MUSHROOM_KINGDOM
     dh      BGM.stage.PEACHS_CASTLE
     dh      BGM.stage.PLANET_ZEBES
+    dh      BGM.menu.RESULTS
     dh      BGM.stage.SAFFRON_CITY
     dh      BGM.stage.SECTOR_Z
     dh      BGM.stage.YOSHIS_ISLAND

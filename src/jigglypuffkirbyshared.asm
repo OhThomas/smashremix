@@ -1,6 +1,8 @@
 // jigglypuffkirbyshared.asm
-
 // This file contains shared functions by Jigglypuff and Kirby Clones.
+if !{defined __JIGGLYPUFF_KIRBY_SHARED__} {
+define __JIGGLYPUFF_KIRBY_SHARED__()
+print "included jigglypuffkirbyshared.asm\n"
 
 scope JigglypuffKirbyShared: {
 
@@ -1312,3 +1314,5 @@ scope JigglypuffKirbyShared: {
     Character.table_patch_start(cpu_attack_weight, Character.id.JKIRBY, 0x4)
     dw cpu_attack_weight_kirby; OS.patch_end()
 }
+
+} // __JIGGLYPUFF_KIRBY_SHARED__

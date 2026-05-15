@@ -1000,7 +1000,7 @@ scope Costumes {
         db 0x05                             // Yoshi
         db 0x05                             // Captain Falcon
         db 0x04                             // Kirby
-        db 0x03                             // Pikachu
+        db 0x04                             // Pikachu
         db 0x04                             // Jigglypuff
         db 0x03                             // Ness
         db 0x00                             // Master Hand
@@ -1940,5 +1940,6 @@ scope Costumes {
     // Set default costumes
     Character.set_default_costumes(Character.id.BOSS, 0, 0, 0, 0, 0, 0, 0)
     Character.set_default_costumes(Character.id.METAL, 0, 1, 4, 5, 1, 3, 2)
+}
 
 } // __COSTUMES__

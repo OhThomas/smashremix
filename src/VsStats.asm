@@ -63,12 +63,12 @@ scope VsStats {
     tech_stats:; db "Tech Stats", 0x00
     ledge_stats:; db "Ledge Stats", 0x00
     times_grabbed:; db "Times grabbed", 0x00
-    airdodge_stats:; db "Air Dodge Stats", 0x00
-    times_dodged:; db "Times dodged", 0x00
     special_move_stats:; db "Special Move Stats", 0x00
     up_special:; db "Up Specials used", 0x00
     neutral_special:; db "Neutral Specials used", 0x00
     down_special:; db "Down Specials used", 0x00
+    airdodge_stats:; db "Air Dodge Stats", 0x00
+    times_dodged:; db "Times dodged", 0x00
     grab_stats:; db "Grab Stats", 0x00
     attempted_grabs:; db "Attempted grabs", 0x00
     attempted_throws:; db "Attempted throws", 0x00
@@ -99,11 +99,9 @@ scope VsStats {
             dw      0x00                                 // 0x0014 = total_damage_taken
             dw      0x00                                 // 0x0018 = total_damage_given
             dw      0x00                                 // 0x001C = highest_damage
-            dw      0x00                                 // 0x0020 = percentage_z_cancel
-            dw      0x00                                 // 0x0024 = percentage_tech
         }
     }
-    constant STATS_STRUCT_SIZE(0x28)
+    constant STATS_STRUCT_SIZE(0x20)
 
     // Create stats structs
     stats_struct(1)
@@ -123,43 +121,6 @@ scope VsStats {
         sw      r0, 0x0014(t2)                           // total_damage_taken = 0
         sw      r0, 0x0018(t2)                           // total_damage_given = 0
         sw      r0, 0x001C(t2)                           // highest_damage = 0
-        sw      r0, 0x0020(t2)                           // percentage_z_cancel = 0
-        sw      r0, 0x0024(t2)                           // percentage_tech = 0
-    }
-
-    // @ Description
-    // This macro creates a new stat counter
-    macro new_tracker(name) {
-        {name}: {
-            dw  0x00 // p1
-            dw  0x00 // p2
-            dw  0x00 // p3
-            dw  0x00 // p4
-        }
-    }
-
-    new_tracker(missed_z_cancels)
-    new_tracker(successful_z_cancels)
-    new_tracker(successful_techs)
-    new_tracker(missed_techs)
-    new_tracker(ledges_grabbed)
-    new_tracker(airdodge_counter)
-    new_tracker(usp_counter)
-    new_tracker(nsp_counter)
-    new_tracker(dsp_counter)
-    new_tracker(grab_counter)
-    new_tracker(throw_counter)
-    new_tracker(throwf_counter)
-    new_tracker(throwb_counter)
-
-    // @ Description
-    // This macro clears a stat counter
-    macro clear_tracker(name) {
-        li      t8, VsStats.{name}
-        sw      r0, 0x0000(t8)              // clear p1 count
-        sw      r0, 0x0004(t8)              // clear p2 count
-        sw      r0, 0x0008(t8)              // clear p3 count
-        sw      r0, 0x000C(t8)              // clear p4 count
     }
 
     // @ Description
@@ -202,6 +163,11 @@ scope VsStats {
     stat_tracker(usp_tracker)
     stat_tracker(nsp_tracker)
     stat_tracker(dsp_tracker)
+    stat_tracker(airdodge_tracker)
+    stat_tracker(grab_tracker)
+    stat_tracker(throw_tracker)
+    stat_tracker(throwf_tracker)
+    stat_tracker(throwb_tracker)
 
     // @ Description
     // Calculate the percentage of a stat tracker for the given port
@@ -381,8 +347,6 @@ scope VsStats {
         li      a0, {table}                 // a0 = address of table
         addiu   a0, a0, {offset}            // a0 = address of value
         lli     a1, {struct_size}           // a1 = size of struct
-        lli     t7, {page}                  // t7 = page
-        addiu   t7, t7, PAGE1_GROUP         // t7 = group for page
         // a2 = y
         jal     draw_line_
         lli     a3, {port_to_skip}          // a3 = port to skip
@@ -583,16 +547,6 @@ scope VsStats {
         nop
         sw      t3, 0x001C(t0)                           // store new highest damage
         _end_collect_{port}:
-    }
-
-    // @ Description
-    // This macro flips the starting stripe value of the last page to keep a checkerboard pattern on the next
-    macro checkerboard_stripe() {
-        lb      a1, 0x0018(sp)              // a1 = starting value of stripe for last page
-        xori    a1, a1, 0x0001              // 0 -> 1 or 1 -> 0 (flip bool)
-        sb      a1, 0x0018(sp)              // save flipped value to use again next page
-        li      a0, stripe_on               // a0 = stripe_on
-        sb      a1, 0x0000(a0)              // save flipped value for this page
     }
 
     // @ Description
@@ -797,14 +751,7 @@ scope VsStats {
         jal     Render.toggle_group_display_
         lli     a1, 0x0001                               // a1 = 1 -> turn off this display list
 
-        lli     a0, 0x0E                                 // a0 = group of stats instructions + port headers
-        jal     Render.toggle_group_display_
-        lli     a1, 0x0000                               // a1 = 0 -> turn on this display list
-
-        lli     a0, PAGE1_GROUP                          // a0 = group of stats (page 1)
-        li      a1, current_page                         // ~
-        lb      a1, 0x0000(a1)                           // a1 = current page
-        addu    a0, a0, a1                               // a0 = PAGE1_GROUP + current page
+        lli     a0, 0x0E                                 // a0 = group of stats menu
         jal     Render.toggle_group_display_
         lli     a1, 0x0000                               // a1 = 0 -> turn on this display list
 
@@ -854,7 +801,7 @@ scope VsStats {
         jal     Render.toggle_group_display_
         lli     a1, 0x0000                               // a1 = 0 -> turn on this display list
 
-        lli     a0, 0x0E                                 // a0 = group of stats instructions + port headers
+        lli     a0, 0x0E                                 // a0 = group of stats menu
         jal     Render.toggle_group_display_
         lli     a1, 0x0001                               // a1 = 1 -> turn off this display list
 
@@ -1056,7 +1003,7 @@ scope VsStats {
         nop
 
         _combo_stats_on_check:
-        // If combo meter is off, skip to page 2 and don't draw combo stats section
+        // If combo meter is off, skip to _end and don't draw combo stats section
         Toggles.guard(Toggles.entry_combo_meter, _combo_stats_off)
 
         addiu   a2, a2, 5                   // adjust y for cleaner spacing
@@ -1104,19 +1051,17 @@ scope VsStats {
         draw_row(neutral_special, 0, VsStats.nsp_tracker, 0x0000, 0x0004, -1, -1, 1)
         draw_row(down_special, 0, VsStats.dsp_tracker, 0x0000, 0x0004, -1, -1, 1)
 
-
         // Page 3
         _page_3:
         // Draw lines
-        checkerboard_stripe()               // continue checkerboard stripe pattern between pages
         lli     a2, 30                      // a2 = start y
         draw_header(grab_stats, 2)
         addiu   a2, a2, -1                  // adjust y for better underline
         draw_underline(57, 2)
-        draw_row(attempted_grabs, 0, VsStats.grab_counter, 0x0000, 0x0004, -1, -1, 2)
-        draw_row(attempted_throws, 0, VsStats.throw_counter, 0x0000, 0x0004, -1, -1, 2)
-        draw_row(throw_forward, 8, VsStats.throwf_counter, 0x0000, 0x0004, -1, -1, 2)
-        draw_row(throw_backward, 8, VsStats.throwb_counter, 0x0000, 0x0004, -1, -1, 2)
+        draw_row(attempted_grabs, 0, VsStats.grab_tracker, 0x0000, 0x0004, -1, -1, 2)
+        draw_row(attempted_throws, 0, VsStats.throw_tracker, 0x0000, 0x0004, -1, -1, 2)
+        draw_row(throw_forward, 8, VsStats.throwf_tracker, 0x0000, 0x0004, -1, -1, 2)
+        draw_row(throw_backward, 8, VsStats.throwb_tracker, 0x0000, 0x0004, -1, -1, 2)
 
         b       _air_dodge_on_check
         nop
@@ -1133,12 +1078,12 @@ scope VsStats {
         draw_header(airdodge_stats, 2)
         addiu   a2, a2, -1                  // adjust y for better underline
         draw_underline(86, 2)
-        draw_row(times_dodged, 0, VsStats.airdodge_counter, 0x0000, 0x0004, -1, -1, 2)
+        draw_row(times_dodged, 0, VsStats.airdodge_tracker, 0x0000, 0x0004, -1, -1, 2)
 
 
         // Hide stat groups so they aren't visible when first entering results screen
         _end:
-        lli     a0, 0x0E                    // a0 = group of stats instructions + port headers
+        lli     a0, 0x0E                    // a0 = group of menu stats
         jal     Render.toggle_group_display_
         lli     a1, 0x0001                  // a1 = 1 -> turn off this display list
 
@@ -1230,34 +1175,8 @@ scope VsStats {
         addiu   sp, sp, 0x0010              // deallocate stack space
     }
 
-    scope tracker_setup_: {
-        addiu   sp, sp, -0x0010             // allocate stack space
-        sw      ra, 0x0004(sp)              // save ra
-
-        clear_tracker(missed_z_cancels)
-        clear_tracker(successful_z_cancels)
-        clear_tracker(successful_techs)
-        clear_tracker(missed_techs)
-        clear_tracker(ledges_grabbed)
-        clear_tracker(airdodge_counter)
-        clear_tracker(usp_counter)
-        clear_tracker(nsp_counter)
-        clear_tracker(dsp_counter)
-        clear_tracker(grab_counter)
-        clear_tracker(throw_counter)
-        clear_tracker(throwf_counter)
-        clear_tracker(throwb_counter)
-
-        _end:
-        lw      ra, 0x0004(sp)              // restore ra
-        addiu   sp, sp, 0x0010              // deallocate stack space
-        jr      ra
-        nop
-    }
-
-
     // @ Description
-    // Increment grab counter whenever someone starts a grab
+    // Increment grab tracker whenever someone starts a grab
     scope count_grabs: {
         OS.patch_start(0xC4600, 0x80149BC0)
         j   count_grabs
@@ -1265,7 +1184,7 @@ scope VsStats {
         _return:
         OS.patch_end()
 
-        li      a2, VsStats.grab_counter
+        li      a2, VsStats.grab_tracker
         lbu     a1, 0x000D(s0)              // a1 = player index (0 - 3)
         sll     a1, a1, 0x0002              // a1 = player index * 4
         addu    a2, a2, a1                  // a2 = address of grab count for this player
@@ -1280,7 +1199,7 @@ scope VsStats {
 
 
     // @ Description
-    // Increment throw counters when someone starts a throw
+    // Increment throw trackers when someone starts a throw
     scope count_throws: {
         addiu   sp, sp, -0x0014             // allocate stack space
         sw      ra, 0x0004(sp)              // save ra
@@ -1289,7 +1208,7 @@ scope VsStats {
 
         // s0 = player struct
         // t9 = status id
-        
+
         addiu   t0, r0, Action.KIRBY.ForwardThrow
         beq     t9, t0, _forward            // branch if forward throw
         addiu   t0, r0, Action.ThrowF       // ~
@@ -1298,12 +1217,12 @@ scope VsStats {
         bne     t9, t0, _end                // return if status id not a throw
         nop
 
-        li      t2, VsStats.throwb_counter
+        li      t2, VsStats.throwb_tracker
         b       _increment
         nop
 
         _forward:
-        li      t2, VsStats.throwf_counter
+        li      t2, VsStats.throwf_tracker
 
         _increment:
         lbu     t0, 0x000D(s0)              // t0 = player index (0 - 3)
@@ -1313,7 +1232,7 @@ scope VsStats {
         addiu   t0, t0, 0x0001              // increment
         sw      t0, 0x0000(t2)              // store updated directional throw count
 
-        li      t2, VsStats.throw_counter
+        li      t2, VsStats.throw_tracker
         lbu     t0, 0x000D(s0)              // t0 = player index (0 - 3)
         sll     t0, t0, 0x0002              // t0 = player index * 4
         addu    t2, t2, t0                  // t2 = address of throw count for this player
@@ -1325,9 +1244,8 @@ scope VsStats {
         lw      t2, 0x000C(sp)              // restore t2
         lw      t0, 0x0008(sp)              // restore t0
         lw      ra, 0x0004(sp)              // restore ra
-        addiu   sp, sp, 0x0014              // deallocate stack space
         jr      ra
-        nop
+        addiu   sp, sp, 0x0014              // deallocate stack space
     }
 
 }

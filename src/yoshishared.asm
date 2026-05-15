@@ -1,4 +1,7 @@
 // Yoshishared.asm
+if !{defined __YOSHI_SHARED__} {
+define __YOSHI_SHARED__()
+print "included yoshishared.asm\n"
 
 // This file contains shared functions by Yoshi Clones.
 
@@ -635,3 +638,5 @@ scope YoshiShared {
     Character.table_patch_start(cpu_attack_weight, Character.id.JYOSHI, 0x4)
     dw cpu_attack_weight; OS.patch_end()
 }
+
+} // __YOSHI_SHARED__

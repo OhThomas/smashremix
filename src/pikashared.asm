@@ -1,4 +1,7 @@
 // Pikashared.asm
+if !{defined __PIKA_SHARED__} {
+define __PIKA_SHARED__()
+print "included pikashared.asm\n"
 
 // This file contains shared functions by Pika Clones.
 
@@ -677,3 +680,5 @@ scope PikaShared {
     // Pikachu shares hardcodings with Jigglypuff and some of his hardcodings are in jigglypuffkirbyshared.asm
 
     }
+
+} // __PIKA_SHARED__

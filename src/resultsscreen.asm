@@ -1,5 +1,8 @@
 // ResultsScreen.asm
 // thanks to tehzz for providing documentation
+if !{defined __RESULTS_SCREEN__} {
+define __RESULTS_SCREEN__()
+print "included resultsscreen.asm\n"
 
 include "OS.asm"
 include "Global.asm"
@@ -780,7 +783,7 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.MTWO,     FGM.announcer.names.MEWTWO,                 POKEMON,         Character.id.SAMUS,   185,     MEWTWO,          20,     0.8,       {MIDI.id.MEWTWO_VICTORY})
     add_to_results_screen(Character.id.MARTH,    FGM.announcer.names.MARTH,                  FIRE_EMBLEM,     Character.id.CAPTAIN, 185,     MARTH,           20,     1,         {MIDI.id.MARTH_VICTORY})
     add_to_results_screen(Character.id.SONIC,    FGM.announcer.names.SONIC,                  SONIC,           Character.id.FOX,     165,     SONIC,           35,     1,         {MIDI.id.SONIC_VICTORY})
-    add_to_results_screen(Character.id.SANDBAG,  FGM.announcer.names.MARTH,                  YOSHI,           Character.id.CAPTAIN, 175,     SANDBAG,         25,     1,         0x0B)
+    add_to_results_screen(Character.id.SANDBAG,  FGM.announcer.names.MARTH,                  SMASH,           Character.id.CAPTAIN, 175,     SANDBAG,         20,     0.75,      0x0B)
     add_to_results_screen(Character.id.SSONIC,   FGM.announcer.names.SSONIC,                 SONIC,           Character.id.FOX,     170,     SUPER SONIC,     20,     0.55,      {MIDI.id.SONIC_VICTORY})
     add_to_results_screen(Character.id.SHEIK,    FGM.announcer.names.SHEIK,                  ZELDA,           Character.id.CAPTAIN, 160,     SHEIK,           40,     1,         {MIDI.id.SHEIK_VICTORY})
     add_to_results_screen(Character.id.MARINA,   FGM.announcer.names.MARINA,                 MISCHIEF_MAKERS, Character.id.CAPTAIN, 180,     M1AR1I111NA,     25,     0.85,      {MIDI.id.MARINA_VICTORY})
@@ -796,7 +799,7 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.PEACH,    FGM.announcer.names.PEACH,                  MARIO_BROS,      Character.id.CAPTAIN, 170,     PEACH,           30,     1,         {MIDI.id.PEACH_VICTORY})
     add_to_results_screen(Character.id.ROY,      FGM.announcer.names.ROY,                    FIRE_EMBLEM,     Character.id.CAPTAIN, 160,     ROY,             50,     1,         {MIDI.id.MARTH_VICTORY})
     add_to_results_screen(Character.id.DRL,      FGM.announcer.names.DRL,                    DR_MARIO,        Character.id.LUIGI,   175,     DR. LUIGI,       25,     0.85,      {MIDI.id.DRMARIO_VICTORY})
-    add_to_results_screen(Character.id.LANKY,    FGM.announcer.names.LANKY,                  DONKEY_KONG,     Character.id.DK,      185,     LAN2KY KONG,      25,     0.55,     {MIDI.id.LANKY_VICTORY})
+    add_to_results_screen(Character.id.LANKY,    FGM.announcer.names.LANKY,                  DONKEY_KONG,     Character.id.DK,      185,     LAN2KY KONG,     25,     0.55,      {MIDI.id.LANKY_VICTORY})
     // ADD NEW CHARACTERS HERE
     add_to_results_screen(Character.id.CBDEDEDE, FGM.announcer.names.DEDEDE,                 KIRBY,           Character.id.CAPTAIN, 175,     DEDEDE,          25,     0.9,       {MIDI.id.DEDEDE_VICTORY})
     add_to_results_screen(Character.id.HBPIKA,   FGM.announcer.names.PIKACHU,                POKEMON,         Character.id.PIKACHU, 185,     PIKACHU,         25,     0.85,      0x14)
@@ -810,7 +813,7 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.PSONIC,   FGM.announcer.names.SONIC,                  SONIC,           Character.id.FOX,     165,     SONIC,           35,     1,         {MIDI.id.SONIC_VICTORY})
     add_to_results_screen(Character.id.MSSONIC,  FGM.announcer.names.SONIC,                  SONIC,           Character.id.FOX,     170,     METAL SONIC,     20,     0.55,      {MIDI.id.SONIC_VICTORY})
     add_to_results_screen(Character.id.ISAAC,    FGM.announcer.names.MARTH,                  FIRE_EMBLEM,     Character.id.CAPTAIN, 180,     ISAAC,           35,     1,         {MIDI.id.MARTH_VICTORY})
-    add_to_results_screen(Character.id.DKJR,     FGM.announcer.names.DK,                     DONKEY_KONG,     Character.id.DK,      180,     DK JR.,          35,     1,         {MIDI.id.DK_JR_STAGE})
+    add_to_results_screen(Character.id.DKJR,     FGM.announcer.names.DK,                     DONKEY_KONG,     Character.id.DK,      180,     DK JR.,          35,     1,         0x0E)
 
     // REMIX POLYGONS
     add_to_results_screen(Character.id.NFALCO,   FGM.announcer.names.NFIGHTER,               SMASH,           Character.id.FOX,     185,     POLY FALCO,      20,     0.6,       0x0B)
@@ -834,4 +837,5 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.NPEACH,   FGM.announcer.names.NFIGHTER,               SMASH,           Character.id.CAPTAIN, 185,     POLY PEACH,      20,     0.6,       0x0B)
     add_to_results_screen(Character.id.NCRASH,   FGM.announcer.names.NFIGHTER,               SMASH,           Character.id.CAPTAIN, 185,     POLY CRASH,      20,     0.6,       0x0B)
 }
-}
+
+} // __RESULTS_SCREEN__

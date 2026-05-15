@@ -1,4 +1,7 @@
 // captainshared.asm
+if !{defined __CAPTAIN_SHARED__} {
+define __CAPTAIN_SHARED__()
+print "included captainshared.asm\n"
 
 // This file contains shared functions by Captain Falcon Clones.
 
@@ -67,14 +70,14 @@ scope CaptainShared {
     OS.copy_segment(0xA9AF8, 0x0008)
     dw  Size.falcon.punch.render_routine_
     OS.copy_segment(0xA9B04, 0x0010)
-    
+
     kick_anim_struct_DRAGONKING:
     dw  0x060F0000
     dw  Character.DRAGONKING_file_7_ptr
     OS.copy_segment(0xA9ACC, 0x08)
     dw  Size.falcon.kick.update_routine_    // scales gfx based on size
     OS.copy_segment(0xA9AD8, 0x14)
-    
+
     punch_anim_struct_DRAGONKING:
     dw  0x020F0000
     dw  Character.DRAGONKING_file_8_ptr
@@ -163,7 +166,7 @@ scope CaptainShared {
         li      a0, kick_anim_struct_JFALCON        // a0 = kick_anim_struct_JFALCON
         beq     t0, t1, _end                // end if character id = JFALCON
         nop
-        
+
         ori     t1, r0, Character.id.DRAGONKING    // t1 = id.JFALCON
         li      a0, kick_anim_struct_DRAGONKING        // a0 = kick_anim_struct_JFALCON
         beq     t0, t1, _end                // end if character id = JFALCON
@@ -479,7 +482,6 @@ scope CaptainShared {
 		addiu	s3, s3, 0x18C0
     }
 
-
     // @ Description
     // Extends a check on ID that occurs when Kirby absorbs or ejects a power.
     scope kirby_power_change_: {
@@ -547,7 +549,7 @@ scope CaptainShared {
             _left:
             lwc1 f6, 0x01CC+0x4C(a0) // load nearest LEFT ledge X
             lwc1 f8, 0x01CC+0x50(a0) // load nearest LEFT ledge Y
-            
+
             b _check_end
             nop
 
@@ -634,7 +636,7 @@ scope CaptainShared {
         lli at, 0x50 // max stick X value (right)
         b _apply_x // apply X value
         nop
-        
+
         _hold_left:
         addiu at, r0, 0xFFB0 // max stick X value (left)
 
@@ -777,7 +779,7 @@ scope CaptainShared {
         lli at, 0x50 // max stick X value (right)
         b _apply_x // apply X value
         nop
-        
+
         _opponent_left:
         bltz t0, _facing_opponent // if facing left already, just point to target
         addiu at, r0, 0xFFB0 // min stick X value (left)
@@ -803,3 +805,5 @@ scope CaptainShared {
     Character.table_patch_start(cpu_post_process, Character.id.JFALCON, 0x4)
     dw cpu_post_process_falcon; OS.patch_end()
 }
+
+} // __CAPTAIN_SHARED__

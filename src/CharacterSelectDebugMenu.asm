@@ -2714,7 +2714,7 @@ scope CharacterSelectDebugMenu {
     scope PoisonDmg {
         include "css/PoisonDmg.asm"
     }
-        scope StickJump {
+    scope StickJump {
         include "css/StickJump.asm"
     }
 

@@ -320,4 +320,5 @@ scope SwordTrail {
         nop
     }
 }
-}
+
+} // __SWORDTRAIL__

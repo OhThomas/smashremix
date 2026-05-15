@@ -349,6 +349,12 @@ scope Character {
         dh      0       // 0 chance
         OS.patch_end()
 
+        // set rare Star KO fgm to null
+        table_patch_start(rare_starko_fgm, id.{name}, 0x4)
+        dh      0x2B7   // FGM id (null)
+        dh      0       // 0 chance
+        OS.patch_end()
+
         // Handle Polygons
         if {variant_type} == variant_type.POLYGON {
             // Set Kirby hat_id to none
@@ -718,7 +724,6 @@ scope Character {
         // Increment {name}_new_actions
         global evaluate {name}_new_actions({{name}_new_actions} + 1)
     }
-
 
     // @ Description
     // Copies menu actions from a base character to a target character.
@@ -1289,7 +1294,6 @@ scope Character {
             fill    jab_3.ENABLED - pc()    // nop the rest of the original logic
         }
 
-
         // @ Description
         // modifies a hard-coded routine which runs when the character initiates a rapid jab, and
         // determines which action ID will be loaded
@@ -1783,7 +1787,6 @@ scope Character {
             OS.patch_end()
         }
 
-
         // @ Description
         // modifies a hard-coded routine which seemingly runs when an AI switches behaviours?
         // the table contains pointers to what seems to be a struct for determining how the AI will
@@ -1802,7 +1805,6 @@ scope Character {
             OS.patch_start(0xADB80,0x80133140)
             lw      s2, LOWER(s2)           // original line (modified)
             OS.patch_end()
-
         }
 
         // @ Description
@@ -1839,7 +1841,6 @@ scope Character {
             }
             addu    at, at, t8              // original line 4
             lw      t8, LOWER(at)           // original line 5 (modified)
-
         }
 
         // @ Description
@@ -1859,7 +1860,6 @@ scope Character {
             lw      t5, LOWER(at)           // original line 5 (modified)
             // jr   t5
         }
-
 
         pullvar base, origin
 
@@ -2022,7 +2022,7 @@ scope Character {
          scope falcon_dive_y_fix_: {
             OS.patch_start(0xC7C08, 0x8014D1C8)
             j   falcon_dive_y_fix_
-           nop
+            nop
             _return:
             OS.patch_end()
 
@@ -2929,7 +2929,6 @@ scope Character {
         OS.patch_end()
     }
 
-
     // @ Description
     // Jump table for Lvl 10 cpus to use instead of rolling
     scope close_quarter_combat {
@@ -3365,42 +3364,6 @@ scope Character {
         jr      ra                          // return
         nop
     }
-    
-    // @ Description
-    // Increment a corresponding Vs Stats counter whenever a player uses a special move.
-    // @ Arguments
-    // at - special used by player (USP/NSP/DSP)
-    // a0 - player object
-    scope increment_special_counter: {
-        constant USP(0x0)
-        constant NSP(0x1)
-        constant DSP(0x2)
-
-        addiu   sp, sp, -0x0018             // allocate stack space
-        sw      ra, 0x0014(sp)              // store ra
-        sw      t0, 0x0010(sp)              // store t0
-
-        li      t0, VsStats.usp_counter     // t0 = starting address of special counters
-        sll     at, at, 0x0004              // at = which special to update * 4
-        addu    at, t0, at                  // at = special counter to update
-
-        lw      t0, 0x0084(a0)              // t0 = player struct
-        lbu     t0, 0x000D(t0)              // t0 = player index (0 - 3)
-        sll     t0, t0, 0x0002              // t0 = player index * 4
-        addu    at, at, t0                  // at = address of special count for this player
-        lw      t0, 0x0000(at)              // t0 = special count
-        addiu   t0, t0, 0x0001              // increment
-        sw      t0, 0x0000(at)              // store updated special count
-
-        lw      t0, 0x0010(sp)              // load t0
-        jalr    ra, t9                      // original line 1
-        nop                                 // original line 2
-
-        lw      ra, 0x0014(sp)              // load ra
-        addiu   sp, sp, 0x0018              // deallocate stack space
-        jr      ra                          // return
-        nop
-    }
 
     // @ Description
     // This table contains FGM id's and 1/X chances for character rare death sounds
@@ -3437,8 +3400,8 @@ scope Character {
         dh 0x02B7;      dh OS.NULL            // 0x18 - NJIGGLY
         dh 0x02B7;      dh OS.NULL            // 0x19 - NNESS
         dh 0x02B7;      dh OS.NULL            // 0x1A - GDONKEY
-        // pad table for new characters
         fill table + (NUM_CHARACTERS * 4) - pc()
+        // pad table for new characters
 
         // @ Description
         // Modifies function ftCommonDeadInitStatusVars to use a character's rare death sound by chance if set
@@ -3471,6 +3434,117 @@ scope Character {
 
             _end:
             jal     0x8013BC60              // original line 1
+            nop
+            j       _return
+            nop
+        }
+    }
+
+    // @ Description
+    // This table contains FGM id's and 1/X chances for character rare Star KO sounds
+    // 0x2B7 = NULL FGM ID, used for anyone without a rare Star KO fgm
+    scope rare_starko_fgm {
+        OS.align(16)
+        table:
+        constant TABLE_ORIGIN(origin())
+        // FGM id       // Chance
+        dh 0x02B7;      dh OS.NULL            // 0x00 - MARIO
+        dh 0x02B7;      dh OS.NULL            // 0x01 - FOX
+        dh 0x02B7;      dh OS.NULL            // 0x02 - DONKEY
+        dh 0x02B7;      dh OS.NULL            // 0x03 - SAMUS
+        dh 0x02B7;      dh OS.NULL            // 0x04 - LUIGI
+        dh 0x02B7;      dh OS.NULL            // 0x05 - LINK
+        dh 0x02B7;      dh OS.NULL            // 0x06 - YOSHI
+        dh 0x02B7;      dh OS.NULL            // 0x07 - CAPTAIN
+        dh 0x02B7;      dh OS.NULL            // 0x08 - KIRBY
+        dh 0x02B7;      dh OS.NULL            // 0x09 - PIKACHU
+        dh 0x02B7;      dh OS.NULL            // 0x0A - JIGGLY
+        dh 0x02B7;      dh OS.NULL            // 0x0B - NESS
+        dh 0x02B7;      dh OS.NULL            // 0x0C - BOSS
+        dh 0x02B7;      dh OS.NULL            // 0x0D - METAL
+        dh 0x02B7;      dh OS.NULL            // 0x0E - NMARIO
+        dh 0x02B7;      dh OS.NULL            // 0x0F - NFOX
+        dh 0x02B7;      dh OS.NULL            // 0x10 - NDONKEY
+        dh 0x02B7;      dh OS.NULL            // 0x11 - NSAMUS
+        dh 0x02B7;      dh OS.NULL            // 0x12 - NLUIGI
+        dh 0x02B7;      dh OS.NULL            // 0x13 - NLINK
+        dh 0x02B7;      dh OS.NULL            // 0x14 - NYOSHI
+        dh 0x02B7;      dh OS.NULL            // 0x15 - NCAPTAIN
+        dh 0x02B7;      dh OS.NULL            // 0x16 - NKIRBY
+        dh 0x02B7;      dh OS.NULL            // 0x17 - NPIKACHU
+        dh 0x02B7;      dh OS.NULL            // 0x18 - NJIGGLY
+        dh 0x02B7;      dh OS.NULL            // 0x19 - NNESS
+        dh 0x02B7;      dh OS.NULL            // 0x1A - GDONKEY
+        fill table + (NUM_CHARACTERS * 4) - pc()
+        // pad table for new characters
+
+        // @ Description
+        // Modifies function ftCommonDeadUpStarSetStatus to use a character's rare Star KO sound by chance if set
+        scope check_rare_starko_fgm_1: {
+            OS.patch_start(0xB721C, 0x8013C7DC)
+            j       check_rare_starko_fgm_1
+            nop
+            _return:
+            OS.patch_end()
+            // s0 = player struct
+
+            lw      t3, 0x09C8(s0)          // t3 = character attributes
+            lw      at, 0x0008(s0)          // at = character id
+            sll     at, at, 0x0002          // at = character id * 4
+            li      t8, rare_starko_fgm.table
+            addu    t8, t8, at              // t8 = address of rare Star KO FGM entry for this character
+            lhu     at, 0x0000(t8)          // at = rare Star KO FGM id
+            addiu   a0, r0, 0x02B7          // a0 = NULL fgm id
+            beql    at, a0, _end            // branch if no rare Star KO FGM
+            lhu     a0, 0x00B8(t3)          // a0 = regular Star KO FGM id
+
+            // if we're here, then the character has a rare Star KO FGM
+            jal     Global.get_random_int_
+            lhu     a0, 0x0002(t8)          // a0 = rare Star KO FGM chance
+            bnezl   v0, _end      	        // if not 0, play regular FGM
+            lhu     a0, 0x00B8(t3)          // a0 = regular Star KO FGM id
+
+            // if we're here, that means the random number == 0, so play rare Star KO FGM instead
+            lhu     a0, 0x0000(t8)          // a0 = rare Star KO FGM id
+
+            _end:
+            jal     0x800269C0              // original line 1
+            nop
+            j       _return
+            nop
+        }
+
+        // @ Description
+        // Modifies function ftCommonDeadUpFallSetStatus to use a character's rare Star KO sound by chance if set
+        scope check_rare_starko_fgm_2: {
+            OS.patch_start(0xB7588, 0x8013CB48)
+            j       check_rare_starko_fgm_2
+            nop
+            _return:
+            OS.patch_end()
+            // s0 = player struct
+
+            lw      t3, 0x09C8(s0)          // t3 = character attributes
+            lw      at, 0x0008(s0)          // at = character id
+            sll     at, at, 0x0002          // at = character id * 4
+            li      t8, rare_starko_fgm.table
+            addu    t8, t8, at              // t8 = address of rare Star KO FGM entry for this character
+            lhu     at, 0x0000(t8)          // at = rare Star KO FGM id
+            addiu   a0, r0, 0x02B7          // a0 = NULL fgm id
+            beql    at, a0, _end            // branch if no rare Star KO FGM
+            lhu     a0, 0x00B8(t3)          // a0 = regular Star KO FGM id
+
+            // if we're here, then the character has a rare Star KO FGM
+            jal     Global.get_random_int_
+            lhu     a0, 0x0002(t8)          // a0 = rare Star KO FGM chance
+            bnezl   v0, _end      	        // if not 0, play regular FGM
+            lhu     a0, 0x00B8(t3)          // a0 = regular Star KO FGM id
+
+            // if we're here, that means the random number == 0, so play rare Star KO FGM instead
+            lhu     a0, 0x0000(t8)          // a0 = rare Star KO FGM id
+
+            _end:
+            jal     0x800269C0              // original line 1
             nop
             j       _return
             nop
@@ -3542,20 +3616,20 @@ scope Character {
     db Stages.id.BTT_PIKACHU             // PIKACHU
     db Stages.id.BTT_JIGGLYPUFF          // JIGGLYPUFF
     db Stages.id.BTT_NESS                // NESS
-    db 0xFF                              // MASTERHAND
+    db Stages.id.BTT_STG1                // MASTERHAND
     db Stages.id.BTT_MARIO               // METAL MARIO
-    db Stages.id.BTT_STG1            // NMARIO
-    db Stages.id.BTT_STG1            // NFOX
-    db Stages.id.BTT_STG1            // NDONKEY
-    db Stages.id.BTT_STG1            // NSAMUS
-    db Stages.id.BTT_STG1            // NLUIGI
-    db Stages.id.BTT_STG1            // NLINK
-    db Stages.id.BTT_STG1            // NYOSHI
-    db Stages.id.BTT_STG1            // NCAPTAIN
-    db Stages.id.BTT_STG1            // NKIRBY
-    db Stages.id.BTT_STG1            // NPIKACHU
-    db Stages.id.BTT_STG1            // NJIGGLY
-    db Stages.id.BTT_STG1            // NNESS
+    db Stages.id.BTT_STG1                // NMARIO
+    db Stages.id.BTT_STG1                // NFOX
+    db Stages.id.BTT_STG1                // NDONKEY
+    db Stages.id.BTT_STG1                // NSAMUS
+    db Stages.id.BTT_STG1                // NLUIGI
+    db Stages.id.BTT_STG1                // NLINK
+    db Stages.id.BTT_STG1                // NYOSHI
+    db Stages.id.BTT_STG1                // NCAPTAIN
+    db Stages.id.BTT_STG1                // NKIRBY
+    db Stages.id.BTT_STG1                // NPIKACHU
+    db Stages.id.BTT_STG1                // NJIGGLY
+    db Stages.id.BTT_STG1                // NNESS
     db Stages.id.BTT_DONKEY_KONG         // GDONKEY
     db 0xFF                              // PLACEHOLDER
     db 0xFF                              // PLACEHOLDER
@@ -3576,7 +3650,7 @@ scope Character {
     db Stages.id.BTP_PIKACHU             // PIKACHU
     db Stages.id.BTP_JIGGLYPUFF          // JIGGLYPUFF
     db Stages.id.BTP_NESS                // NESS
-    db 0xFF                              // MASTERHAND
+    db Stages.id.BTP_POLY                // MASTERHAND
     db Stages.id.BTP_MARIO               // METAL MARIO
     db Stages.id.BTP_POLY                // NMARIO
     db Stages.id.BTP_POLY                // NFOX
@@ -3613,20 +3687,20 @@ scope Character {
     db Stages.id.BTT_SAMUS               // PIKACHU
     db Stages.id.BTT_FOX                 // JIGGLYPUFF
     db Stages.id.BTT_YL                  // NESS
-    db 0xFF                              // MASTERHAND
+    db Stages.id.BTT_STG1                // MASTERHAND
     db Stages.id.BTT_MARIO               // METAL MARIO
-    db Stages.id.BTT_STG1            // NMARIO
-    db Stages.id.BTT_STG1            // NFOX
-    db Stages.id.BTT_STG1            // NDONKEY
-    db Stages.id.BTT_STG1            // NSAMUS
-    db Stages.id.BTT_STG1            // NLUIGI
-    db Stages.id.BTT_STG1            // NLINK
-    db Stages.id.BTT_STG1            // NYOSHI
-    db Stages.id.BTT_STG1            // NCAPTAIN
-    db Stages.id.BTT_STG1            // NKIRBY
-    db Stages.id.BTT_STG1            // NPIKACHU
-    db Stages.id.BTT_STG1            // NJIGGLY
-    db Stages.id.BTT_STG1            // NNESS
+    db Stages.id.BTT_STG1                // NMARIO
+    db Stages.id.BTT_STG1                // NFOX
+    db Stages.id.BTT_STG1                // NDONKEY
+    db Stages.id.BTT_STG1                // NSAMUS
+    db Stages.id.BTT_STG1                // NLUIGI
+    db Stages.id.BTT_STG1                // NLINK
+    db Stages.id.BTT_STG1                // NYOSHI
+    db Stages.id.BTT_STG1                // NCAPTAIN
+    db Stages.id.BTT_STG1                // NKIRBY
+    db Stages.id.BTT_STG1                // NPIKACHU
+    db Stages.id.BTT_STG1                // NJIGGLY
+    db Stages.id.BTT_STG1                // NNESS
     db Stages.id.BTT_SAMUS               // GDONKEY
     db 0xFF                              // PLACEHOLDER
     db 0xFF                              // PLACEHOLDER
@@ -3647,7 +3721,7 @@ scope Character {
     db Stages.id.BTP_NESS                // PIKACHU
     db Stages.id.BTP_WARIO               // JIGGLYPUFF
     db Stages.id.BTP_PIKACHU             // NESS
-    db 0xFF                              // MASTERHAND
+    db Stages.id.BTP_POLY                // MASTERHAND
     db Stages.id.BTP_BOWSER              // METAL MARIO
     db Stages.id.BTP_POLY                // NMARIO
     db Stages.id.BTP_POLY                // NFOX
@@ -3977,6 +4051,7 @@ scope Character {
     define_character(NPEACH, FOX, File.NPEACH_MAIN, 0x0D0, 0, File.NPEACH_CHARACTER, File.PEACH_SHIELD_POSE, 0x0D2, File.PEACH_TURNIP_INFO, 0x0A1, 0x013C, 0x428, 0x0, OS.FALSE, OS.FALSE, Stages.id.BTT_STG1, Stages.id.BTP_POLY, Stages.id.BTT_STG1, Stages.id.BTP_POLY, sound_type.U, variant_type.POLYGON)
     // NCRASH
     define_character(NCRASH, MARIO, File.NCRASH_MAIN, 0x0CA, 0, File.NCRASH_CHARACTER, File.CRASH_SHIELD_POSE, 0x0CC,  File.CRASH_SPIN_GFX, File.CRASH_ENTRY, 0, 0x2C0, 9, OS.FALSE, OS.FALSE, Stages.id.BTT_STG1, Stages.id.BTP_POLY, Stages.id.BTT_STG1, Stages.id.BTP_POLY, sound_type.U, variant_type.POLYGON)
+    // remix polygon characters ids get updated with every added remix non-polygon character, these get automatically updated too and incremented by 1
 
     print "========================================================================== \n"
     print "# Remix Fighters = "; print "0x"; OS.print_hex(NUM_REMIX_FIGHTERS); print " \n";

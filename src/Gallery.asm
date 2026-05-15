@@ -366,7 +366,6 @@ scope Gallery {
     dh {MIDI.id.MM_TITLE}
     dh {MIDI.id.ESPERANCE}
 
-
     bgm_goemon:
     dh 3                                    // number of BGM
     dh {MIDI.id.OEDO_EDO}
@@ -379,13 +378,14 @@ scope Gallery {
     dh {MIDI.id.TRAVELING}
 
     bgm_banjo:
-    dh 10                                   // number of BGM
+    dh 11                                   // number of BGM
     dh {MIDI.id.BANJO_MAIN}
     dh {MIDI.id.SPIRAL_MOUNTAIN}
     dh {MIDI.id.TREASURE_TROVE_COVE}
     dh {MIDI.id.MADMONSTER}
     dh {MIDI.id.BK_FINALBATTLE}
     dh {MIDI.id.VS_KLUNGO}
+    dh {MIDI.id.LOST}
     dh {MIDI.id.OLDKINGCOAL}
     dh {MIDI.id.MRPATCH}
     dh {MIDI.id.FROSTY_VILLAGE}
@@ -786,12 +786,14 @@ scope Gallery {
     add_bgm_to_gallery({MIDI.id.MULTIMAN2}, id.DKING)
     add_bgm_to_gallery({MIDI.id.SONIC_R}, id.SONIC)
     add_bgm_to_gallery({MIDI.id.UNDERGROUND_HURRY}, id.LUIGI)
+    add_bgm_to_gallery({MIDI.id.LOST}, id.BANJO)
 
     // @ Description
     // Table which holds the 'L' and 'R' sound effects for drumming
     fgm_drum_kit:
 
     dh  0x020, 0x01F                     // Kicks
+    dh  0x08F, 0x08E                     // Japenese Kicks
     dh  0x11F, 0x033                     // Stomp / Fan smack
     dh  0x117, 0x038                     // POW Block / Koopa shell
     dh  0x03D, 0x02F                     // Gun Shoot / Bumper
@@ -807,8 +809,8 @@ scope Gallery {
     dh  0x180, 0x181                     // Kirby "Falcon Punch!"
     dh  0x256, 0x257                     // Yoshi
     dh  0x230, 0x234                     // Jigglypuff
+    dh  0x13E, 0x13F                     // Hitmonlee
     dh  0x5CD, 0x5CC                     // F-Zero Announcer "1" / "2"
-    dh  0x5CB, 0x5CE                     // F-Zero Announcer "3" / "GO"
     dh  0x52B, 0x52C                     // Kazooie Fair
     dh  0x52E, 0x52F                     // Beak Buster
     dh  0x5A1, 0x583                     // Crash Bounce / Spin
@@ -816,7 +818,7 @@ scope Gallery {
     dh  0x5F8, 0x5F9                     // Lanky "Hip" / "Hup"
     dh  0x547, 0x549                     // DKing Hurt
 
-    constant DRUM_KIT_ENTRY_COUNT(24)    // update this when we add sound effects
+    constant DRUM_KIT_ENTRY_COUNT(25)    // update this when we add sound effects
 
     drum_kit_index:
     dw  0
@@ -908,7 +910,6 @@ scope Gallery {
         lhu     a1, 0x0000(t1)              // a1 = BGM id for music_index
         jal     BGM.play_                   // play BGM
         lli     a0, 0                       // a0 = 0
-
 
         _end_idle_init:
         // update the character id using the current gallery index
@@ -1518,4 +1519,6 @@ scope Gallery {
             OS.patch_end()
         }
     }
+}
+
 } // __GALLERY__

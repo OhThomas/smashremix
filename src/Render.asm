@@ -2255,8 +2255,6 @@ scope Render {
         nop
         jal     ComboMeter.setup_           // Setup the Combo Meter
         nop
-        jal     VsStats.tracker_setup_         // Clear VsStats stat trackers
-        nop
 
         _end:
         OS.restore_registers()              // restore all registers
@@ -2274,8 +2272,6 @@ scope Render {
         jal     SinglePlayerModes.setup_    // Setup the KO counter
         nop
         jal     ComboMeter.setup_           // Setup the Combo Meter
-        nop
-        jal     VsStats.tracker_setup_         // Clear VsStats stat trackers
         nop
 
         b       _end

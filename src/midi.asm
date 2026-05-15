@@ -1,6 +1,7 @@
 // MIDI.asm (Fray)
 if !{defined __MIDI__} {
 define __MIDI__()
+print "included midi.asm\n"
 
 // This file extends the music table and defines macros for including new MIDI files.
 // It also extends the instrument table and defines macros for including new instruments.
@@ -237,6 +238,7 @@ scope MIDI {
     add_game(warioware, "WarioWare, Inc.: Mega Microgame$!")
     add_game(wwtouched, "WarioWare: Touched!")
     add_game(dkarc, "Donkey Kong/Donkey Kong Jr.")
+    add_game(dkjr, "Donkey Kong Jr.)
     add_game(dkl, "Donkey Kong Land")
     add_game(dkc, "Donkey Kong Country")
     add_game(dkc2, "Donkey Kong Country 2: Diddy's Kong Quest")
@@ -696,7 +698,7 @@ scope MIDI {
     insert_midi(GREENGARDEN, OS.TRUE, OS.TRUE, "Green Garden", bomberman, 153)
     insert_midi(BLUE_RESORT, OS.TRUE, OS.TRUE, "Blue Resort", bomberman, 36)
     insert_midi(HORROR_MANOR, OS.TRUE, OS.TRUE, "Horror Manor", warioworld, 164)
-    // insert_midi(DREAMLANDBETA, OS.TRUE, OS.TRUE, "Gourmet Race (Alternate)", kirbysuperstar, 148)
+    insert_midi(DREAMLANDBETA, OS.TRUE, OS.TRUE, "Gourmet Race (Alternate)", kirbysuperstar, 148)
     insert_midi(BLOOMING_VILLAIN, OS.TRUE, OS.TRUE, "Blooming Villain", persona5, 35)
     insert_midi(ALL_I_NEEDED_WAS_YOU, OS.TRUE, OS.TRUE, "All That I Needed (Was You)", earthboundb, 3)
     insert_midi(PIGGYGUYS, OS.TRUE, OS.TRUE, "Piggy Guys", mother3, 240)
@@ -714,9 +716,9 @@ scope MIDI {
     insert_midi(OLD_SPIRAL_MOUNTAIN, OS.TRUE, OS.TRUE, "Spiral Mountain", banjokazooie, 283)
     insert_midi(OLD_UNFOUNDED_REVENGE, OS.TRUE, OS.TRUE, "Unfounded Revenge", mother3, 327)
     insert_midi(KROOLS_ACID_PUNK, OS.TRUE, OS.TRUE, "K. Rool's Acid Punk", dkl, 172)
-    // insert_midi(CRUEL, OS.TRUE, OS.TRUE, "Cruel Multi-Man Mode", brawl, 73)
-    // insert_midi(FIRE_FIELD, OS.TRUE, OS.TRUE, "Feel Our Pain (Fire Field)", fzero_gx, 109)
-    // insert_midi(DCMC, OS.TRUE, OS.TRUE, "DCMC Performance", mother3, 81)
+    insert_midi(CRUEL, OS.TRUE, OS.TRUE, "Cruel Multi-Man Mode", brawl, 73)
+    insert_midi(FIRE_FIELD, OS.TRUE, OS.TRUE, "Feel Our Pain (Fire Field)", fzero_gx, 109)
+    insert_midi(DCMC, OS.TRUE, OS.TRUE, "DCMC Performance", mother3, 81)
     insert_midi(NBA_JAM_TEAMSEL, OS.TRUE, OS.TRUE, "Team Select", nbajam, 303)
     insert_midi(NORFAIRMELEE, OS.TRUE, OS.TRUE, "Brinstar Depths (Melee)", metroid, 46)
     insert_midi(OLD_TOWEROFHEAVEN, OS.TRUE, OS.TRUE, "Luna Ascension", toh, 191)
@@ -726,7 +728,7 @@ scope MIDI {
     insert_midi(OLD_MUTE_CITY, OS.TRUE, OS.TRUE, "Mute City", fzero, 218)
     insert_midi(FORTUNA, OS.TRUE, OS.TRUE, "Fortuna", starfox0, 126)
     insert_midi(ROUTE209, OS.TRUE, OS.TRUE, "Route 209", pokemondiamond, 263)
-    // insert_midi(DANGEROUS_GUYS, OS.TRUE, OS.TRUE, "Dangerous Guys", mother3, 75)
+    insert_midi(DANGEROUS_GUYS, OS.TRUE, OS.TRUE, "Dangerous Guys", mother3, 75)
     insert_midi(MULTIPLAYER_BATTLE, OS.TRUE, OS.TRUE, "Multiplayer Battle (Bomberman DS)", bombermands, 215)
     insert_midi(BATTLECYRUS, OS.TRUE, OS.TRUE, "Battle! Cyrus", pokemondiamond, 23)
     insert_midi(HUMANSDEMONSAND, OS.TRUE, OS.TRUE, "Battle - Humans, Demons, and...", smtv, 16)
@@ -753,7 +755,7 @@ scope MIDI {
     insert_midi(YOUWILLKNOWOURNAMES, OS.TRUE, OS.TRUE, "You Will Know Our Names", xenoblade, 350)
     insert_midi(LOST, OS.TRUE, OS.TRUE, "Lost", dream, 190)
     insert_extra_midi(OLD_FALCO_VICTORY)
-    insert_extra_midi(DK_JR_STAGE)
+    insert_midi(DK_JR_STAGE, OS.TRUE, OS.TRUE, "Donkey Kong Jr.", dkjr, 1)
 
     pushvar origin, base
 

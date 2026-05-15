@@ -1,4 +1,7 @@
 // MarioShared.asm
+if !{defined __MARIO_SHARED__} {
+define __MARIO_SHARED__()
+print "included marioshared.asm\n"
 
 // This file contains shared functions by Mario and others
 
@@ -262,3 +265,5 @@ scope MarioShared {
     }
 
 }
+
+} // __MARIO_SHARED__

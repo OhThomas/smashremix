@@ -1,4 +1,7 @@
 // Reflect.asm
+if !{defined __REFLECT__} {
+define __REFLECT__()
+print "included Reflect.asm\n"
 
 // This file allows us to use custom reflect routines for the reflecting player. Usually related to an action change or fgm/gfx
 // Also some AI stuff
@@ -889,3 +892,5 @@ scope Reflect {
         // add more routines here
     }
 }
+
+} // __REFLECT__

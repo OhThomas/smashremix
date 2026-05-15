@@ -1,4 +1,8 @@
+// ChargeSmashAttacks.asm
 // Coded by HaloFactory
+if !{defined __CHARGE_SMASH_ATTACKS__} {
+define __CHARGE_SMASH_ATTACKS__()
+print "included ChargeSmashAttacks.asm\n"
 
     // @ Description
     // ChargeSmashAttacks
@@ -703,3 +707,5 @@
         // See NPeach.asm for Peach's entry
         // See NCrash.asm for Peach's entry
 }
+
+} // __CHARGE_SMASH_ATTACKS__
