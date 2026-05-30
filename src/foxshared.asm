@@ -133,6 +133,8 @@ scope FoxShared {
     dw recovery_logic; OS.patch_end()
     Character.table_patch_start(recovery_logic, Character.id.JFOX, 0x4)
     dw recovery_logic; OS.patch_end()
+    Character.table_patch_start(recovery_logic, Character.id.HPFOX, 0x4)
+    dw recovery_logic; OS.patch_end()
 
     scope cpu_post_process: {
         OS.routine_begin(0x20)
@@ -183,6 +185,8 @@ scope FoxShared {
     Character.table_patch_start(cpu_post_process, Character.id.FOX, 0x4)
     dw cpu_post_process; OS.patch_end()
     Character.table_patch_start(cpu_post_process, Character.id.JFOX, 0x4)
+    dw cpu_post_process; OS.patch_end()
+    Character.table_patch_start(cpu_post_process, Character.id.HPFOX, 0x4)
     dw cpu_post_process; OS.patch_end()
 }
 

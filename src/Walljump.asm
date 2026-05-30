@@ -82,6 +82,11 @@ scope Walljump {
         beq     t0, t1, end                 // skip if Dedede
         ori     t1, r0, Character.id.PEACH
         beq     t0, t1, end                 // skip if Peach
+        // Costumes
+        ori     t1, r0, Character.id.CBDEDEDE
+        beq     t0, t1, end                 // skip if Cowboy Dedede
+        ori     t1, r0, Character.id.MPPUFF
+        beq     t0, t1, end                 // skip if Microphone Jigglypuff
         // Remix Polygon Characters
         ori     t1, r0, Character.id.NLUCAS
         beq     t0, t1, end                 // skip if Polygon Lucas

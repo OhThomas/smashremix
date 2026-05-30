@@ -1414,8 +1414,6 @@ scope Character {
             sll     t7, t6, 0x2             // original line 3
             addu    t9, t9, t7              // original line 4
             lw      t9, LOWER(t9)           // original line 5 (modified)
-            jal     increment_special_counter
-            addiu   at, r0, increment_special_counter.NSP
         }
 
         // @ Description
@@ -1435,8 +1433,6 @@ scope Character {
             sll     t6, t5, 0x2             // original line 3
             addu    t9, t9, t6              // original line 4
             lw      t9, LOWER(t9)           // original line 5 (modified)
-            jal     increment_special_counter
-            addiu   at, r0, increment_special_counter.NSP
         }
 
         // @ Description
@@ -1456,8 +1452,6 @@ scope Character {
             sll     t3, t2, 0x2             // original line 3
             addu    t9, t9, t3              // original line 4
             lw      t9, LOWER(t9)           // original line 5 (modified)
-            jal     increment_special_counter
-            addiu   at, r0, increment_special_counter.USP
         }
 
         // @ Description
@@ -1477,8 +1471,6 @@ scope Character {
             sll     t8, t7, 0x2             // original line 3
             addu    t9, t9, t8              // original line 4
             lw      t9, LOWER(t9)           // original line 5 (modified)
-            jal     increment_special_counter
-            addiu   at, r0, increment_special_counter.DSP
         }
 
         // @ Description
@@ -1498,8 +1490,6 @@ scope Character {
             sll     t7, t6, 0x2             // original line 3
             addu    t9, t9, t7              // original line 4
             lw      t9, LOWER(t9)           // original line 5 (modified)
-            jal     increment_special_counter
-            addiu   at, r0, increment_special_counter.NSP
         }
 
         // @ Description
@@ -1519,8 +1509,6 @@ scope Character {
             sll     t6, t5, 0x2             // original line 3
             addu    t9, t9, t6              // original line 4
             lw      t9, LOWER(t9)           // original line 5 (modified)
-            jal     increment_special_counter
-            addiu   at, r0, increment_special_counter.NSP
         }
 
         // @ Description
@@ -1539,8 +1527,6 @@ scope Character {
             sll     t3, t2, 0x2             // original line 2
             addu    t9, t9, t3              // original line 3
             lw      t9, LOWER(t9)           // original line 4 (modified)
-            jal     increment_special_counter
-            addiu   at, r0, increment_special_counter.USP
         }
 
         // @ Description
@@ -1559,8 +1545,6 @@ scope Character {
             sll     t4, t3, 0x2             // original line 2
             addu    t9, t9, t4              // original line 3
             lw      t9, LOWER(t9)           // original line 4 (modified)
-            jal     increment_special_counter
-            addiu   at, r0, increment_special_counter.DSP
         }
 
         // @ Description
@@ -3982,7 +3966,7 @@ scope Character {
     // ADD NEW CHARACTERS HERE
 
     // 0x4D - COWBOY DEDEDE
-    define_character(CBDEDEDE, CAPTAIN,  File.DEDEDE_COWBOY_MAIN, 0x0EB, 0, File.DEDEDE_COWBOY_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
+    define_character(CBDEDEDE, CAPTAIN, File.DEDEDE_COWBOY_MAIN, 0x0EB, 0, File.DEDEDE_COWBOY_CHARACTER, File.DEDEDE_SHIELD_POSE, File.WADDLE_DEE_INFO, File.DEDEDE_STAR, 0, 0, 0x5A4, 0x16, OS.TRUE, OS.TRUE, Stages.id.BTT_DEDEDE, Stages.id.BTP_DEDEDE, Stages.id.BTT_MARTH, Stages.id.BTP_YL, sound_type.U, variant_type.SPECIAL)
     copy_gfx_parameters(CBDEDEDE, KIRBY)
     // 0x4E - HEADBAND PIKACHU
     define_character(HBPIKA, PIKACHU, File.PIKACHU_HEADBAND_MAIN, 0x0F2, 0, File.PIKACHU_HEADBAND_CHARACTER, 0x157, 0x0F4, 0x15B, 0x156, 0, 0x41C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_PIKACHU, Stages.id.BTP_PIKACHU, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF, sound_type.U, variant_type.SPECIAL)

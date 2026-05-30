@@ -263,7 +263,6 @@ scope MarioShared {
         j       0x801427AC                  // modified original line 1, routine having Mario properly turn during Pipe animation
         nop
     }
-
 }
 
 } // __MARIO_SHARED__

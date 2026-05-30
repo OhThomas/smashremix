@@ -1268,6 +1268,8 @@ scope JigglypuffKirbyShared: {
     dw cpu_attack_weight; OS.patch_end()
     Character.table_patch_start(cpu_attack_weight, Character.id.EPUFF, 0x4)
     dw cpu_attack_weight; OS.patch_end()
+    Character.table_patch_start(cpu_attack_weight, Character.id.MPPUFF, 0x4)
+    dw cpu_attack_weight; OS.patch_end()
 
     scope cpu_attack_weight_kirby: {
         // s0 = character struct
