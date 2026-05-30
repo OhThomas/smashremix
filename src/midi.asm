@@ -1812,8 +1812,9 @@ scope MIDI {
     add_master_volume_override({MIDI.id.DRMARIO_VICTORY}, 127)
     add_master_volume_override({MIDI.id.BOWSERBOSS}, 88)
     add_master_volume_override({MIDI.id.LOST}, 93)
-    add_master_volume_override({MIDI.id.DK_JR_STAGE}, 127)
     add_master_volume_override({MIDI.id.BASSDRIVE}, 107)
+    add_master_volume_override({MIDI.id.BOWSERROOM}, 127)
+    add_master_volume_override({MIDI.id.E_FORT}, 127)
     add_master_volume_override({MIDI.id.HUMANSDEMONSAND}, 97)
 }
 
