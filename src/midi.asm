@@ -1815,6 +1815,7 @@ scope MIDI {
     add_master_volume_override({MIDI.id.BASSDRIVE}, 107)
     add_master_volume_override({MIDI.id.BOWSERROOM}, 127)
     add_master_volume_override({MIDI.id.E_FORT}, 127)
+    add_master_volume_override({MIDI.id.GRIMGREENFOREST}, 127)
     add_master_volume_override({MIDI.id.HUMANSDEMONSAND}, 97)
 }
 
