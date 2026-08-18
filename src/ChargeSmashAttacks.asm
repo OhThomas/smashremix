@@ -681,6 +681,7 @@
         set_charged_smash_attacks(Character.id.MSSONIC, entry_sonic)
         set_charged_smash_attacks(Character.id.ISAAC, entry_marth)
         set_charged_smash_attacks(Character.id.DKJR, entry_dk)
+        set_charged_smash_attacks(Character.id.BOSHI, entry_yoshi)
         // REMIX POLYGONS
         set_charged_smash_attacks(Character.id.NWARIO, entry_wario)
         set_charged_smash_attacks(Character.id.NLUCAS, entry_lucas)

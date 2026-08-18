@@ -15,6 +15,7 @@
 build/original/*.bin
 build/original/*.vpk
 build/original/*.txt
+build/create_original_from_incremental_auto.bat
 
 # /roms
 /roms/*

@@ -332,6 +332,8 @@ include "src/NPeach/NPeach.asm"
 include "src/NCrash/NCrash.asm"
 // METAL SONIC
 include "src/MSSonic/MSSonic.asm"
+// BOSHI
+include "src/Boshi/Boshi.asm"
 
 // KIRBY
 include "src/Kirby/Kirby.asm"

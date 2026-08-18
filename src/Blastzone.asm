@@ -355,6 +355,10 @@ scope BlastZone: {
         bne     a3, a2, pc() + 12                 // ~
         addiu   at, r0, Action.YOSHI.GroundPoundDrop
         beq     v0, at, _check_frame              // ~
+        lli     a2, Character.id.BOSHI            // ~
+        bne     a3, a2, pc() + 12                 // ~
+        addiu   at, r0, Action.YOSHI.GroundPoundDrop
+        beq     v0, at, _check_frame              // ~
         lli     a2, Character.id.BOWSER           // ~
         beq     a3, a2, pc() + 16                 // ~
         lli     a2, Character.id.GBOWSER          // ~

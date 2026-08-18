@@ -93,6 +93,8 @@ scope DKMode {
     // yoshi based
     Character.table_patch_start(fighter_DK_mode, Character.id.JYOSHI, 0x4)
     db 0x3, 0x7, 0xB, 0x0;   OS.patch_end();   // copy of yoshi
+    Character.table_patch_start(fighter_DK_mode, Character.id.BOSHI, 0x4)
+    db 0x3, 0x7, 0xB, 0x0;   OS.patch_end();   // copy of yoshi
     Character.table_patch_start(fighter_DK_mode, Character.id.BOWSER, 0x4)
     db 0x3, 0x7, 0xB, 0x0;   OS.patch_end();   // copy of yoshi
     Character.table_patch_start(fighter_DK_mode, Character.id.GBOWSER, 0x4)
