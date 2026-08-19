@@ -30,6 +30,8 @@ ADD,,.\original\156A.bin,1,0004,8904,.\original\156A.txt,2
 ADD,,.\original\156B.bin,1,0128,3FFFC,,2
 ADD,,.\original\156C.bin,1,0130,0000,.\original\156C.txt,2
 ADD,,.\original\156D.bin,0,0004,8344,.\original\156D.txt,2
+ADD,,.\original\156E.bin,1,0330,0000,.\original\156E.txt,2
+ADD,,.\original\156F.bin,1,237C,4B1C,.\original\156F.txt,2
 MODIFY,0A06,.\original\0A06.bin,1,0210,3FFFC,,2
 MODIFY,000C,.\original\000C.bin,1,0130,3FFFC,,2
 MODIFY,0011,.\original\0011.bin,1,0038,3FFFC,,2

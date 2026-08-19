@@ -3288,6 +3288,7 @@ scope TwelveCharBattle {
     add_defeat_parameters(File.MARTH_DOWN_STAND_U,      defeated_moveset_jiggly,    0)          // 0x58 - ISAAC
     add_defeat_parameters(0x34F,                        defeated_moveset_donkey,    0)          // 0x59 - DONKEY KONG JR
     add_defeat_parameters(0x745,                        defeated_moveset_yoshi,     0)          // 0x5A - BOSHI
+    add_defeat_parameters(0x80E,                        defeated_moveset_pikachu,   0)          // 0x5B - RAICHU
 
     // REMIX POLYGONS
     add_defeat_parameters(0x222,                        defeated_moveset_mario,     0)          // - NWARIO

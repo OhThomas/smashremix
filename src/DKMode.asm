@@ -77,6 +77,8 @@ scope DKMode {
     // pika based
     Character.table_patch_start(fighter_DK_mode, Character.id.HBPIKA, 0x4)
     db 0x7, 0x5, 0xD, 0x0;   OS.patch_end();   // copy of pika
+    Character.table_patch_start(fighter_DK_mode, Character.id.RAICHU, 0x4)
+    db 0x7, 0x5, 0xD, 0x0;   OS.patch_end();   // copy of pika
     Character.table_patch_start(fighter_DK_mode, Character.id.JPIKA, 0x4)
     db 0x7, 0x5, 0xD, 0x0;   OS.patch_end();   // copy of pika
     Character.table_patch_start(fighter_DK_mode, Character.id.EPIKA, 0x4)

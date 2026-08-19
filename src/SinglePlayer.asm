@@ -1672,6 +1672,7 @@ scope SinglePlayer {
         constant MSSONIC(0x0000DAC8)
         constant DKJR(0x0000DC40)
         constant BOSHI(0x0000DD60)
+        constant RAICHU(0x0000DEE0)
 
         // Duo Teams
         constant STARFOX(0x00006238)
@@ -2823,5 +2824,6 @@ scope SinglePlayer {
     add_to_single_player(Character.id.MSSONIC, name_texture.MSSONIC,       name_delay.SONIC)
     add_to_single_player(Character.id.ISAAC,   name_texture.MARTH,         name_delay.MARTH)
     add_to_single_player(Character.id.DKJR,    name_texture.DKJR,          name_delay.JDK)
-    add_to_single_player(Character.id.BOSHI,   name_texture.BOSHI,          name_delay.YOSHI)
+    add_to_single_player(Character.id.BOSHI,   name_texture.BOSHI,         name_delay.YOSHI)
+    add_to_single_player(Character.id.RAICHU,  name_texture.RAICHU,        name_delay.PIKACHU)
 } // __SINGLE_PLAYER__

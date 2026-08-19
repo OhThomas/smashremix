@@ -295,6 +295,7 @@ scope CharacterSelect {
     dw  0x197D0 + 0x200                     // 0x58 - ISAAC
     dw  0xE2C0 + 0x200                      // 0x59 - DONKEY KONG JR
     dw  0xD7E0 + 0x200                      // 0x5A - BOSHI
+    dw  0xC380 + 0x200                      // 0x5B - RAICHU
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -451,6 +452,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.ISAAC, req/ISAAC_MODEL)
     add_alt_req_list(Character.id.DKJR, req/DKJR_MODEL)
     add_alt_req_list(Character.id.BOSHI, req/BOSHI_MODEL)
+    add_alt_req_list(Character.id.RAICHU, req/RAICHU_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -3182,6 +3184,7 @@ scope CharacterSelect {
         constant ISAAC(0x0001D4B8)
         constant DKJR(0x000031F8)
         constant BOSHI(0x000074F8)
+        constant RAICHU(0x0000A738)
         // custom
         constant FALCO(0x0000D978)
         constant GND(0x0000EA38)
@@ -3567,6 +3570,7 @@ scope CharacterSelect {
         constant ISAAC(0x0001A428)
         constant DKJR(0x00028968 + 0x10)
         constant BOSHI(0x00028C90 + 0x10)
+        constant RAICHU(0x000290B0 + 0x10)
         // POLYGONS
         constant NWARIO(0x0001CB28)
         constant NLUCAS(0x0001D008)
@@ -5171,6 +5175,7 @@ scope CharacterSelect {
         constant ISAAC(0x6A40 + 0x10)
         constant DKJR(0x6B18 + 0x10)
         constant BOSHI(0x6BF0 + 0x10)
+        constant RAICHU(0x6CC8 + 0x10)
     }
 
     // @ Description
@@ -5295,6 +5300,9 @@ scope CharacterSelect {
         lli     t2, Character.id.BOSHI
         beql    a1, t2, _draw_icon          // If BOSHI, then draw BOSHI stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.BOSHI // a1 = BOSHI footer struct
+        lli     t2, Character.id.RAICHU
+        beql    a1, t2, _draw_icon          // If RAICHU, then draw RAICHU stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.RAICHU // a1 = RAICHU footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7348,6 +7356,7 @@ scope CharacterSelect {
     add_to_css(Character.id.ISAAC,  FGM.announcer.names.MARTH,          1.50,         0x00010004, FIRE_EMBLEM,  name_texture.MARTH,          portrait_offsets.MARTH,          28)
     add_to_css(Character.id.DKJR,   FGM.announcer.names.DONKEY_KONG,    2,            0x00010001, DONKEY_KONG,  name_texture.DKJR,           portrait_offsets.DKJR,           4)
     add_to_css(Character.id.BOSHI,  FGM.announcer.names.YOSHI,          1.50,         0x00010002, YOSHI,        name_texture.BOSHI,          portrait_offsets.BOSHI,          13)
+    add_to_css(Character.id.RAICHU, FGM.announcer.names.PIKACHU,        1.50,         0x00010001, POKEMON,      name_texture.RAICHU,         portrait_offsets.RAICHU,         16)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

@@ -334,6 +334,8 @@ include "src/NCrash/NCrash.asm"
 include "src/MSSonic/MSSonic.asm"
 // BOSHI
 include "src/Boshi/Boshi.asm"
+// RAICHU
+include "src/Raichu/Raichu.asm"
 
 // KIRBY
 include "src/Kirby/Kirby.asm"

@@ -3364,6 +3364,8 @@ scope File {
     constant DONKEY_KONG_JR_STOCK_ICON(0x156B)
     constant BOSHI_MAIN(0x156C)
     constant BOSHI_CHARACTER(0x156D)
+    constant RAICHU_MAIN(0x156E)
+    constant RAICHU_CHARACTER(0x156F)
 
  }
 

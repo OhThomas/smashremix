@@ -467,6 +467,8 @@ scope JigglypuffKirbyShared: {
 
         addiu   at, r0, Character.id.HBPIKA     // HBPIKA ID
         beq     v0, at, _pokeballflash          // HBPIKA Jump
+        addiu   at, r0, Character.id.RAICHU     // RAICHU ID
+        beq     v0, at, _pokeballflash          // RAICHU Jump
         addiu   at, r0, Character.id.EPIKA      // EPIKA ID
         beq     v0, at, _pokeballflash          // EPIKA Jump
         addiu   at, r0, Character.id.JPIKA      // JPIKA ID
@@ -493,6 +495,8 @@ scope JigglypuffKirbyShared: {
         beq     t9, at, _pikachuhat             // PIKA Jump - original line 1 replacement
         addiu   at, r0, Character.id.HBPIKA     // HBPIKA ID
         beq     t9, at, _pikachuhat             // HBPIKA Jump
+        addiu   at, r0, Character.id.RAICHU     // RAICHU ID
+        beq     t9, at, _pikachuhat             // RAICHU Jump
         addiu   at, r0, Character.id.EPIKA      // EPIKA ID
         beq     t9, at, _pikachuhat             // EPIKA Jump
         addiu   at, r0, Character.id.JPIKA      // JPIKA ID

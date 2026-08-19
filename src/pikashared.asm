@@ -138,6 +138,8 @@ scope PikaShared {
     dw recovery_logic; OS.patch_end()
     Character.table_patch_start(recovery_logic, Character.id.HBPIKA, 0x4)
     dw recovery_logic; OS.patch_end()
+    Character.table_patch_start(recovery_logic, Character.id.RAICHU, 0x4)
+    dw recovery_logic; OS.patch_end()
     Character.table_patch_start(recovery_logic, Character.id.EPIKA, 0x4)
     dw recovery_logic; OS.patch_end()
     Character.table_patch_start(recovery_logic, Character.id.JPIKA, 0x4)
@@ -197,6 +199,8 @@ scope PikaShared {
     dw cpu_post_process; OS.patch_end()
     Character.table_patch_start(cpu_post_process, Character.id.HBPIKA, 0x4)
     dw cpu_post_process; OS.patch_end()
+    Character.table_patch_start(cpu_post_process, Character.id.RAICHU, 0x4)
+    dw cpu_post_process; OS.patch_end()
 
     // character ID check add for when Pika Clones perform rapid jab
     scope rapid_jab_fix_1: {
@@ -208,6 +212,8 @@ scope PikaShared {
 
         beq     v0, at, _rapid_jump             // modified original line 1
         addiu   at, r0, Character.id.HBPIKA     // HBPIKA ID
+        beq     v0, at, _rapid_jump
+        addiu   at, r0, Character.id.RAICHU     // RAICHU ID
         beq     v0, at, _rapid_jump
         addiu   at, r0, Character.id.EPIKA      // EPIKA ID
         beq     v0, at, _rapid_jump
@@ -233,6 +239,8 @@ scope PikaShared {
         beq     v1, at, _rapid_jump_2             // modified original line 1
         addiu   at, r0, Character.id.HBPIKA     // HBPIKA ID
         beq     v1, at, _rapid_jump_2
+        addiu   at, r0, Character.id.RAICHU     // RAICHU ID
+        beq     v1, at, _rapid_jump_2
         addiu   at, r0, Character.id.EPIKA      // EPIKA ID
         beq     v1, at, _rapid_jump_2
         addiu   at, r0, Character.id.JPIKA      // JPIKA ID
@@ -256,6 +264,8 @@ scope PikaShared {
 
         beq     v0, at, _fsmash_jump          // modified original line 1
         addiu   at, r0, Character.id.HBPIKA   // HBPIKA ID
+        beq     v0, at, _fsmash_jump
+        addiu   at, r0, Character.id.RAICHU   // RAICHU ID
         beq     v0, at, _fsmash_jump
         addiu   at, r0, Character.id.EPIKA    // EPIKA ID
         beq     v0, at, _fsmash_jump
@@ -281,6 +291,8 @@ scope PikaShared {
         beq     v0, at, _fsmash_jump_2          // modified original line 1
         addiu   at, r0, Character.id.HBPIKA   // HBPIKA ID
         beq     v0, at, _fsmash_jump_2
+        addiu   at, r0, Character.id.RAICHU   // RAICHU ID
+        beq     v0, at, _fsmash_jump_2
         addiu   at, r0, Character.id.EPIKA    // EPIKA ID
         beq     v0, at, _fsmash_jump_2
         addiu   at, r0, Character.id.JPIKA    // JPIKA ID
@@ -304,6 +316,8 @@ scope PikaShared {
 
         beq     v0, at, _fsmash_jump_3          // modified original line 1
         addiu   at, r0, Character.id.HBPIKA   // HBPIKA ID
+        beq     v0, at, _fsmash_jump_3
+        addiu   at, r0, Character.id.RAICHU   // RAICHU ID
         beq     v0, at, _fsmash_jump_3
         addiu   at, r0, Character.id.EPIKA    // EPIKA ID
         beq     v0, at, _fsmash_jump_3
@@ -386,6 +400,9 @@ scope PikaShared {
         ori     t2, r0, Character.id.HBPIKA // t2 = id.HBPIKA
         li      a0, thunder_anim_struct_hbpika    // a0 = thunder_struct_hbpika
         beq     t1, t2, _end                // end if character id = HBPIKA
+        ori     t2, r0, Character.id.RAICHU // t2 = id.RAICHU
+        li      a0, thunder_anim_struct_raichu    // a0 = thunder_struct_raichu
+        beq     t1, t2, _end                // end if character id = RAICHU
         ori     t2, r0, Character.id.EPIKA  // t2 = id.EPIKA
         li      a0, thunder_anim_struct     // a0 = thunder_struct
         beq     t1, t2, _end                // end if character id = EPIKA
@@ -530,6 +547,9 @@ scope PikaShared {
         ori     t2, r0, Character.id.HBPIKA // t2 = id.HBPIKA
         li      a1, thunder_special_struct_1_hbpika    // a0 = thunder_struct_hbpika
         beq     t1, t2, _end                // end if character id = HBPIKA
+        ori     t2, r0, Character.id.RAICHU // t2 = id.RAICHU
+        li      a1, thunder_special_struct_1_raichu    // a0 = thunder_struct_raichu
+        beq     t1, t2, _end                // end if character id = RAICHU
         ori     t2, r0, Character.id.EPIKA  // t2 = id.EPIKA
         li      a1, thunder_special_struct_1     // a0 = thunder_struct
         beq     t1, t2, _end                // end if character id = EPIKA
@@ -568,6 +588,9 @@ scope PikaShared {
         ori     t2, r0, Character.id.HBPIKA  // t2 = id.HBPIKA
         li      a1, thunder_special_struct_2_hbpika    // a0 = thunder_struct_hbpika
         beq     t1, t2, _end                // end if character id = HBPIKA
+        ori     t2, r0, Character.id.RAICHU  // t2 = id.RAICHU
+        li      a1, thunder_special_struct_2_raichu    // a0 = thunder_struct_raichu
+        beq     t1, t2, _end                // end if character id = RAICHU
         ori     t2, r0, Character.id.EPIKA  // t2 = id.EPIKA
         li      a1, thunder_special_struct_2     // a0 = thunder_struct
         beq     t1, t2, _end                // end if character id = EPIKA
@@ -608,6 +631,32 @@ scope PikaShared {
     dw 0x02000000
     dw 0x0000000C
     dw Character.HBPIKA_file_1_ptr
+    OS.copy_segment(0x103BA0, 0x40)
+
+    // RAICHU (vvv NEED TO CHANGE thunder_anim_struct_raichu vvv)
+    // currently using Headband Pikachu Character file in file_9_ptr
+    // because the Raichu Character file isn't formatted properly to
+    // work with this. Fix then change 156E.txt back, drop
+    // Headband Pikachu Character file in the define_character call
+    // and change thunder_anim_struct_raichu to use file_4_ptr 
+    OS.align(16)
+    thunder_anim_struct_raichu:
+    dw  0x020F0000
+    dw  Character.RAICHU_file_9_ptr
+    OS.copy_segment(0xA9A2C, 0x20)
+
+    OS.align(16)
+    thunder_special_struct_1_raichu:
+    dw 0x02000000
+    dw 0x0000000B
+    dw Character.RAICHU_file_1_ptr
+    OS.copy_segment(0x103B6C, 0x40)
+
+    OS.align(16)
+    thunder_special_struct_2_raichu:
+    dw 0x02000000
+    dw 0x0000000C
+    dw Character.RAICHU_file_1_ptr
     OS.copy_segment(0x103BA0, 0x40)
 
     // EPIKA
