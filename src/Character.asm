@@ -2562,6 +2562,43 @@ scope Character {
     }
 
     // @ Description
+    // Holds extra variant character IDs in an array representing the d-pad directions for each character
+    scope variants_2 {
+        table:
+        constant TABLE_ORIGIN(origin())
+        //  D-UP        //  D-DOWN       //  D-LEFT     //  D-RIGHT
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x00 - MARIO
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x01 - FOX
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x02 - DONKEY
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x03 - SAMUS
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x04 - LUIGI
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x05 - LINK
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x06 - YOSHI
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x07 - CAPTAIN
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x08 - KIRBY
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x09 - PIKACHU
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x0A - JIGGLY
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x0B - NESS
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x0C - BOSS
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x0D - METAL
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x0E - NMARIO
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x0F - NFOX
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x10 - NDONKEY
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x11 - NSAMUS
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x12 - NLUIGI
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x13 - NLINK
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x14 - NYOSHI
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x15 - NCAPTAIN
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x16 - NKIRBY
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x17 - NPIKACHU
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x18 - NJIGGLY
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x19 - NNESS
+        db  id.NONE;    db  id.NONE;     db  id.NONE;   db  id.NONE        // 0x1A - GDONKEY
+        // pad table for new characters
+        fill table + (NUM_CHARACTERS * 4) - pc(), id.NONE
+    }
+
+    // @ Description
     // Holds variant character IDs with the same model in an array for each character
     scope variants_with_same_model {
         OS.align(16)

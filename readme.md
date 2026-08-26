@@ -1,6 +1,11 @@
 # Smash Remix
 *A Super Smash Bros. 64 Mod Organized by The_Smashfather*
 
+## Extra Variants
+This branch adds extra variants to all non bonus characters by holding the R button on the CSS.
+
+You can add extra variants by updating the variants_2 table.
+
 ## Building
 ### THIS IS ONLY FOR THOSE INTERESTED IN THE SOURCE CODE OF THE MOD. PLEASE DOWNLOAD THE RELEASE VERSION BY CLICKING THE RELEASE TAB.
 The original xdelta will generate a smash rom that is compatible with our ASM code. Much of our edits are done within
