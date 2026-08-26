@@ -624,6 +624,16 @@ scope CharacterSelect {
         beqz    t0, _end                    // if variant_offset is 0, then skip
         nop                                 // else, get the variant ID
         li      t1, Character.variants.table// t1 = variant table
+
+        // Checking if R held for extra variants
+        li      t2, variant_2_show
+        addu    t2, t2, a0                  // t2 = variant_2_show + offset for port
+        lbu     t2, 0x0000(t2)
+        beqz    t2, _variant_setup          // if R not held, use normal variants
+        nop
+        li      t1, Character.variants_2.table // t1 = variant_2 table
+
+        _variant_setup:
         sll     t2, v0, 0x0002              // t2 = character variant array index
         addu    t1, t1, t2                  // t1 = character variant array
         addiu   t0, t0, -0x0001             // t0 = variant_offset, adjusted
@@ -2630,12 +2640,77 @@ scope CharacterSelect {
         addu    at, t1, at                  // at = offset for port (a1 * 10)
         li      t1, Joypad.struct
         addu    t1, t1, at                  // t1 = Joypad.struct + offset for port
+
+        // R release gives normal variants
+        lhu     t0, 0x0006(t1)              // released button mask
+        andi    t0, t0, Joypad.R            // check for R release
+        beqz    t0, _z_r_check              // if R not released, continue checking Z/R press
+        nop
+
+        // variant_2_show port = 0 so we can update the variant and character ID
+        li      t0, variant_2_show
+        addu    t0, t0, a1                  // t0 = variant_2_show + offset for port
+        sb      r0, 0x0000(t0)              // variant_2_show current port = 0
+        b       _variant_refresh
+        nop
+
+        _z_r_check:
         lh      t1, 0x0000(t1)              // held button mask
         andi    t1, t1, Joypad.Z | Joypad.R // check for Z or R held
         beqz    t1, _no_Z_or_R              // if no Z or R held, exit
         nop
 
         _continue:
+        // R held gives alternate variants
+        andi    t1, t8, Joypad.R            // check for R held
+        beqz    t1, _variant_set            // if R not held, continue setting variant
+        nop
+
+        // Checking for extra variants
+        lw      t0, 0x0038(sp)              // t0 = held token char_id
+
+        // Getting hovered portrait id from char_id
+        li      at, Character.variant_original.table
+        sll     t0, t0, 0x0002              // t0 = offset in variant_original table
+        addu    at, at, t0                  // at = address of original character id
+        lw      t0, 0x0000(at)              // t0 = character_id of hovered portrait
+
+        // Going through variants_2 table and seeing if any exist so we can proceed
+        li      t1, Character.variants_2.table
+        sll     t0, t0, 0x0002              // t0 = character variant array index
+        addu    t1, t1, t0                  // t1 = character variant array
+        lbu     t0, 0x0000(t1)              // t0 = variant ID
+        addiu   a0, r0, Character.id.NONE   // a0 = id.NONE
+        bne     t0, a0, _variant_2_show     // if variant defined, set variant_2_show + port to 1
+        lbu     t0, 0x0001(t1)              // t0 = variant ID
+        bne     t0, a0, _variant_2_show        
+        lbu     t0, 0x0002(t1)              // t0 = variant ID
+        bne     t0, a0, _variant_2_show        
+        lbu     t0, 0x0003(t1)              // t0 = variant ID
+        bne     t0, a0, _variant_2_show        
+        nop            
+        b       _variant_set
+        nop
+
+        _variant_2_show:
+        // variant_2_show port = 1 so we can update the variant and character ID
+        li      t1, variant_2_show
+        addu    t1, t1, a1                  // t1 = variant_2_show + offset for port
+        lli     t0, OS.TRUE
+        sb      t0, 0x0000(t1)              // variant_2_show current port = 1
+
+        _variant_refresh:
+        // Redrawing variant indicator for R press/release
+        lw      a0, 0x0080(v1)              // a0 = held token index
+        bltz    a0, _variant_set            // if not holding a token (meaning char is selected), don't refresh variants
+        nop
+        lw      a0, 0x0038(sp)              // a0 = character id
+        OS.save_registers()
+        jal     draw_variant_indicator_
+        nop
+        OS.restore_registers()
+
+        _variant_set:
         li      at, variant_offset          // at = variant_offset address
         lw      t0, 0x0080(v1)              // t0 = currently held token
         addiu   t0, t0, 0x0001              // t0 = 0 if no token held, else 1 - 4 corresponding to port
@@ -2759,6 +2834,12 @@ scope CharacterSelect {
     db 0x00                                 // player 3
     db 0x00                                 // player 4
 
+    variant_2_show:
+    db OS.FALSE                             // player 1
+    db OS.FALSE                             // player 2
+    db OS.FALSE                             // player 3
+    db OS.FALSE                             // player 4
+
     variant_cycle_timer:
     dw -1, -1, -1, -1   // p1, p2, p3, p4
 
@@ -2809,9 +2890,36 @@ scope CharacterSelect {
         addu    t2, t2, t1                  // t2 = address of hovered character's portrait_id
         lbu     t2, 0x0000(t2)              // t2 = portrait_id
         lli     t1, BOOKEND_BONUS_PORTRAIT  // t1 = portrait_id for bonus bookend
-        bne     t1, t2, _check_destroy      // if bonus portrait is not hovered, then skip
+        beq     t1, t2, _object_check       // if bonus portrait, then check object
         nop
 
+        // Check for extra variants
+        lw      a0, 0x0048(s4)              // a0 = char_id
+
+        // Getting hovered portrait id from char_id
+        li      t2, Character.variant_original.table
+        sll     a0, a0, 0x0002              // a0 = offset in variant_original table
+        addu    t2, t2, a0                  // at = address of original character id
+        lw      a0, 0x0000(t2)              // a0 = character_id of hovered portrait
+
+        // Going through variants_2 table and seeing if any exist so we can proceed
+        sll     t2, a0, 0x0002              // t2 = character variant array index
+        li      a0, Character.variants_2.table
+        addu    a0, a0, t2                  // a0 = character variant array
+        lbu     t2, 0x0000(a0)              // t2 = variant ID
+        addiu   t1, r0, Character.id.NONE   // t1 = id.NONE
+        bne     t2, t1, _object_check       // if variant defined, continue
+        lbu     t2, 0x0001(a0)              // t2 = variant ID
+        bne     t2, t1, _object_check        
+        lbu     t2, 0x0002(a0)              // t2 = variant ID
+        bne     t2, t1, _object_check        
+        lbu     t2, 0x0003(a0)              // t2 = variant ID
+        bne     t2, t1, _object_check        
+        nop       
+        b       _check_destroy              // if not bonus or extra variants, then leave
+        nop
+
+        _object_check:
         // if here, then we need to display the object
         lw      a0, 0x0000(s1)              // a0 = object address
         bnez    a0, _update_display         // if object defined, skip creating it
@@ -2955,6 +3063,26 @@ scope CharacterSelect {
         beqzl   t2, pc() + 8                // if in hide state, update render flags
         lli     t1, 0x0205                  // t1 = render flags (hide)
 
+        // Checking for extra variants; hide all but R button if so
+        lw      t0, 0x0048(s4)              // t0 = char_id
+        li      t2, portrait_id_table_pointer
+        lw      t2, 0x0000(t2)              // t2 = portraid_id_table
+        addu    t2, t2, t0                  // t2 = address of hovered character's portrait_id
+        lbu     t2, 0x0000(t2)              // t2 = portrait_id
+        lli     t0, BOOKEND_BONUS_PORTRAIT  // t0 = portrait_id for bonus bookend
+        bnel    t0, t2, _hide_Z             // if not bonus character, then set hide flag
+        lli     t1, 0x0205                  // t1 = render flags (hide)
+        b       _update_hide
+        nop
+
+        _hide_Z:
+        // Hide Z; each image struct has a pointer to the next one at 0x08
+        lw      t2, 0x0074(a0)              // t2 = left arrow image struct
+        lw      t2, 0x0008(t2)              // t2 = right arrow image struct
+        lw      t2, 0x0008(t2)              // t2 = z button image struct
+        sh      t1, 0x0024(t2)              // update render flags
+
+        _update_hide:
         lw      t0, 0x0074(a0)              // t0 = left arrow image struct
         sh      t1, 0x0024(t0)              // update render flags
         lw      t0, 0x0008(t0)              // t0 = right arrow image struct
@@ -5088,7 +5216,20 @@ scope CharacterSelect {
 
         // Now, check each entry and add the variant icon as needed
         lw      at, 0x0010(sp)              // at = character variant array
+        lw      a1, 0x0014(sp)              // a1 = offset for port
 
+        // Checking if R is held down for extra variants
+        li      t4, variant_2_show
+        addu    t4, t4, a1                  // t4 = variant_2_show + offset for port
+        lbu     t4, 0x0000(t4)
+        beqz    t4, _d_pad_check            // if R not held, show normal variants
+        nop
+
+        // Adding variant table size as offset to get to variant_2 table
+        li      a1, 0x0004 * Character.NUM_CHARACTERS // a1 = variant table size
+        addu    at, at, a1                  // at = variant_2 id address
+
+        _d_pad_check:
         // D-UP
         lbu     a1, 0x0000(at)              // a1 = variant id
         lli     t4, Character.id.NONE       // t4 = Character.id.NONE

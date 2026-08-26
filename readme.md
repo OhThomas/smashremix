@@ -1,6 +1,11 @@
 # Smash Remix
 *A Super Smash Bros. 64 Mod Organized by The_Smashfather*
 
+## San Antonio Costumes
+This branch adds extra costumes and characters.
+
+They can be built with the original.xdelta file and then patched with patch.bat.
+
 ## Building
 ### THIS IS ONLY FOR THOSE INTERESTED IN THE SOURCE CODE OF THE MOD. PLEASE DOWNLOAD THE RELEASE VERSION BY CLICKING THE RELEASE TAB.
 The original xdelta will generate a smash rom that is compatible with our ASM code. Much of our edits are done within
