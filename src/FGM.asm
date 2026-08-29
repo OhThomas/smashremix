@@ -1836,6 +1836,24 @@ scope FGM {
     add_sound_advanced(TimerBackfireEnd, sounds/misc/dne_remit, sounds/misc/timer_fgm_microcode, 0x12, sounds/misc/timer_sfx_microcode, 0xD, OS.FALSE, 0, 0, 0, OS.FALSE)  // note: the sfx_microcode here is the generic sfx microcode that gets used by the VOICE type fgm
     add_fgm(DEATH, Crash/sounds/DEATH, 0x11, 0x498, -1, -1, -1) // note: the sfx_id here and the length in the microcode are hard coded based on Crash WOAH
     add_sound(sounds/stadium/PUMPED, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_down_special, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_neutral_special, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_announcer, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_generic_attack, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_generic_attack2, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_generic_attack3, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_damaged, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_star_ko, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_death, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_taunt, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_ledge, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_shield_break, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_box_lift, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_tech, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_up_special, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Raichu/Sounds/raichu_cheer, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Boshi/Sounds/boshi_announcer, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
+    add_sound(Boshi/Sounds/boshi_cheer, SAMPLE_RATE_16000, FGM_TYPE_VOICE, 0, -1)
 
     // This is always last
     write_sounds()
@@ -2001,6 +2019,8 @@ scope FGM {
             constant PEACH(1432)
             constant LANKY(1497)
             constant EPIKA(1459)
+            constant RAICHU(1547)
+            constant BOSHI(1561)
         }
 
         scope css {

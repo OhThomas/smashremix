@@ -24,3 +24,6 @@ build/create_original_from_incremental_auto.bat
 
 # Python (scripts)
 *.pyc
+
+# Backup files
+*.bak

@@ -685,6 +685,8 @@ scope MIDI {
     insert_midi(BLUE_RESORT, OS.TRUE, OS.TRUE, "Blue Resort", bomberman, 27)
     insert_midi(LOST, OS.TRUE, OS.TRUE, "Lost", dream, 149)
     insert_extra_midi(DK_JR_STAGE)
+    insert_extra_midi(VERMILLION_CITY)
+    insert_extra_midi(RAICHU_VICTORY)
 
     pushvar origin, base
 
@@ -1742,7 +1744,9 @@ scope MIDI {
     add_master_volume_override({MIDI.id.DRMARIO_VICTORY}, 127)
     add_master_volume_override({MIDI.id.BOWSERBOSS}, 88)
     add_master_volume_override({MIDI.id.LOST}, 93)
-    add_master_volume_override({MIDI.id.DK_JR_STAGE}, 127)
+    add_master_volume_override({MIDI.id.DK_JR_STAGE}, 95)
+    add_master_volume_override({MIDI.id.VERMILLION_CITY}, 93)
+    add_master_volume_override({MIDI.id.RAICHU_VICTORY}, 95)
 }
 
 } // __MIDI__

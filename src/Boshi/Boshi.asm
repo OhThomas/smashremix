@@ -6,7 +6,7 @@ scope Boshi {
     
     // Set crowd chant FGM.
     Character.table_patch_start(crowd_chant_fgm, Character.id.BOSHI, 0x2)
-    dh  0x0318
+    dh  0x061A
     OS.patch_end()
 
     // Set action strings

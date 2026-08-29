@@ -7496,8 +7496,8 @@ scope CharacterSelect {
     add_to_css(Character.id.MSSONIC,FGM.announcer.names.SONIC,          1.50,         0x00010004, SONIC,        name_texture.MSSONIC,        portrait_offsets.MSSONIC,        BOOKEND_BONUS_PORTRAIT)
     add_to_css(Character.id.ISAAC,  FGM.announcer.names.MARTH,          1.50,         0x00010004, FIRE_EMBLEM,  name_texture.MARTH,          portrait_offsets.MARTH,          28)
     add_to_css(Character.id.DKJR,   FGM.announcer.names.DONKEY_KONG,    2,            0x00010001, DONKEY_KONG,  name_texture.DKJR,           portrait_offsets.DKJR,           4)
-    add_to_css(Character.id.BOSHI,  FGM.announcer.names.YOSHI,          1.50,         0x00010002, YOSHI,        name_texture.BOSHI,          portrait_offsets.BOSHI,          13)
-    add_to_css(Character.id.RAICHU, FGM.announcer.names.PIKACHU,        1.50,         0x00010001, POKEMON,      name_texture.RAICHU,         portrait_offsets.RAICHU,         16)
+    add_to_css(Character.id.BOSHI,  FGM.announcer.names.BOSHI,          1.50,         0x00010002, YOSHI,        name_texture.BOSHI,          portrait_offsets.BOSHI,          13)
+    add_to_css(Character.id.RAICHU, FGM.announcer.names.RAICHU,         1.50,         0x00010001, POKEMON,      name_texture.RAICHU,         portrait_offsets.RAICHU,         16)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override
