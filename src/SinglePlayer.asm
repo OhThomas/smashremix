@@ -1671,6 +1671,8 @@ scope SinglePlayer {
         constant LANKY(0x0000D658)
         constant MSSONIC(0x0000DAC8)
         constant DKJR(0x0000DC40)
+        constant BOSHI(0x0000DD60)
+        constant RAICHU(0x0000DEE0)
 
         // Duo Teams
         constant STARFOX(0x00006238)
@@ -2393,7 +2395,9 @@ scope SinglePlayer {
     set_ending_image(Character.id.PSONIC, File.SONIC_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.MSSONIC, File.SONIC_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.ISAAC, File.MARTH_VICTORY_IMAGE_BOTTOM)
-    set_ending_image(Character.id.DKJR, 0xB8)
+    set_ending_image(Character.id.DKJR, File.DONKEY_KONG_JR_VICTORY_IMAGE_BOTTOM)
+    set_ending_image(Character.id.BOSHI, File.BOSHI_VICTORY_IMAGE_BOTTOM)
+    set_ending_image(Character.id.RAICHU, File.RAICHU_VICTORY_IMAGE_BOTTOM)
 
     // @ Description
     // Patch which substitutes the victory picture with a custom one for all non-original characters.
@@ -2823,4 +2827,6 @@ scope SinglePlayer {
     add_to_single_player(Character.id.MSSONIC, name_texture.MSSONIC,       name_delay.SONIC)
     add_to_single_player(Character.id.ISAAC,   name_texture.MARTH,         name_delay.MARTH)
     add_to_single_player(Character.id.DKJR,    name_texture.DKJR,          name_delay.JDK)
+    add_to_single_player(Character.id.BOSHI,   name_texture.BOSHI,         name_delay.YOSHI)
+    add_to_single_player(Character.id.RAICHU,  name_texture.RAICHU,        name_delay.PIKACHU)
 } // __SINGLE_PLAYER__

@@ -1792,6 +1792,8 @@ scope SonicUSP {
         beq     t4, at, _yoshi      // if Yoshi, need to do action checks
         lli     at, Character.id.JYOSHI
         beq     t4, at, _yoshi      // if JYoshi, need to do action checks
+        lli     at, Character.id.BOSHI
+        beq     t4, at, _yoshi      // if Boshi, need to do action checks
         lli     at, Character.id.BOWSER
         beq     t4, at, _bowser     // if Bowser, need to do action checks
         lli     at, Character.id.GBOWSER

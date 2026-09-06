@@ -1081,6 +1081,8 @@ scope Costumes {
         db 0x05                             // Metal Sonic
         db 0x05                             // Isaac
         db 0x04                             // Donkey Kong Jr
+        db 0x05                             // Boshi
+        db 0x03                             // Raichu
         // Polygons
         db 0x05                             // Polygon Wario
         db 0x05                             // Polygon Lucas
@@ -1819,6 +1821,8 @@ scope Costumes {
     include "costumes/NBanjo.asm"
     include "costumes/NPeach.asm"
     include "costumes/NCrash.asm"
+
+    include "costumes/Boshi.asm"
 
     // @ Description
     // Revises attribute location within main file to adjust for Polygon Characters and Metal Mario's new costumes

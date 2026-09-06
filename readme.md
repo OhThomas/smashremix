@@ -1,6 +1,11 @@
 # Smash Remix
 *A Super Smash Bros. 64 Mod Organized by The_Smashfather*
 
+## San Antonio Remix
+This is the San Antonio Remix branch (will probably rename soon from san_antonio_combined). This branch merges the [Smash Remix Debugged](https://github.com/Brob2nd/Smash-Remix-Debugged) repository to the san_antonio and san_antonio_costumes branches.
+
+They can be built with the original.xdelta file and then patched with patch.bat. This build gets uploaded to the [Releases](https://github.com/OhThomas/smashremix/releases/tag/Latest) page.
+
 ## Building
 ### THIS IS ONLY FOR THOSE INTERESTED IN THE SOURCE CODE OF THE MOD. PLEASE DOWNLOAD THE RELEASE VERSION BY CLICKING THE RELEASE TAB.
 The original xdelta will generate a smash rom that is compatible with our ASM code. Much of our edits are done within

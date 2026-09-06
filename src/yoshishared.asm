@@ -18,6 +18,8 @@ scope YoshiShared {
         beq     a0, v0, _yoshi_dj_1             // modified original line 1
         addiu   a0, r0, Character.id.JYOSHI     // j yoshi ID
         beq     a0, v0, _yoshi_dj_1
+        addiu   a0, r0, Character.id.BOSHI      // boshi ID
+        beq     a0, v0, _yoshi_dj_1
         nop
         j       _return
         lw      t0, 0x0028(sp)              // original line 2
@@ -41,6 +43,8 @@ scope YoshiShared {
         beq     t7, at, _yoshi_shield_1
         addiu   at, r0, Character.id.JYOSHI             // j yoshi ID
         beq     t7, at, _yoshi_shield_1
+        addiu   at, r0, Character.id.BOSHI              // boshi ID
+        beq     t7, at, _yoshi_shield_1
         nop
 
         _regular_shield_1:
@@ -62,6 +66,8 @@ scope YoshiShared {
 
         beq     t9, at, _yoshi_shield_2
         addiu   at, r0, Character.id.JYOSHI             // j yoshi ID
+        beq     t9, at, _yoshi_shield_2
+        addiu   at, r0, Character.id.BOSHI              // boshi ID
         beq     t9, at, _yoshi_shield_2
         nop
 
@@ -85,6 +91,8 @@ scope YoshiShared {
         beq     t6, at, _yoshi_shield_3
         addiu   at, r0, Character.id.JYOSHI             // j yoshi ID
         beq     t6, at, _yoshi_shield_3
+        addiu   at, r0, Character.id.BOSHI              // boshi ID
+        beq     t6, at, _yoshi_shield_3
         nop
 
         _regular_shield_3:
@@ -106,6 +114,8 @@ scope YoshiShared {
 
         beq     t8, at, _yoshi_shield_4
         addiu   at, r0, Character.id.JYOSHI             // j yoshi ID
+        beq     t8, at, _yoshi_shield_4
+        addiu   at, r0, Character.id.BOSHI              // boshi ID
         beq     t8, at, _yoshi_shield_4
         nop
 
@@ -130,6 +140,8 @@ scope YoshiShared {
         beq     t1, at, _yoshi_shield_5
         addiu   at, r0, Character.id.JYOSHI             // j yoshi ID
         beq     t1, at, _yoshi_shield_5
+        addiu   at, r0, Character.id.BOSHI              // boshi ID
+        beq     t1, at, _yoshi_shield_5
         nop
 
         _regular_shield_5:
@@ -151,6 +163,8 @@ scope YoshiShared {
 
         beq     t7, at, _yoshi_shield_6
         addiu   at, r0, Character.id.JYOSHI             // j yoshi ID
+        beq     t7, at, _yoshi_shield_6
+        addiu   at, r0, Character.id.BOSHI              // boshi ID
         beq     t7, at, _yoshi_shield_6
         nop
 
@@ -174,6 +188,8 @@ scope YoshiShared {
         beq     v1, at, _yoshi_shield_7
         addiu   at, r0, Character.id.JYOSHI             // j yoshi ID
         beq     v1, at, _yoshi_shield_7
+        addiu   at, r0, Character.id.BOSHI              // boshi ID
+        beq     v1, at, _yoshi_shield_7
         nop
 
         _regular_shield_7:
@@ -195,6 +211,8 @@ scope YoshiShared {
 
         beq     t8, at, _yoshi_shield_8
         addiu   at, r0, Character.id.JYOSHI             // j yoshi ID
+        beq     t8, at, _yoshi_shield_8
+        addiu   at, r0, Character.id.BOSHI              // boshi ID
         beq     t8, at, _yoshi_shield_8
         nop
 
@@ -218,6 +236,8 @@ scope YoshiShared {
         beq     v0, at, _yoshi_grab_1             // modified original line 1
         addiu   at, r0, Character.id.JYOSHI       // j yoshi ID
         beq     at, v0, _yoshi_grab_1
+        addiu   at, r0, Character.id.BOSHI        // boshi ID
+        beq     at, v0, _yoshi_grab_1
         nop
         j       _return
         or      a0, s0, r0                 // original line 2
@@ -239,6 +259,8 @@ scope YoshiShared {
 
         beq     v0, at, _yoshi_grab_2             // modified original line 1 part 2
         addiu   at, r0, Character.id.JYOSHI       // j yoshi ID
+        beq     at, v0, _yoshi_grab_2
+        addiu   at, r0, Character.id.BOSHI        // boshi ID
         beq     at, v0, _yoshi_grab_2
         nop
         j       _return
@@ -265,6 +287,8 @@ scope YoshiShared {
         beq     at, v0, _yoshi_throw_1
         addiu   at, r0, Character.id.JYOSHI       // j yoshi ID
         beq     at, v0, _yoshi_throw_1
+        addiu   at, r0, Character.id.BOSHI        // boshi ID
+        beq     at, v0, _yoshi_throw_1
         nop
         j       _return
         addiu  at, r0, 0x0014                 // original line 2
@@ -289,6 +313,8 @@ scope YoshiShared {
         addiu   at, r0, Character.id.MARINA   // marina ID
         beq     at, v0, _marina_jump_check
         addiu   at, r0, Character.id.JYOSHI   // j yoshi ID
+        beq     at, v0, _yoshi_recover_1
+        addiu   at, r0, Character.id.BOSHI    // boshi ID
         beq     at, v0, _yoshi_recover_1
         nop
 
@@ -325,6 +351,9 @@ scope YoshiShared {
         addiu   t1, r0, Character.id.JYOSHI     // JYOSHI ID
         li      a1, upspecial_struct_jyoshi     // JYOSHI File Pointer placed in correct location
         beq     t1, t2, _end
+        addiu   t1, r0, Character.id.BOSHI      // BOSHI ID
+        li      a1, upspecial_struct_boshi      // BOSHI File Pointer placed in correct location
+        beq     t1, t2, _end
         nop
 
         lui     a1, 0x8019                  // original line 1
@@ -355,6 +384,9 @@ scope YoshiShared {
 
         addiu   t1, r0, Character.id.JYOSHI     // JYOSHI ID
         li      a1, downspecial_struct_jyoshi   // JYOSHI File Pointer placed in correct location
+        beq     t1, t2, _end
+        addiu   t1, r0, Character.id.BOSHI      // BOSHI ID
+        li      a1, downspecial_struct_boshi    // BOSHI File Pointer placed in correct location
         beq     t1, t2, _end
         addiu   t1, r0, Character.id.DEDEDE     // DEDEDE ID
         li      a1, downspecial_struct_dedede   // DEDEDE File Pointer placed in correct location
@@ -389,6 +421,20 @@ scope YoshiShared {
     dw 0x00000000
     dw 0x00000006
     dw Character.JYOSHI_file_1_ptr
+    OS.copy_segment(0x103D6C, 0x40)
+    
+    OS.align(16)
+    upspecial_struct_boshi:
+    dw 0x00000000
+    dw 0x00000005
+    dw Character.BOSHI_file_1_ptr
+    OS.copy_segment(0x103D2C, 0x40)
+
+    OS.align(16)
+    downspecial_struct_boshi:
+    dw 0x00000000
+    dw 0x00000006
+    dw Character.BOSHI_file_1_ptr
     OS.copy_segment(0x103D6C, 0x40)
 
     OS.align(16)
@@ -533,6 +579,8 @@ scope YoshiShared {
     dw recovery_logic; OS.patch_end()
     Character.table_patch_start(recovery_logic, Character.id.JYOSHI, 0x4)
     dw recovery_logic; OS.patch_end()
+    Character.table_patch_start(recovery_logic, Character.id.BOSHI, 0x4)
+    dw recovery_logic; OS.patch_end()
 
     scope cpu_post_process: {
         OS.routine_begin(0x20)
@@ -592,6 +640,8 @@ scope YoshiShared {
     dw cpu_post_process; OS.patch_end()
     Character.table_patch_start(cpu_post_process, Character.id.JYOSHI, 0x4)
     dw cpu_post_process; OS.patch_end()
+    Character.table_patch_start(cpu_post_process, Character.id.BOSHI, 0x4)
+    dw cpu_post_process; OS.patch_end()
 
     scope cpu_attack_weight: {
         // s0 = character struct
@@ -636,6 +686,8 @@ scope YoshiShared {
     Character.table_patch_start(cpu_attack_weight, Character.id.YOSHI, 0x4)
     dw cpu_attack_weight; OS.patch_end()
     Character.table_patch_start(cpu_attack_weight, Character.id.JYOSHI, 0x4)
+    dw cpu_attack_weight; OS.patch_end()
+    Character.table_patch_start(cpu_attack_weight, Character.id.BOSHI, 0x4)
     dw cpu_attack_weight; OS.patch_end()
 }
 

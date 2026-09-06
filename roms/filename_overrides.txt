@@ -3370,6 +3370,10 @@
 1569 Donkey Kong Jr Main
 156A Donkey Kong Jr Character
 156B Donkey Kong Jr Stock Icon
+156C Yoshi Boshi Main
+156D Yoshi Boshi Character
+156E Raichu Main
+156F Raichu Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

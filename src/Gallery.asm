@@ -71,6 +71,9 @@ scope Gallery {
         constant EBI(0x25)
         constant PIANO(0x26)
         constant REMIX(0x27)
+        constant DKJR(0x28)
+        constant BOSHI(0x29)
+        constant RAICHU(0x2A)
     }
 
     // @ Description
@@ -116,6 +119,9 @@ scope Gallery {
     dw bgm_ebi                              // Ebisumaru
     dw bgm_piano                            // Mad Piano
     dw bgm_remix                            // You Are Proud
+    dw bgm_dkjr                             // Donkey Kong Jr
+    dw bgm_boshi                            // Boshi
+    dw bgm_raichu                           // Raichu
 
     bgm_mario:
     dh 13                                   // number of BGM
@@ -166,11 +172,10 @@ scope Gallery {
     dh {MIDI.id.TALENTSTUDIO}
 
     bgm_dk:
-    dh 10                                   // number of BGM
+    dh 9                                    // number of BGM
     dh BGM.stage.CONGO_JUNGLE
     dh {MIDI.id.DK_MEDLEY}
     dh {MIDI.id.DKCTITLE}
-    dh {MIDI.id.DK_JR_STAGE}
     dh {MIDI.id.SKERRIES}
     dh {MIDI.id.GANGPLANK}
     dh {MIDI.id.SNAKEY_CHANTEY}
@@ -468,12 +473,24 @@ scope Gallery {
     dh {MIDI.id.CREDITS_BRAWL}
     dh {MIDI.id.GALLERY}
     dh {MIDI.id.TARGET_TEST}
+
+    bgm_dkjr:
+    dh 1                                    // number of BGM
+    dh {MIDI.id.DK_JR_STAGE}
+
+    bgm_boshi:
+    dh 1                                    // number of BGM
+    dh {MIDI.id.FOREST_MAZE_CAVE_REMIX}
+
+    bgm_raichu:
+    dh 1                                    // number of BGM
+    dh {MIDI.id.VERMILION_CITY}
     OS.align(4)
 
     // @ Description
     // table which holds the character id for a given Gallery index
     id_table:
-    constant id_table.SIZE(40)
+    constant id_table.SIZE(43)
     db Character.id.MARIO
     db Character.id.DK
     db Character.id.LINK
@@ -514,6 +531,9 @@ scope Gallery {
     db Character.id.EBI
     db Character.id.PIANO
     db Character.id.BOSS
+    db Character.id.DKJR
+    db Character.id.BOSHI
+    db Character.id.RAICHU
     OS.align(4)
 
     // @ Description
@@ -802,7 +822,9 @@ scope Gallery {
     add_bgm_to_gallery({MIDI.id.JUNGLEJAPES64}, id.LANKY)
     add_bgm_to_gallery({MIDI.id.BASSDRIVE}, id.LUIGI)
     add_bgm_to_gallery({MIDI.id.MASKEDDEDEDE}, id.DEDEDE)
-
+    add_bgm_to_gallery({MIDI.id.DK_JR_STAGE}, id.DKJR)
+    add_bgm_to_gallery({MIDI.id.FOREST_MAZE_CAVE_REMIX}, id.BOSHI)
+    add_bgm_to_gallery({MIDI.id.VERMILION_CITY}, id.RAICHU)
 
     // @ Description
     // Table which holds the 'L' and 'R' sound effects for drumming

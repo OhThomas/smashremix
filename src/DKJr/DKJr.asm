@@ -15,7 +15,7 @@ scope DKJr {
 
     // Set Remix 1P ending music
     Character.table_patch_start(remix_1p_end_bgm, Character.id.DKJR, 0x2)
-    dh {MIDI.id.DK_RAP}
+    dh {MIDI.id.DK_JR_STAGE}
     OS.patch_end()
 
     // Setting Yellow costume
