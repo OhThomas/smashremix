@@ -71,6 +71,9 @@ scope Gallery {
         constant EBI(0x25)
         constant PIANO(0x26)
         constant REMIX(0x27)
+        constant DKJR(0x28)
+        constant BOSHI(0x29)
+        constant RAICHU(0x2A)
     }
 
     // @ Description
@@ -116,6 +119,9 @@ scope Gallery {
     dw bgm_ebi                              // Ebisumaru
     dw bgm_piano                            // Mad Piano
     dw bgm_remix                            // You Are Proud
+    dw bgm_dkjr                             // Donkey Kong Jr
+    dw bgm_boshi                            // Boshi
+    dw bgm_raichu                           // Raichu
 
     bgm_mario:
     dh 12                                   // number of BGM
@@ -438,12 +444,24 @@ scope Gallery {
     dh {MIDI.id.CREDITS_BRAWL}
     dh {MIDI.id.GALLERY}
     dh {MIDI.id.TARGET_TEST}
+
+    bgm_dkjr:
+    dh 1                                    // number of BGM
+    dh {MIDI.id.DK_JR_STAGE}
+
+    bgm_boshi:
+    dh 1                                    // number of BGM
+    dh {MIDI.id.FOREST_MAZE_CAVE_REMIX}
+
+    bgm_raichu:
+    dh 1                                    // number of BGM
+    dh {MIDI.id.VERMILION_CITY}
     OS.align(4)
 
     // @ Description
     // table which holds the character id for a given Gallery index
     id_table:
-    constant id_table.SIZE(40)
+    constant id_table.SIZE(43)
     db Character.id.MARIO
     db Character.id.DK
     db Character.id.LINK
@@ -484,6 +502,9 @@ scope Gallery {
     db Character.id.EBI
     db Character.id.PIANO
     db Character.id.BOSS
+    db Character.id.DKJR
+    db Character.id.BOSHI
+    db Character.id.RAICHU
     OS.align(4)
 
     // @ Description
@@ -761,6 +782,9 @@ scope Gallery {
     add_bgm_to_gallery({MIDI.id.METAL_BATTLE}, id.DKING)
     add_bgm_to_gallery({MIDI.id.TABUU}, id.DKING)
     add_bgm_to_gallery({MIDI.id.FD_BRAWL}, id.DKING)
+    add_bgm_to_gallery({MIDI.id.DK_JR_STAGE}, id.DKJR)
+    add_bgm_to_gallery({MIDI.id.FOREST_MAZE_CAVE_REMIX}, id.BOSHI)
+    add_bgm_to_gallery({MIDI.id.VERMILION_CITY}, id.RAICHU)
 
     // @ Description
     // Table which holds the 'L' and 'R' sound effects for drumming

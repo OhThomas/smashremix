@@ -2394,8 +2394,9 @@ scope SinglePlayer {
     set_ending_image(Character.id.PSONIC, File.SONIC_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.MSSONIC, File.SONIC_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.ISAAC, File.MARTH_VICTORY_IMAGE_BOTTOM)
-    set_ending_image(Character.id.DKJR, 0xB8)
-    set_ending_image(Character.id.BOSHI, 0xAC)
+    set_ending_image(Character.id.DKJR, File.DONKEY_KONG_JR_VICTORY_IMAGE_BOTTOM)
+    set_ending_image(Character.id.BOSHI, File.BOSHI_VICTORY_IMAGE_BOTTOM)
+    set_ending_image(Character.id.RAICHU, File.RAICHU_VICTORY_IMAGE_BOTTOM)
 
     // @ Description
     // Patch which substitutes the victory picture with a custom one for all non-original characters.

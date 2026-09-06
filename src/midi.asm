@@ -689,6 +689,7 @@ scope MIDI {
     insert_extra_midi(RAICHU_VICTORY)
     insert_extra_midi(BOSHI_VICTORY)
     insert_midi(FOREST_MAZE_CAVE_REMIX, OS.TRUE, OS.TRUE, "Forest Maze (Cave Mix)", smrpg, 99)
+    insert_extra_midi(DK_JR_VICTORY)
 
     pushvar origin, base
 
