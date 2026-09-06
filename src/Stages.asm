@@ -533,7 +533,6 @@ scope Stages {
         constant REMIX4(0x06)
         constant REMIX5(0x07)
         constant REMIX6(0x08)
-        constant REMIX7(0x09)
     }
 
     constant ICON_WIDTH(40)
@@ -1858,7 +1857,6 @@ scope Stages {
         dw layout_remix     // remix 4
         dw layout_remix     // remix 5
         dw layout_remix     // remix 6
-        dw layout_remix     // remix 7
     }
 
     // @ Arguments
@@ -3496,36 +3494,36 @@ scope Stages {
     db id.WARIOWARE                         // 03
     db id.GERUDO                            // 04
     db id.GOOMBA_ROAD                       // 05
-    db id.DREAM_LAND                        // 06       <-- Hazards ON
-    db id.FRAYS_STAGE                       // 07
-    db id.FRAYS_STAGE_NIGHT                 // 08
-    db id.FIRST_DESTINATION                 // 09
-    db id.POKEMON_STADIUM_2                 // 0A
-    db id.GYM_LEADER_CASTLE                 // 0B
-    db id.SAFFRON_DL                        // 0C       <-- Movement ON
-    db id.GANONS_TOWER                      // 0D
-    db id.GLACIAL_REMIX                     // 0E
-    db id.DR_MARIO                          // 0F
-    db id.TALTAL                            // 10       <-- Hazards OFF
+    db id.FIRST_DESTINATION                 // 06
+    db id.DREAM_LAND                        // 07       <-- Hazards ON
+    db id.POKEMON_STADIUM_2                 // 08
+    db id.FRAYS_STAGE                       // 09
+    db id.FRAYS_STAGE_NIGHT                 // 0A
+    db id.GLACIAL_REMIX                     // 0B
+    db id.DR_MARIO                          // 0C
+    db id.TALTAL                            // 0D       <-- Hazards OFF
+    db id.MELRODE                           // 0E
+    db id.YOSHI_STORY_2                     // 0F       <-- Movement ON
+    db id.SAFFRON_DL                        // 10       <-- Movement ON
     db id.RANDOM                            // 11
     // Page 2 - Viable Stages
-    db id.MELRODE                           // 12
-    db id.YOSHI_STORY_2                     // 13       <-- Movement ON
-    db id.DELFINO                           // 14       <-- Movement ON
+    db id.GYM_LEADER_CASTLE                 // 12
+    db id.GANONS_TOWER                      // 13
+    db id.DELFINO                           // 14
     db id.CSIEGE                            // 15
-    db id.SPIRALM                           // 16       <-- Movement ON
-    db id.SMASHVILLE_REMIX                  // 17       <-- Movement ON
+    db id.SPIRALM                           // 16
+    db id.SMASHVILLE_REMIX                  // 17
     db id.YOSHI_ISLAND_DL                   // 18       <-- Hazards ON
-    db id.YOSHIS_ISLAND_II                  // 19       <-- Movement ON
-    db id.CLANCER                           // 1A       <-- Movement ON
-    db id.FOD                               // 1B       <-- Movement ON
+    db id.YOSHIS_ISLAND_II                  // 19
+    db id.CLANCER                           // 1A
+    db id.FOD                               // 1B
     db id.FINAL_DESTINATION                 // 1C
     db id.GLACIAL                           // 1D
-    db id.BIG_BOOS_HAUNT                    // 1E       <-- Movement ON
-    db id.GHZ                               // 1F       <-- Movement ON
+    db id.BIG_BOOS_HAUNT                    // 1E
+    db id.GHZ                               // 1F
     db id.NPC                               // 20
-    db id.BOWSERS_KEEP                      // 21       <-- Movement ON
-    db id.DATA                              // 22       <-- Movement OFF
+    db id.BOWSERS_KEEP                      // 21
+    db id.DATA                              // 22
     db id.RANDOM                            // 23
     // Page 3 - Additional DL Clones (No Hazards or Movement)
     db id.PCASTLE_DL                        // 24       <-- Hazards OFF
@@ -5464,7 +5462,7 @@ scope Stages {
     add_bg_animation(SPIRALM)
     add_stage(n64, "N64", {MIDI.id.N64}, {MIDI.id.TALENTSTUDIO}, {MIDI.id.REDIAL}, {MIDI.id.BLUE_RESORT}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  REMIX, Hazards.type.NONE, 122)
     set_bg_type(N64, bg_type.SECTORZ)
-    add_stage(mute_dl, "Mute City DL", {MIDI.id.MUTE_CITY}, {MIDI.id.FZERO_MEDLEY}, {MIDI.id.MACHRIDER}, {MIDI.id.FIRE_FIELD}, OS.TRUE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, id.MUTE, variant_type.DL, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  FZERO, Hazards.type.NONE, 120)
+    add_stage(mute_dl, "Mute City DL", {MIDI.id.MUTE_CITY}, {MIDI.id.FZERO_MEDLEY}, {MIDI.id.MACHRIDER}, -1, OS.TRUE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, id.MUTE, variant_type.DL, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  FZERO, Hazards.type.NONE, 120)
     add_stage(madmm, "Mad Monster Mansion", {MIDI.id.MADMONSTER}, {MIDI.id.MRPATCH}, {MIDI.id.VS_KLUNGO}, {MIDI.id.OLDKINGCOAL}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  BANJO_KAZOOIE, Hazards.type.NONE, 108)
     add_stage(smbbf, "Mushroom Kingdom DL", -1, {MIDI.id.UNDERGROUND}, {MIDI.id.SMB3OVERWORLD}, {MIDI.id.NSMB}, OS.TRUE, HAZARDS_OFF_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, id.MUSHROOM_KINGDOM, variant_type.DL, 0x05, 0x05, 0x05, default_blue_shell_rate + 1, default_lightning_rate + 1, default_item_rate, default_item_rate,  MARIO_BROS, Hazards.type.HAZARDS, 117)
     add_stage(smbo, "Mushroom Kingdom ~", -1, {MIDI.id.UNDERGROUND}, {MIDI.id.SMB3OVERWORLD}, {MIDI.id.NSMB}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, id.MUSHROOM_KINGDOM, variant_type.OMEGA, 0x05, 0x05, 0x05, default_blue_shell_rate + 1, default_lightning_rate + 1, default_item_rate, default_item_rate,  MARIO_BROS, Hazards.type.HAZARDS, 116)
@@ -5594,7 +5592,7 @@ scope Stages {
     add_bg_animation(SECTOR_Z_REMIX)
     add_position_array(SECTOR_Z_REMIX, -3328, 0, 2048)
     set_bg_type(SECTOR_Z_REMIX, bg_type.SECTORZ)
-    add_stage(mute, "Mute City", {MIDI.id.MUTE_CITY}, {MIDI.id.FZERO_MEDLEY}, {MIDI.id.MACHRIDER}, {MIDI.id.FIRE_FIELD}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  FZERO, Hazards.type.BOTH, 119)
+    add_stage(mute, "Mute City", {MIDI.id.MUTE_CITY}, {MIDI.id.FZERO_MEDLEY}, {MIDI.id.MACHRIDER}, -1, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  FZERO, Hazards.type.BOTH, 119)
     add_stage(hrc, "Home Run Contest", {MIDI.id.TARGET_TEST}, -1, -1, -1, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.RTTF, -1, -1, -1, id.DUEL_ZONE, variant_type.REMIX, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  SMASH, Hazards.type.NONE, 100)
     add_stage(mk_remix, "Mushroom Kingdom SR", -1, {MIDI.id.UNDERGROUND}, {MIDI.id.SMB3OVERWORLD}, {MIDI.id.NSMB}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, id.MUSHROOM_KINGDOM, variant_type.REMIX, 0x05, 0x05, 0x05, default_blue_shell_rate + 1, default_lightning_rate + 1, default_item_rate, default_item_rate,  MARIO_BROS, Hazards.type.HAZARDS, 118)
     add_stage(ghz, "Green Hill Zone", {MIDI.id.GREEN_HILL_ZONE}, {MIDI.id.EMERALDHILL}, {MIDI.id.CHEMICAL_PLANT}, {MIDI.id.LIVE_AND_LEARN}, OS.TRUE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  SONIC, Hazards.type.MOVEMENT, 97)
@@ -5623,7 +5621,7 @@ scope Stages {
     add_stage(draculas_castle, "Dracula's Castle", {MIDI.id.VAMPIREKILLER}, {MIDI.id.BLOODY_TEARS}, {MIDI.id.DRACULAS_CASTLE}, {MIDI.id.IRON_BLUE_INTENTION}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  CASTLEVANIA, Hazards.type.MOVEMENT, 71)
     add_stage(inverted_castle, "Reverse Castle", {MIDI.id.IRON_BLUE_INTENTION}, {MIDI.id.DRACULAS_CASTLE}, {MIDI.id.OPUS_13}, {MIDI.id.DRACULAS_TEARS}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, id.DRACULAS_CASTLE, variant_type.REMIX, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  CASTLEVANIA, Hazards.type.MOVEMENT, 143)
     add_stage(dedede_btp, "Board the Platforms", -1, {MIDI.id.TARGET_TEST}, {MIDI.id.BUMPERCROPBUMP}, -1, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.FALSE, class.BTP, 0x000073A0, 0x000074D8, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  NONE, Hazards.type.NONE, 20)
-    add_stage(mt_dedede, "Mt. Dedede", {MIDI.id.DEDEDE}, {MIDI.id.MK_REVENGE}, {MIDI.id.KIRBY_64_BOSS}, -1, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  KIRBY, Hazards.type.MOVEMENT, 114)
+    add_stage(mt_dedede, "Mt. Dedede", {MIDI.id.DEDEDE}, {MIDI.id.MK_REVENGE}, {MIDI.id.KIRBY_64_BOSS}, {MIDI.id.MASKEDDEDEDE}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  KIRBY, Hazards.type.MOVEMENT, 114)
     add_stage(edo, "Edo Town", {MIDI.id.OEDO_EDO}, {MIDI.id.KAI_HIGHWAY}, {MIDI.id.MUSICAL_CASTLE}, {MIDI.id.THE_ALOOF_SOLDIER}, OS.TRUE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate, GOEMON, Hazards.type.NONE, 78)
     set_custom_item_spawn_rate(EDO, Dango, 0x14)
     add_bg_animation(EDO)
@@ -5637,7 +5635,7 @@ scope Stages {
     add_stage(meta_remix, "Meta Crystent", -1, {MIDI.id.METAL_BATTLE}, {MIDI.id.EASTON_KINGDOM}, -1, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.TRUE, class.BATTLE, -1, -1, -1, id.META_CRYSTAL, variant_type.REMIX, 0x05, 0x05, 0x05, default_blue_shell_rate + 1, default_lightning_rate + 1, default_item_rate, default_item_rate,  MARIO_BROS, Hazards.type.NONE, 112)
     add_stage(remix_rttf, "Remix 1p Race to the Finish", -1, {MIDI.id.TARGET_TEST}, {MIDI.id.TARGET_TEST}, -1, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.FALSE, OS.FALSE, class.RTTF, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  NONE, Hazards.type.NONE, 142)
     set_bg_type(REMIX_RTTF, bg_type.BONUS3)
-    add_stage(reapers, "Grim Reaper's Cavern", {MIDI.id.GRIMREAPERSCAVERN}, {MIDI.id.WORLD_OF_ENVY}, {MIDI.id.ARIA_OF_THE_SOUL}, -1, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  JACKBROS, Hazards.type.HAZARDS, 98)
+    add_stage(reapers, "Grim Reaper's Cavern", {MIDI.id.GRIMREAPERSCAVERN}, {MIDI.id.WORLD_OF_ENVY}, {MIDI.id.ARIA_OF_THE_SOUL}, {MIDI.id.HUMANSDEMONSAND}, OS.FALSE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  JACKBROS, Hazards.type.HAZARDS, 98)
     add_stage(scuttle_town, "Scuttle Town", {MIDI.id.SHANTAEMEDLEY}, {MIDI.id.BURNINGTOWN}, {MIDI.id.SHANTAEBOSS}, -1, OS.FALSE, HAZARDS_OFF_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate,  SHANTAE, Hazards.type.MOVEMENT, 147)
     add_bg_animation(SCUTTLE_TOWN)
     add_stage(big_boos_haunt, "Big Boo's Haunt", {MIDI.id.BIG_BOO}, {MIDI.id.HORROR_LAND}, {MIDI.id.GHOSTGULPING}, -1, OS.TRUE, HAZARDS_ON_MOVEMENT_ON, OS.TRUE, OS.TRUE, class.BATTLE, -1, -1, -1, -1, -1, 0x05, 0x05, 0x05, default_blue_shell_rate, default_lightning_rate, default_item_rate, default_item_rate, MARIO_BROS, Hazards.type.MOVEMENT, 6)

@@ -2942,9 +2942,11 @@ scope TwelveCharBattle {
         // 12CB "Winners Unlocked" format: the winner may select any alive character.
         // (Default keeps the vanilla "winner must keep their character" rule below.)
         // Only reached for 12CB here (twelve_cb_flag set + not Tournament), so this is 12CB-only.
-        OS.read_word(Toggles.entry_12cb_format + 0x4, t0) // t0 = 0 = Default (locked), 1 = Winners Unlocked
-        bnez    t0, _end                    // Winners Unlocked -> allow selecting any live character
-        nop
+        // OS.read_word(Toggles.entry_12cb_format + 0x4, t0) // t0 = 0 = Default (locked), 1 = Winners Unlocked
+        // // li      t0, Toggles.entry_12cb_format
+        // // lw      t0, 0x0004(t0)
+        // bnez    t0, _end                    // Winners Unlocked -> allow selecting any live character
+        // nop
 
         // if the player won last match, make sure they can't select a different character
         jal     get_last_match_portrait_and_stocks_ // v0 = remaining stocks, v1 = portrait_id of last match
@@ -3388,9 +3390,9 @@ scope TwelveCharBattle {
         // 12CB "Winners Unlocked" format: allow grabbing any token (incl. the CPU's) like Tournament,
         // so a new matchup can be set up freely after a win. (Default keeps the vanilla lock below.)
         // Only reached for 12CB here (twelve_cb_flag set + not Tournament).
-        OS.read_word(Toggles.entry_12cb_format + 0x4, t0) // t0 = 0 = Default (locked), 1 = Winners Unlocked
-        bnez    t0, _end                    // Winners Unlocked -> allow pickup
-        nop
+        // OS.read_word(Toggles.entry_12cb_format + 0x4, t0) // t0 = 0 = Default (locked), 1 = Winners Unlocked
+        // bnez    t0, _end                    // Winners Unlocked -> allow pickup
+        // nop
 
         li      t0, config.status
         lw      t0, 0x0000(t0)              // t0 = battle status
@@ -3474,13 +3476,13 @@ scope TwelveCharBattle {
 
         // 12CB: the "12CB stock format" toggle picks the behavior (Default = retain remaining stocks,
         // Reset Stocks = full each match like Tournament 1). 12CB-only (we already know not Tournament).
-        OS.read_word(Toggles.entry_12cb_stock_format + 0x4, t7) // t7 = 0 = Default (retain), 1 = Reset Stocks
-        beqz    t7, _use_remaining_stocks   // Default -> keep remaining (vanilla 12CB)
-        nop
-        b       _get_portrait_stock_count   // Reset Stocks -> full stocks via portrait count
-        lbu     t8, 0x000B(a0)              // t8 = current match portrait_id (delay slot)
+        // OS.read_word(Toggles.entry_12cb_stock_format + 0x4, t7) // t7 = 0 = Default (retain), 1 = Reset Stocks
+        // beqz    t7, _use_remaining_stocks   // Default -> keep remaining (vanilla 12CB)
+        // nop
+        // b       _get_portrait_stock_count   // Reset Stocks -> full stocks via portrait count
+        // lbu     t8, 0x000B(a0)              // t8 = current match portrait_id (delay slot)
 
-        _use_remaining_stocks:
+        // _use_remaining_stocks:
         bgtz    t8, _end                    // if the player was not previously defeated, use remaining stocks
         nop
         lbu     t8, 0x000B(a0)              // t8 = portrait_id of current match
@@ -5495,27 +5497,27 @@ scope TwelveCharBattle {
 
         // 12CB: the "12CB stock format" toggle picks the behavior (Default = retain remaining stocks,
         // Reset Stocks = refill survivors to full like Tournament 1). 12CB-only (not Tournament here).
-        OS.read_word(Toggles.entry_12cb_stock_format + 0x4, t1) // t1 = 0 = Default (retain), 1 = Reset Stocks
-        beqz    t1, _end                    // Default -> retain remaining (no reset)
-        nop
-        b       _do_t1_refill               // Reset Stocks -> refill survivors to full
-        nop
+        // OS.read_word(Toggles.entry_12cb_stock_format + 0x4, t1) // t1 = 0 = Default (retain), 1 = Reset Stocks
+        // beqz    t1, _end                    // Default -> retain remaining (no reset)
+        // nop
+        // b       _do_t1_refill               // Reset Stocks -> refill survivors to full
+        // nop
 
-        _do_t1_refill:
-        li      t1, config.stocks_by_portrait_id
-        li      t3, config.num_stocks
-        lw      t3, 0x0000(t3)              // t3 = full stock count
-        OS.read_word(slot_count, t2)        // PHASE B: loop over all active slots (24 or 32)
-        lli     t0, 0x00FF                  // t0 = eliminated marker (0-based -1)
-        _t1_refill:
-        lbu     v0, 0x0000(t1)              // current stock for this portrait
-        beq     v0, t0, _t1_refill_next     // eliminated (0xFF) -> leave eliminated
-        nop
-        sb      t3, 0x0000(t1)              // survivor -> reset to full
-        _t1_refill_next:
-        addiu   t2, t2, -0x0001
-        bnez    t2, _t1_refill
-        addiu   t1, t1, 0x0001              // next portrait (delay slot)
+        // _do_t1_refill:
+        // li      t1, config.stocks_by_portrait_id
+        // li      t3, config.num_stocks
+        // lw      t3, 0x0000(t3)              // t3 = full stock count
+        // OS.read_word(slot_count, t2)        // PHASE B: loop over all active slots (24 or 32)
+        // lli     t0, 0x00FF                  // t0 = eliminated marker (0-based -1)
+        // _t1_refill:
+        // lbu     v0, 0x0000(t1)              // current stock for this portrait
+        // beq     v0, t0, _t1_refill_next     // eliminated (0xFF) -> leave eliminated
+        // nop
+        // sb      t3, 0x0000(t1)              // survivor -> reset to full
+        // _t1_refill_next:
+        // addiu   t2, t2, -0x0001
+        // bnez    t2, _t1_refill
+        // addiu   t1, t1, 0x0001              // next portrait (delay slot)
 
         _end:
         lw      ra, 0x0004(sp)              // restore registers
