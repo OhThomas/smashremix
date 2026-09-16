@@ -1711,6 +1711,30 @@ scope Spawn {
     float32 -1440,  0000
     float32  1440,  0000
 
+    // D8 - Hyrule Castle Black
+    float32 -2400,  1042
+    float32 -1110,  1039
+    float32  0240,  1042
+    float32  1500,  1042
+
+    // D9 - Hyrule Castle Green
+    float32 -2400,  1042
+    float32 -1110,  1039
+    float32  0240,  1042
+    float32  1500,  1042
+
+    // DA - Hyrule Castle White
+    float32 -2400,  1042
+    float32 -1110,  1039
+    float32  0240,  1042
+    float32  1500,  1042
+
+    // DB - Hyrule Castle Blue
+    float32 -2400,  1042
+    float32 -1110,  1039
+    float32  0240,  1042
+    float32  1500,  1042
+
     neutral_table:
     // 00 - Peach's Castle
     float32 -1613,  1554
@@ -3008,6 +3032,30 @@ scope Spawn {
     float32  0660,  0000
     float32 -1440,  0000
     float32  1440,  0000
+
+    // D8 - Hyrule Castle Black
+    float32 -2400,  1042
+    float32 -1110,  1039
+    float32  0240,  1042
+    float32  1500,  1042
+
+    // D9 - Hyrule Castle Green
+    float32 -2400,  1042
+    float32 -1110,  1039
+    float32  0240,  1042
+    float32  1500,  1042
+
+    // DA - Hyrule Castle White
+    float32 -2400,  1042
+    float32 -1110,  1039
+    float32  0240,  1042
+    float32  1500,  1042
+
+    // DB - Hyrule Castle Blue
+    float32 -2400,  1042
+    float32 -1110,  1039
+    float32  0240,  1042
+    float32  1500,  1042
 }
 
 } // __SPAWN__

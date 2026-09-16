@@ -1,2 +1,14 @@
 Mode,FileNumberHex,NewFilePath,Compressed,InternalFileTableOffsetBytes,InternalFileResourceOffsetBytes,ReqFilesFile,CompressionLevel
+ADD,,.\original\hyrule_castle_black_header.bin,1,0098,0014,.\original\hyrule_castle_black_header.txt,1
+ADD,,.\original\hyrule_castle_black_stage.bin,1,0B7C,3FFFC,,2
+ADD,,.\original\black_stage_background.bin,1,269D0,3FFFC,,2
+ADD,,.\original\hyrule_castle_green_header.bin,1,0098,0014,.\original\hyrule_castle_green_header.txt,1
+ADD,,.\original\hyrule_castle_green_stage.bin,1,0B7C,3FFFC,,2
+ADD,,.\original\green_stage_background.bin,1,269D0,3FFFC,,2
+ADD,,.\original\hyrule_castle_white_header.bin,1,0098,0014,.\original\hyrule_castle_white_header.txt,1
+ADD,,.\original\hyrule_castle_white_stage.bin,1,0B7C,3FFFC,,2
+ADD,,.\original\white_stage_background.bin,1,269D0,3FFFC,,2
+ADD,,.\original\hyrule_castle_blue_header.bin,1,0098,0014,.\original\hyrule_castle_blue_header.txt,1
+ADD,,.\original\hyrule_castle_blue_stage.bin,1,0B7C,3FFFC,,2
+ADD,,.\original\blue_stage_background.bin,1,269D0,3FFFC,,2
 END,,,,,,,

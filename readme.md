@@ -1,6 +1,13 @@
 # Smash Remix
 *A Super Smash Bros. 64 Mod Organized by The_Smashfather*
 
+## Blank Stage
+This branch adds 4 stages that are completely 1 color for machinima purposes (recording animations, taking pictures, etc). They can be found on the first page of the stage select screen, as the last stage before Random (using N64 logo for portrait).
+
+![](blankstage_ssspic.png)
+![](blankstage_blackpic.png)
+![](blankstage_bluepic.png)
+
 ## Building
 ### THIS IS ONLY FOR THOSE INTERESTED IN THE SOURCE CODE OF THE MOD. PLEASE DOWNLOAD THE RELEASE VERSION BY CLICKING THE RELEASE TAB.
 The original xdelta will generate a smash rom that is compatible with our ASM code. Much of our edits are done within

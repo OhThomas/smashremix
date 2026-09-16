@@ -3341,6 +3341,18 @@
 154C Giga Bowser FTilt
 154D Giga Bowser FTiltLow
 154E Giga Bowser Turn
+154F Hyrule Castle Black Header
+1550 Hyrule Castle Black Stage
+1551 Black Stage Background
+1552 Hyrule Castle Green Header
+1553 Hyrule Castle Green Stage
+1554 Green Stage Background
+1555 Hyrule Castle White Header
+1556 Hyrule Castle White Stage
+1557 White Stage Background
+1558 Hyrule Castle Blue Header
+1559 Hyrule Castle Blue Stage
+155A Blue Stage Background
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO
