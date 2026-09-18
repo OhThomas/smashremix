@@ -124,6 +124,12 @@ scope Pause {
         jal     check_toggle_hud_press_
         lw      a1, 0x000C(sp)          // restore a1
 
+        jal     check_toggle_third_person_view_
+        lw      a1, 0x000C(sp)          // restore a1
+
+        jal     check_toggle_camera_reset_press_
+        lw      a1, 0x000C(sp)          // restore a1
+
         jal     check_legend_toggle_press_
         lw      a1, 0x000C(sp)          // restore a1
 
@@ -222,6 +228,86 @@ scope Pause {
 
         jal     Render.toggle_group_display_
         lli     a0, 0x0010                  // a0 = group of Pause Legend HUD
+
+        _end:
+        lw      ra, 0x00014(sp)             // restore registers
+        addiu   sp, sp, 0x0020              // deallocate stack space
+        jr      ra                          // return
+        nop
+    }
+
+    // @ Description
+    // Checks if L is released and disables HUD while unpausing with camera in current third person view
+    scope check_toggle_third_person_view_: {
+        addiu   sp, sp,-0x0020              // allocate stack space
+        sw      ra, 0x00014(sp)             // ~
+
+        li      v0, Toggles.entry_third_person_view
+        lw      v0, 0x0004(v0)              // v0 = entry_third_person_view (0 if OFF)
+        beqz    v0, _end                    // skip if third person view is off
+        nop
+
+        li      v0, Toggles.entry_disable_hud
+        lw      v0, 0x0004(v0)              // v0 = entry_disable_hud (0 if OFF, 1 if PAUSE, 2 if ALL)
+        bnez    v0, _unpause                // skip if HUD is already disabled
+        nop
+
+        lh      t0, 0x0006(a1)              // t0 = players current input (released)
+        lli     v0, Joypad.L                // v0 = Joypad.L
+        bne     t0, v0, _end                // skip if not releasing L button
+        nop
+
+        li      t0, 0x80046728              // t0 = group 0xE head
+        lw      t0, 0x0000(t0)              // ~
+        lw      t0, 0x007C(t0)              // t0 = display state (0 = shown, 1 = hidden)
+        addiu   a1, r0, 1                   // a1 = 1 (hide)
+
+        jal     Render.toggle_group_display_
+        lli     a0, 0x000E                  // a0 = group of HUD
+
+        addiu   a1, r0, 1                   // a1 = 1 (hide)
+        jal     Render.toggle_group_display_
+        lli     a0, 0x000F                  // a0 = group of Pause Legend HUD
+
+        jal     Render.toggle_group_display_
+        lli     a0, 0x0010                  // a0 = group of Pause Legend HUD
+
+        // Game will continue running while current player is technically paused which holds the camera view
+        _unpause:
+        li      a0, 0x800A4D18              // a0 = pause byte
+        addiu   a1, r0, 1                   // a1 = 1
+        sh      a1, 0x0000(a0)              // unpause
+
+        _end:
+        lw      ra, 0x00014(sp)             // restore registers
+        addiu   sp, sp, 0x0020              // deallocate stack space
+        jr      ra                          // return
+        nop
+    }
+
+    // @ Description
+    // Checks if Start is pressed and resets camera from third person view
+    scope check_toggle_camera_reset_press_: {
+        addiu   sp, sp,-0x0020              // allocate stack space
+        sw      ra, 0x00014(sp)             // ~
+
+        li      v0, Toggles.entry_third_person_view
+        lw      v0, 0x0004(v0)              // v0 = entry_third_person_view (0 if OFF)
+        beqz    v0, _end                    // skip if third person view is off
+        nop
+
+        lh      t0, 0x0002(a1)              // t0 = players current input (pressed)
+        lli     v0, Joypad.START            // v0 = Joypad.Start
+        bne     t0, v0, _end                // skip if not pressing Start
+        nop
+
+        lui     a0, 0x8013
+        sw      r0, 0x17E8(a0)              // setting camera y to 0
+        sw      r0, 0x17EC(a0)              // setting camera x to 0
+
+        addiu   a1, r0, 1                   // a1 = 1
+        sw      a1, 0x14B4(a0)              // setting pause flag to 1 [camera flag?]
+        sw      r0, 0x14B8(a0)              // setting running flag to 0 [camera flag?]
 
         _end:
         lw      ra, 0x00014(sp)             // restore registers
@@ -339,6 +425,14 @@ scope Pause {
         Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.B, Render.NOOP, 0x42A00000, 0x432A0000, 0x00D040FF, 0x003000FF, 0x3F700000)
         Render.draw_string(0x18, 0x10, string_camera_fov, Render.NOOP, 0x42BC0000, 0x432A0000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
 
+        li      a1, Toggles.entry_third_person_view
+        lw      a1, 0x0004(a1)              // a1 = entry_third_person_view (0 if OFF)
+        beqz    a1, _toggle_camera_controls // skip if third person view is off
+        nop
+        Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.L, Render.NOOP, 0x42240000, 0x43380000, 0x848484FF, 0x303030FF, 0x3F800000)
+        Render.draw_string(0x18, 0x10, string_third_person_view, Render.NOOP, 0x42700000, 0x43380000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
+
+        _toggle_camera_controls:
         b       _toggle_display_camera_controls
         addiu   a1, r0, r0                  // a1 = 0 (show)
 
@@ -600,6 +694,7 @@ scope Pause {
     string_camera_zoom:; db ": Zoom Camera", 0
     string_camera_pan:; db ": Pan Camera", 0
     string_camera_fov:; db ": Field of View", 0
+    string_third_person_view:; db ": Set Camera", 0
     OS.align(4)
 
 }
