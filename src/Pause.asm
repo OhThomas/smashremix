@@ -124,7 +124,13 @@ scope Pause {
         jal     check_toggle_hud_press_
         lw      a1, 0x000C(sp)          // restore a1
 
+        jal     check_camera_control_
+        lw      a1, 0x000C(sp)          // restore a1
+
         jal     check_toggle_third_person_view_
+        lw      a1, 0x000C(sp)          // restore a1
+
+        jal     check_toggle_player_change_
         lw      a1, 0x000C(sp)          // restore a1
 
         jal     check_toggle_camera_reset_press_
@@ -237,6 +243,67 @@ scope Pause {
     }
 
     // @ Description
+    // Checks if current paused player is dead/cpu and frees camera if third person view is on
+    scope check_camera_control_: {
+        addiu   sp, sp,-0x0020              // allocate stack space
+        sw      ra, 0x00014(sp)             // ~
+
+        li      v0, Toggles.entry_third_person_view
+        lw      v0, 0x0004(v0)              // v0 = entry_third_person_view (0 if OFF)
+        beqz    v0, _end                    // skip if third person view is off
+        nop
+
+        // checking if we already set locked camera to operational
+        li      v0, camera_control
+        lbu     a0, 0x0000(v0)
+        bnez    a0, _end                    // skip if camera_control is already set
+
+        // checking if camera is locked
+        lui     a1, 0x8013                  // this holds camera fixed target
+        lbu     a0, 0x1828(a1)              // a0 = camera control flag
+        bnez    a0, _end                    // if you have control then skip, aka character is alive/playable
+        lli     a0, OS.TRUE
+
+        sb      a0, 0x0000(v0)              // camera_control = 1
+        sb      a0, 0x1828(a1)              // camera control flag = 1
+        li      v0, 0x8010CAE0              // v0 = camera fixed target to player
+        sw      v0, 0x14BC(a1)              // setting camera fixed target to player
+
+        // looking for first available port in player struct list to set camera to
+        // (just looking at character pointer locations and assuming the
+        // first location we see that starts with an 8 to be a proper address)
+        li      t1, 0x800A4D80              // t1 = port pov pointer location
+        li      a2, 0x800A4EDC              // a2 = end of port pov pointers
+        li      v0, 8                       // v0 = 8
+        _search:
+        lw      t0, 0x0000(t1)              // t0 = next port pov pointer
+        srl     a0, t0, 28                  // a0 = t0 leftmost byte
+        andi    a0, a0, 0xF                 // a0 = a0 leftmost bit
+        beq     a0, v0, _set_fixed_cam      // if a0 = 8 then set camera to this port
+        addiu   t1, t1, 0x0074              // t1 increment to next port pov pointer
+        blt     a2, t1, _end                // if at the end of 4 ports, skip setting anything
+        nop
+        b       _search
+        nop
+
+        _set_fixed_cam:
+        sw      t0, 0x14F4(a1)              // setting which port/player to lock the camera to
+        li      t0, camera_default_settings
+        lw      a0, 0x0000(t0)
+        sw      a0, 0x1500(a1)              // setting camera zoom settings
+        lw      a0, 0x0004(t0)
+        sw      a0, 0x1504(a1)
+        lw      a0, 0x0008(t0)
+        sw      a0, 0x1508(a1)
+
+        _end:
+        lw      ra, 0x00014(sp)             // restore registers
+        addiu   sp, sp, 0x0020              // deallocate stack space
+        jr      ra                          // return
+        nop
+    }
+
+    // @ Description
     // Checks if L is released and disables HUD while unpausing with camera in current third person view
     scope check_toggle_third_person_view_: {
         addiu   sp, sp,-0x0020              // allocate stack space
@@ -278,6 +345,10 @@ scope Pause {
         addiu   a1, r0, 1                   // a1 = 1
         sh      a1, 0x0000(a0)              // unpause
 
+        li      v0, camera_control          // setting camera to be controlled while game is running
+        addiu   a1, a1, 1                   // a1 = 2
+        sb      a1, 0x0000(v0)              // camera_control = 2
+
         _end:
         lw      ra, 0x00014(sp)             // restore registers
         addiu   sp, sp, 0x0020              // deallocate stack space
@@ -301,13 +372,101 @@ scope Pause {
         bne     t0, v0, _end                // skip if not pressing Start
         nop
 
+        // if camera was locked when first paused, then we need to set it back
+        li      v0, camera_control          // checking if player camera control is set
+        lbu     a0, 0x0000(v0)
+        beqz    a0, _player_alive           // skip if not set
         lui     a0, 0x8013
+        sb      r0, 0x0000(v0)              // camera_control = 0
+        sb      r0, 0x1828(a0)              // setting camera control to 0, none
+        li      v0, 0x8010C734              // v0 = camera fixed target to stage
+        sw      v0, 0x14BC(a0)              // setting camera fixed to stage
+
+        _player_alive:
         sw      r0, 0x17E8(a0)              // setting camera y to 0
         sw      r0, 0x17EC(a0)              // setting camera x to 0
 
         addiu   a1, r0, 1                   // a1 = 1
         sw      a1, 0x14B4(a0)              // setting pause flag to 1 [camera flag?]
         sw      r0, 0x14B8(a0)              // setting running flag to 0 [camera flag?]
+
+        _end:
+        lw      ra, 0x00014(sp)             // restore registers
+        addiu   sp, sp, 0x0020              // deallocate stack space
+        jr      ra                          // return
+        nop
+    }
+
+    // @ Description
+    // Checks if DU is pressed and changes current third person view to the next player
+    scope check_toggle_player_change_: {
+        addiu   sp, sp,-0x0020              // allocate stack space
+        sw      ra, 0x00014(sp)             // ~
+
+        li      v0, Toggles.entry_third_person_view
+        lw      v0, 0x0004(v0)              // v0 = entry_third_person_view (0 if OFF)
+        beqz    v0, _end                    // skip if third person view is off
+        nop
+
+        lh      t0, 0x0002(a1)              // t0 = players current input (released)
+        lli     v0, Joypad.DU               // v0 = Joypad.DU
+        bne     t0, v0, _end                // skip if not pressing D-pad Up
+        nop
+
+        // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
+        li      v0, 0x801314F4              // v0 = current player pov pointer loc
+        lw      a0, 0x0000(v0)              // a0 = current player pov pointer
+        li      t1, r0                      // t1 = 0
+        lui     a1, 0x800A
+        lw      t0, 0x4D80(a1)              // t0 = 1st port pov pointer
+        beq     a0, t0, _find_next_player
+        addiu   t1, t1, 1                   // t1 = 1
+        lw      t0, 0x4DF4(a1)              // t0 = next port pov pointer
+        beq     a0, t0, _find_next_player
+        addiu   t1, t1, 1                   // t1 = 2
+        lw      t0, 0x4E68(a1)              // t0 = next port pov pointer
+        beq     a0, t0, _find_next_player
+        addiu   t1, t1, 1                   // t1 = 3
+        li      t1, r0                      // t1 = 0
+        
+        // looking for first available port in player struct list to set camera to
+        // (just looking at character pointer locations and assuming the
+        // first location we see that starts with an 8 to be a proper address)
+        _find_next_player:
+        li      a1, 8                       // a1 = 8
+        li      t0, 0x0074                  // t0 = offset for next port pov pointer
+        multu   t1, t0
+        mflo    t0                          // t0 = port * 0x74
+        li      t1, 0x800A4D80              // t1 = port pov pointer location
+        addu    t1, t1, t0                  // t1 = current port pov pointer
+        li      a2, 0x800A4EDC              // a2 = end of port pov pointers
+        _loop:
+        lw      t0, 0x0000(t1)              // t0 = next port pov pointer
+        srl     a0, t0, 28                  // a0 = leftmost byte
+        andi    a0, a0, 0xF                 // a0 = leftmost bit
+        beq     a0, a1, _set_pov            // if a0 = 8 then set camera to this port
+        addiu   t1, t1, 0x0074              // incrementing to next port pov pointer
+        blt     a2, t1, _search_beginning   // if at end of port pov pointers then loop from beginning
+        nop
+        b       _loop                       // otherwise continue looping from where we're at
+        nop
+
+        // going through the player struct list again, but from start
+        _search_beginning:
+        li      t1, 0x800A4D80              // t1 = port pov pointer location
+        _search_more:
+        lw      t0, 0x0000(t1)              // t0 = next port pov pointer
+        srl     a0, t0, 28                  // a0 = leftmost byte
+        andi    a0, a0, 0xF                 // a0 = leftmost bit
+        beq     a0, a1, _set_pov            // if a0 = 8 then set camera to this port
+        addiu   t1, t1, 0x0074              // incrementing to next port pov pointer
+        blt     a2, t1, _end                // if at end of port pov pointers, then don't set anything
+        nop
+        b       _search_more
+        nop
+
+        _set_pov:
+        sw      t0, 0x0000(v0)              // setting current pov to next player
 
         _end:
         lw      ra, 0x00014(sp)             // restore registers
@@ -431,6 +590,9 @@ scope Pause {
         nop
         Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.L, Render.NOOP, 0x42240000, 0x43380000, 0x848484FF, 0x303030FF, 0x3F800000)
         Render.draw_string(0x18, 0x10, string_third_person_view, Render.NOOP, 0x42700000, 0x43380000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
+        Render.draw_texture_at_offset(0x18, 0xF, css_images_file_pointer, 0x0218, Render.NOOP, 0x43300000, 0x430C0000, 0x848484FF, 0x303030FF, 0x3F800000)
+        Render.draw_rectangle(0x18, 0xF, 183, 143, 2, 2, Color.high.YELLOW, OS.FALSE)
+        Render.draw_string(0x18, 0x10, string_change_view, Render.NOOP, 0x43420000, 0x430C0000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
 
         _toggle_camera_controls:
         b       _toggle_display_camera_controls
@@ -687,6 +849,17 @@ scope Pause {
     dw  0x0002
 
     // @ Description
+    // Flag for camera control settings
+    // 0 = no control (if player is dead or cpu); 1 = controlled (expected when paused); 2 = controlled while playing
+    camera_control:
+    db 0x0
+    
+    // @ Description
+    // Default zoom settings for third person view
+    camera_default_settings:
+    dw 0x44C80000; dw 0x3DCCCCCD; dw 0x41E80000
+
+    // @ Description
     // Legend strings
     string_music_note:; db 0x80, 0
     string_music_next:; db ": Next Music Track", 0
@@ -695,6 +868,7 @@ scope Pause {
     string_camera_pan:; db ": Pan Camera", 0
     string_camera_fov:; db ": Field of View", 0
     string_third_person_view:; db ": Set Camera", 0
+    string_change_view:; db ": Change View", 0
     OS.align(4)
 
 }
