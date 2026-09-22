@@ -2,9 +2,6 @@
 // These constants must be defined for a menu item.
 define LABEL("Dpad map")
 
-include "../Pause.asm"
-include "../Joypad.asm"
-
 constant VALUE_TYPE(CharacterSelectDebugMenu.value_type.STRING)
 constant MIN_VALUE(0)
 constant MAX_VALUE(3)
@@ -108,8 +105,11 @@ scope dpad_macro_check_: {
 
     // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
     lui     at, 0x8013                  // at = current player pov pointer loc
+    li      t5, 0x8010CAE0              // t5 = camera fixed to player
+    sw      t5, 0x14BC(at)              // setting camera fixed to players
     lw      t4, 0x14F4(at)              // t4 = current player pov pointer
     li      t5, r0                      // t5 = 0
+    beqz    t4, _find_next_player       // if no player set then start searching at beginning of ports
     lui     t9, 0x800A
     lw      t2, 0x4D80(t9)              // t2 = 1st port pov pointer
     beq     t4, t2, _find_next_player
@@ -120,6 +120,8 @@ scope dpad_macro_check_: {
     lw      t2, 0x4E68(t9)              // t2 = next port pov pointer
     beq     t4, t2, _find_next_player
     addiu   t5, t5, 1                   // t5 = 3
+    lw      t2, 0x4EDC(t9)              // t2 = next port pov pointer
+    beq     t4, t2, _set_to_stage
     li      t5, r0                      // t5 = 0
 
     // looking for first available port in player struct list to set camera to
@@ -139,25 +141,18 @@ scope dpad_macro_check_: {
     andi    t4, t4, 0xF                 // t4 = leftmost bit
     beq     t4, t9, _set_pov            // if t4 = 8 then set camera to this port
     addiu   t5, t5, 0x0074              // incrementing to next port pov pointer
-    slt     t4, a0, t5                  // if at end of port pov pointers then loop from beginning
-    bnez    t4, _search_beginning
+    slt     t4, a0, t5
+    bnez    t4, _set_to_stage           // if at end of port pov pointers then set to stage
     nop
     b       _loop                       // otherwise continue looping from where we're at
     nop
 
     // going through the player struct list again, but from start
-    _search_beginning:
-    li      t5, 0x800A4D80              // t5 = port pov pointer location
-    _search_more:
-    lw      t2, 0x0000(t5)              // t2 = next port pov pointer
-    srl     t4, t2, 28                  // t4 = leftmost byte
-    andi    t4, t4, 0xF                 // t4 = leftmost bit
-    beq     t4, t9, _set_pov            // if t4 = 8 then set camera to this port
-    addiu   t5, t5, 0x0074              // incrementing to next port pov pointer
-    slt     t4, a0, t5                  // if at end of port pov pointers, then don't set anything
-    bnez    t4, _normal
-    nop
-    b       _search_more
+    _set_to_stage:
+    li      t4, 0x8010C734              // t4 = camera fixed target to stage
+    sw      t4, 0x14BC(at)              // setting camera fixed to stage
+    sw      r0, 0x14F4(at)              // setting player camera is fixed to, to 0
+    b       _normal
     nop
 
     _set_pov:

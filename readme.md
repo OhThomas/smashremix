@@ -2,7 +2,7 @@
 *A Super Smash Bros. 64 Mod Organized by The_Smashfather*
 
 ## Third Person View
-This branch gives the ability to set the camera to whichever view you want while following the player. To use third person view, pause the game and set the camera how you want, then press the L button. Reset the camera by pausing and then unpausing. Toggle available in Remix Settings. This is great for machinima purposes.
+This branch gives the ability to set the camera to whichever view you want while following the player. To use third person view, pause the game and set the camera how you want, then press the L button. Reset the camera by pausing and then unpausing. Dpad-up changes which character the camera follows. Toggle available in Remix Settings. This is great for machinima purposes.
 
 ![](example.webp)
 

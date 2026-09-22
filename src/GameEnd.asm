@@ -115,10 +115,17 @@ scope GameEnd {
         _no_salty_runback:
         // end
         li      t1, update_screen_          // check skip results
+        lui     t0, 0x800A                  // t0 = port pov pointer location
+        sw      r0, 0x4D80(t0)              // set all character structs to 0
+        sw      r0, 0x4DF4(t0)
+        sw      r0, 0x4E68(t0)
+        sw      r0, 0x4EDC(t0)
 
         _end:
         li      t0, is_salty_runback        // t0 = address of is_salty_runback
         sw      r0, 0x0000(t0)              // is_salty_runback = 0
+        li      t0, Pause.camera_control    // t0 = address of camera_control
+        sw      r0, 0x0000(t0)              // camera_control = 0
         lw      t0, 0x0004(sp)              // ~
         lw      v0, 0x0008(sp)              // ~
         lw      ra, 0x000C(sp)              // ~

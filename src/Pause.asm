@@ -253,13 +253,9 @@ scope Pause {
         beqz    v0, _end                    // skip if third person view is off
         nop
 
-        // checking if we already set locked camera to operational
-        li      v0, camera_control
-        lbu     a0, 0x0000(v0)
-        bnez    a0, _end                    // skip if camera_control is already set
-
         // checking if camera is locked
-        lui     a1, 0x8013                  // this holds camera fixed target
+        li      v0, camera_control
+        lui     a1, 0x8013
         lbu     a0, 0x1828(a1)              // a0 = camera control flag
         bnez    a0, _end                    // if you have control then skip, aka character is alive/playable
         lli     a0, OS.TRUE
@@ -288,12 +284,11 @@ scope Pause {
 
         _set_fixed_cam:
         sw      t0, 0x14F4(a1)              // setting which port/player to lock the camera to
-        li      t0, camera_default_settings
-        lw      a0, 0x0000(t0)
+        li      a0, 0x44C80000
         sw      a0, 0x1500(a1)              // setting camera zoom settings
-        lw      a0, 0x0004(t0)
+        li      a0, 0x3DCCCCCD
         sw      a0, 0x1504(a1)
-        lw      a0, 0x0008(t0)
+        li      a0, 0x41E80000
         sw      a0, 0x1508(a1)
 
         _end:
@@ -414,9 +409,12 @@ scope Pause {
         nop
 
         // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
-        li      v0, 0x801314F4              // v0 = current player pov pointer loc
-        lw      a0, 0x0000(v0)              // a0 = current player pov pointer
+        lui     v0, 0x8013
+        li      t1, 0x8010CAE0              // t1 = camera fixed to player
+        sw      t1, 0x14BC(v0)              // setting camera fixed to players
+        lw      a0, 0x14F4(v0)              // a0 = current player pov pointer
         li      t1, r0                      // t1 = 0
+        beqz    a0, _find_next_player       // if no player set then start searching at beginning of ports
         lui     a1, 0x800A
         lw      t0, 0x4D80(a1)              // t0 = 1st port pov pointer
         beq     a0, t0, _find_next_player
@@ -427,6 +425,8 @@ scope Pause {
         lw      t0, 0x4E68(a1)              // t0 = next port pov pointer
         beq     a0, t0, _find_next_player
         addiu   t1, t1, 1                   // t1 = 3
+        lw      t0, 0x4EDC(a1)              // t0 = next port pov pointer
+        beq     a0, t0, _set_to_stage
         li      t1, r0                      // t1 = 0
         
         // looking for first available port in player struct list to set camera to
@@ -446,27 +446,21 @@ scope Pause {
         andi    a0, a0, 0xF                 // a0 = leftmost bit
         beq     a0, a1, _set_pov            // if a0 = 8 then set camera to this port
         addiu   t1, t1, 0x0074              // incrementing to next port pov pointer
-        blt     a2, t1, _search_beginning   // if at end of port pov pointers then loop from beginning
+        blt     a2, t1, _set_to_stage       // if at end of port pov pointers then set camera to stage
         nop
         b       _loop                       // otherwise continue looping from where we're at
         nop
 
         // going through the player struct list again, but from start
-        _search_beginning:
-        li      t1, 0x800A4D80              // t1 = port pov pointer location
-        _search_more:
-        lw      t0, 0x0000(t1)              // t0 = next port pov pointer
-        srl     a0, t0, 28                  // a0 = leftmost byte
-        andi    a0, a0, 0xF                 // a0 = leftmost bit
-        beq     a0, a1, _set_pov            // if a0 = 8 then set camera to this port
-        addiu   t1, t1, 0x0074              // incrementing to next port pov pointer
-        blt     a2, t1, _end                // if at end of port pov pointers, then don't set anything
-        nop
-        b       _search_more
+        _set_to_stage:
+        li      t1, 0x8010C734              // t1 = camera fixed target to stage
+        sw      t1, 0x14BC(v0)              // setting camera fixed to stage
+        sw      r0, 0x14F4(v0)              // setting player camera is fixed to, to 0
+        b       _end
         nop
 
         _set_pov:
-        sw      t0, 0x0000(v0)              // setting current pov to next player
+        sw      t0, 0x14F4(v0)              // setting current pov to next player
 
         _end:
         lw      ra, 0x00014(sp)             // restore registers
@@ -853,11 +847,6 @@ scope Pause {
     // 0 = no control (if player is dead or cpu); 1 = controlled (expected when paused); 2 = controlled while playing
     camera_control:
     db 0x0
-    
-    // @ Description
-    // Default zoom settings for third person view
-    camera_default_settings:
-    dw 0x44C80000; dw 0x3DCCCCCD; dw 0x41E80000
 
     // @ Description
     // Legend strings
