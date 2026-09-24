@@ -254,15 +254,15 @@ scope Pause {
         nop
 
         // checking if camera is locked
-        li      v0, camera_control
-        lui     a1, 0x8013
-        lbu     a0, 0x1828(a1)              // a0 = camera control flag
-        bnez    a0, _end                    // if you have control then skip, aka character is alive/playable
+        li      v0, camera_control          // setting camera_control to 1 no matter what
         lli     a0, OS.TRUE
-
         sb      a0, 0x0000(v0)              // camera_control = 1
-        sb      a0, 0x1828(a1)              // camera control flag = 1
+        lui     a1, 0x8013
+        lbu     t1, 0x1828(a1)              // t1 = camera control flag
+        bnez    t1, _end                    // if you have control then skip, aka character is alive/playable
         li      v0, 0x8010CAE0              // v0 = camera fixed target to player
+
+        sb      a0, 0x1828(a1)              // camera control flag = 1
         sw      v0, 0x14BC(a1)              // setting camera fixed target to player
 
         // looking for first available port in player struct list to set camera to
@@ -398,15 +398,15 @@ scope Pause {
         addiu   sp, sp,-0x0020              // allocate stack space
         sw      ra, 0x00014(sp)             // ~
 
+        // checking if third person view set
         li      v0, Toggles.entry_third_person_view
         lw      v0, 0x0004(v0)              // v0 = entry_third_person_view (0 if OFF)
         beqz    v0, _end                    // skip if third person view is off
-        nop
 
-        lh      t0, 0x0002(a1)              // t0 = players current input (released)
+        // checking if d-pad up released
+        lh      t0, 0x0006(a1)              // t0 = players current input (released)
         lli     v0, Joypad.DU               // v0 = Joypad.DU
         bne     t0, v0, _end                // skip if not pressing D-pad Up
-        nop
 
         // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
         lui     v0, 0x8013
@@ -440,8 +440,8 @@ scope Pause {
         li      t1, 0x800A4D80              // t1 = port pov pointer location
         addu    t1, t1, t0                  // t1 = current port pov pointer
         li      a2, 0x800A4EDC              // a2 = end of port pov pointers
-        _loop:
         lw      t0, 0x0000(t1)              // t0 = next port pov pointer
+        _loop:
         srl     a0, t0, 28                  // a0 = leftmost byte
         andi    a0, a0, 0xF                 // a0 = leftmost bit
         beq     a0, a1, _set_pov            // if a0 = 8 then set camera to this port
@@ -449,9 +449,9 @@ scope Pause {
         blt     a2, t1, _set_to_stage       // if at end of port pov pointers then set camera to stage
         nop
         b       _loop                       // otherwise continue looping from where we're at
-        nop
+        lw      t0, 0x0000(t1)              // t0 = next port pov pointer
 
-        // going through the player struct list again, but from start
+        // setting pov to stage
         _set_to_stage:
         li      t1, 0x8010C734              // t1 = camera fixed target to stage
         sw      t1, 0x14BC(v0)              // setting camera fixed to stage
@@ -459,6 +459,7 @@ scope Pause {
         b       _end
         nop
 
+        // setting pov to character
         _set_pov:
         sw      t0, 0x14F4(v0)              // setting current pov to next player
 

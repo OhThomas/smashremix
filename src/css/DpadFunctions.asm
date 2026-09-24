@@ -88,80 +88,9 @@ scope dpad_macro_check_: {
     addu    t4, t4, at              // t4 = player entry in dpad_macro_table
     lw      at, 0x0000(t4)          // at = players value in table
 
-    bnez    at, _single_button_check // proceed to check third person view if it's disabled for this port
-
-    // Third person view change
-    // checking if third person view set
-    li      at, Pause.camera_control
-    lbu     at, 0x0000(at)
-    li      t4, 2
-    bne     at, t4, _normal
-
-    // checking for Dpad Up release
-    addiu   t4, a0, 0x0006              // t4 = controller struct offset + type
-    lhu     t4, 0x0000(t4)              // t4 = type
-    li      t5, Joypad.DU
-    bne     t4, t5, _normal             // if (mask != button_mask), skip
-
-    // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
-    lui     at, 0x8013                  // at = current player pov pointer loc
-    li      t5, 0x8010CAE0              // t5 = camera fixed to player
-    sw      t5, 0x14BC(at)              // setting camera fixed to players
-    lw      t4, 0x14F4(at)              // t4 = current player pov pointer
-    li      t5, r0                      // t5 = 0
-    beqz    t4, _find_next_player       // if no player set then start searching at beginning of ports
-    lui     t9, 0x800A
-    lw      t2, 0x4D80(t9)              // t2 = 1st port pov pointer
-    beq     t4, t2, _find_next_player
-    addiu   t5, t5, 1                   // t5 = 1
-    lw      t2, 0x4DF4(t9)              // t2 = next port pov pointer
-    beq     t4, t2, _find_next_player
-    addiu   t5, t5, 1                   // t5 = 2
-    lw      t2, 0x4E68(t9)              // t2 = next port pov pointer
-    beq     t4, t2, _find_next_player
-    addiu   t5, t5, 1                   // t5 = 3
-    lw      t2, 0x4EDC(t9)              // t2 = next port pov pointer
-    beq     t4, t2, _set_to_stage
-    li      t5, r0                      // t5 = 0
-
-    // looking for first available port in player struct list to set camera to
-    // (just looking at character pointer locations and assuming the
-    // first location we see that starts with an 8 to be a proper address)
-    _find_next_player:
-    li      t9, 8                       // t9 = 8
-    li      t2, 0x0074                  // t2 = offset for next port pov pointer
-    multu   t5, t2
-    mflo    t2                          // t2 = port * 0x74
-    li      t5, 0x800A4D80              // t5 = port pov pointer location
-    addu    t5, t5, t2                  // t5 = current port pov pointer
-    li      a0, 0x800A4EDC              // a0 = end of port pov pointers
-    _loop:
-    lw      t2, 0x0000(t5)              // t2 = next port pov pointer
-    srl     t4, t2, 28                  // t4 = leftmost byte
-    andi    t4, t4, 0xF                 // t4 = leftmost bit
-    beq     t4, t9, _set_pov            // if t4 = 8 then set camera to this port
-    addiu   t5, t5, 0x0074              // incrementing to next port pov pointer
-    slt     t4, a0, t5
-    bnez    t4, _set_to_stage           // if at end of port pov pointers then set to stage
-    nop
-    b       _loop                       // otherwise continue looping from where we're at
+    beqz    at, _normal             // proceed normally if it's disabled for this port
     nop
 
-    // going through the player struct list again, but from start
-    _set_to_stage:
-    li      t4, 0x8010C734              // t4 = camera fixed target to stage
-    sw      t4, 0x14BC(at)              // setting camera fixed to stage
-    sw      r0, 0x14F4(at)              // setting player camera is fixed to, to 0
-    b       _normal
-    nop
-
-    _set_pov:
-    // lui     at, 0x8013               // if we need another register, we can use at and set here again
-    sw      t2, 0x14F4(at)              // setting current pov to next player
-    b       _normal
-    nop
-
-    _single_button_check:
     li      t9, Toggles.entry_single_button_mode
     lw      t4, 0x0004(t9)          // t9 = single_button_mode (0 if OFF, 1 if 'A', 2 if 'B', 3 if 'R', 4 if 'A+C', 5 if 'B+C', 6 if 'R+C')
     bnez    t4, _normal             // if Single Button Mode is enabled, return normally (no dpad macros)

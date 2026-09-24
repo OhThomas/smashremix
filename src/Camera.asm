@@ -1491,6 +1491,88 @@ scope Camera {
         jr      ra
         addiu   sp, sp, 0x0080              // allocate stack space
     }
+
+    
+    // @ Description
+    // Continues InputDelay.asm controller hijacking (0x4BF8, 0x80003FF8) to check for camera controls.
+    scope third_person_view_controls: {
+        // checking if toggle is on
+        li      t5, Toggles.entry_third_person_view
+        lw      t5, 0x0004(t5)              // v0 = entry_third_person_view (0 if OFF)
+        beqz    t5, _end                    // skip if third person view is off
+        
+        // checking if third person view set
+        li      at, Pause.camera_control
+        lbu     at, 0x0000(at)
+        li      t5, 2
+        bne     at, t5, _end
+
+        // checking if d-pad up released
+        lli     t5, Joypad.DU               // t5 = Joypad.DU
+        bne     t5, t1, _end                // skip if not releasing D-pad Up
+
+        // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
+        lui     at, 0x8013                  // at = current player pov pointer loc
+        li      t5, 0x8010CAE0              // t5 = camera fixed to player
+        sw      t5, 0x14BC(at)              // setting camera fixed to players
+        lw      t6, 0x14F4(at)              // t6 = current player pov pointer
+        li      t5, r0                      // t5 = 0
+        beqz    t6, _find_next_player       // if no player set then start searching at beginning of ports
+        lui     t0, 0x800A
+        lw      a3, 0x4D80(t0)              // a3 = 1st port pov pointer
+        beq     t6, a3, _find_next_player
+        addiu   t5, t5, 1                   // t5 = 1
+        lw      a3, 0x4DF4(t0)              // a3 = next port pov pointer
+        beq     t6, a3, _find_next_player
+        addiu   t5, t5, 1                   // t5 = 2
+        lw      a3, 0x4E68(t0)              // a3 = next port pov pointer
+        beq     t6, a3, _find_next_player
+        addiu   t5, t5, 1                   // t5 = 3
+        lw      a3, 0x4EDC(t0)              // a3 = next port pov pointer
+        beq     t6, a3, _set_to_stage
+        li      t5, r0                      // t5 = 0
+
+        // looking for first available port in player struct list to set camera to
+        // (just looking at character pointer locations and assuming the
+        // first location we see that starts with an 8 to be a proper address)
+        _find_next_player:
+        li      t0, 8                       // t0 = 8
+        li      a3, 0x0074                  // a3 = offset for next port pov pointer
+        multu   t5, a3
+        mflo    a3                          // a3 = port * 0x74
+        li      t5, 0x800A4D80              // t5 = port pov pointer location
+        addu    t5, t5, a3                  // t5 = current port pov pointer
+        li      at, 0x800A4EDC              // at = end of port pov pointers
+        lw      a3, 0x0000(t5)              // a3 = next port pov pointer
+        _loop:
+        srl     t6, a3, 28                  // t6 = leftmost byte
+        andi    t6, t6, 0xF                 // t6 = leftmost bit
+        beq     t6, t0, _set_pov            // if t6 = 8 then set camera to this port
+        addiu   t5, t5, 0x0074              // incrementing to next port pov pointer
+        slt     t6, at, t5
+        bnez    t6, _set_to_stage           // if at end of port pov pointers then set to stage
+        nop
+        b       _loop                       // otherwise continue looping from where we're at
+        lw      a3, 0x0000(t5)              // a3 = next port pov pointer
+
+        // setting pov to stage
+        _set_to_stage:
+        lui     at, 0x8013                  // setting at again
+        li      t6, 0x8010C734              // t6 = camera fixed target to stage
+        sw      t6, 0x14BC(at)              // setting camera fixed to stage
+        sw      r0, 0x14F4(at)              // setting player camera is fixed to, to 0
+        b       _end
+        nop
+
+        // setting pov to character
+        _set_pov:
+        lui     at, 0x8013                  // setting at again
+        sw      a3, 0x14F4(at)              // setting current pov to next player
+
+        _end:
+        jr      ra
+        nop
+    }
 }
 
 } // __CAMERA__
