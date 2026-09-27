@@ -1,7 +1,6 @@
 // @ Description
 // These constants must be defined for a menu item.
 define LABEL("Dpad map")
-
 constant VALUE_TYPE(CharacterSelectDebugMenu.value_type.STRING)
 constant MIN_VALUE(0)
 constant MAX_VALUE(3)
