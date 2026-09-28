@@ -261,11 +261,8 @@ scope Pause {
         li      v0, camera_control          // setting camera_control to 1 no matter what
         lli     a0, OS.TRUE
         sb      a0, 0x0000(v0)              // camera_control = 1
-        li      v0, Camera.r_start_held_time // setting r_start_held_time to 0
-        sw      r0, 0x0000(v0)              // r_start_held_time port 1 = 0
-        sw      r0, 0x0004(v0)              // r_start_held_time port 2 = 0
-        sw      r0, 0x0008(v0)              // r_start_held_time port 3 = 0
-        sw      r0, 0x000C(v0)              // r_start_held_time port 4 = 0
+        li      v0, Camera.r_start_held     // setting r_start_held to 0
+        sw      r0, 0x0000(v0)              // r_start_held port 1-4 = 0
         lui     a1, 0x8013
         lbu     t1, 0x1828(a1)              // t1 = camera control flag
         bnez    t1, _end                    // if you have control then skip, aka character is alive/playable

@@ -126,11 +126,8 @@ scope GameEnd {
         sw      r0, 0x0000(t0)              // is_salty_runback = 0
         li      t0, Pause.camera_control    // t0 = address of camera_control
         sw      r0, 0x0000(t0)              // camera_control = 0
-        li      t0, Camera.r_start_held_time // t0 = address of r_start_held_time
-        sw      r0, 0x0000(t0)              // r_start_held_time port 1 = 0
-        sw      r0, 0x0004(t0)              // r_start_held_time port 2 = 0
-        sw      r0, 0x0008(t0)              // r_start_held_time port 3 = 0
-        sw      r0, 0x000C(t0)              // r_start_held_time port 4 = 0
+        li      t0, Camera.r_start_held     // t0 = address of r_start_held
+        sw      r0, 0x0000(t0)              // r_start_held port 1-4 = 0
         lw      t0, 0x0004(sp)              // ~
         lw      v0, 0x0008(sp)              // ~
         lw      ra, 0x000C(sp)              // ~

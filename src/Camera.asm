@@ -1536,82 +1536,82 @@ scope Camera {
         // removing Start input
         andi    t8, t8, 0xEFFF              // remove held Start input
         andi    t9, t9, 0xEFFF              // remove pressed Start input
-        li      t6, r_start_held_time       // t6 = r_start_held_time
-        sll     t0, a1, 2                   // t0 = port * 4
-        addu    t6, t6, t0                  // t6 = r_start_held_time + port
-        lw      t0, 0x0000(t6)              // t0 = r_start_held_time
-        OS.read_word(Global.current_screen_frame_count, t5)
+        li      t6, r_start_held            // t6 = r_start_held
+        addu    t6, t6, a1                  // t6 = r_start_held + port
+        lw      t0, 0x0000(t6)              // t0 = r_start_held
+        beqzl   t0, _start_save             // if r_start_held = 0, set to 1
+        addiu   t0, r0, 1 
 
-        // saving time Start was first pressed
-        bnez    t0, _start_release_check    // if t0 is already set skip
-        nop
-        sw      t5, 0x0000(t6)              // r_start_held_time = current frame count
+        _start_save:
+        sw      t0, 0x0000(t6)              // r_start_held = t0
         b       _r_check
         nop
 
-        // If Start held for more than 30 frames, we ignore pausing the game
+        // If any camera controls occur, we ignore pausing the game, remove Start input
         _start_release_check:
         andi    t5, t1, 0x1000              // t5 = Start button held 
         beqz    t5, _r_check                // skip if Start not released
         nop
-        OS.read_word(Global.current_screen_frame_count, t5)
-        li      t0, r_start_held_time
-        sll     t6, a1, 2                   // t6 = port * 4
-        addu    t0, t0, t6                  // t0 = r_start_held_time + port
-        lw      t6, 0x0000(t0)              // t6 = r_start_held_time
-        sw      r0, 0x0000(t0)              // r_start_held_time = 0
-        sub     t5, t5, t6                  // t5 = current time - r_start_held_time
-        li      t6, 30                      // t6 = amount of frames before nulling start input
-        blt     t6, t5, _r_check            // if more than 30 frames has passed then don't do start input
+        li      t0, r_start_held
+        addu    t0, t0, a1                  // t0 = r_start_held + port
+        lw      t6, 0x0000(t0)              // t6 = r_start_held
+        sw      r0, 0x0000(t0)              // r_start_held = 0
+        li      t5, 2                       // t5 = 2
+        beq     t6, t5, _r_check            // if camera input has happened then don't do start input
         nop
         ori     t8, t8, 0x1000              // add held Start input
         ori     t9, t9, 0x1000              // add pressed Start input
 
-        // After 30 frames of R being held, we negate R input
+        // If any camera controls occur, remove R input
         _r_check:
         andi    t5, t8, 0x0010              // checking R button
         beqz    t5, _r_release_check
         nop
 
-        // here if R held, saving time R was first pressed
-        OS.read_word(Global.current_screen_frame_count, t5)
-        li      t6, r_start_held_time
-        sll     t0, a1, 2                   // t0 = port * 4
-        addu    t6, t6, t0                  // t6 = r_start_held_time + port
-        lw      t0, 0x0000(t6)              // t0 = r_start_held_time
-        bnez    t0, _r_time_check           // if r_start_held_time is already set, skip
-        nop
-        sw      t5, 0x0000(t6)
-        b       _toggle_check
-        nop
+        // here if R held, r_start_held = 1 if 0
+        li      t6, r_start_held
+        addu    t6, t6, a1                  // t6 = r_start_held + port
+        lw      t0, 0x0000(t6)              // t0 = r_start_held
+        beqzl   t0, r_save                  // if r_start_held = 0, set to 1
+        addiu   t0, r0, 1
 
-        // removing R input after 30 frames
+        r_save:
+        sw      t0, 0x0000(t6)              // r_start_held = t0
+        // b       _toggle_check
+        // nop
+
+        // removing R input if any camera control input occurred
         _r_time_check:
-        sub     t5, t5, t6                  // t5 = current time - r_start_held_time
-        li      t6, 30                      // t6 = amount of frames before nulling R input
-        blt     t5, t6, _toggle_check       // if more than 30 frames has passed then don't do R input
+        li      t5, 2                       // t5 = 2
+        bne     t0, t5, _toggle_check       // if camera input has happened then don't do R input
         nop
         andi    t8, t8, 0xFFEF              // remove held R input
         andi    t9, t9, 0xFFEF              // remove pressed R input
 
-        // when R is released, r_start_held_time = 0
+        // when R is released, r_start_held = 0
         _r_release_check:
         andi    t5, t1, 0x0010              // checking R button release
-        beqz    t5, _toggle_check           // if R released, set r_start_held_time to 0
+        beqz    t5, _toggle_check           // if R released, set r_start_held to 0
         nop
-        li      t6, r_start_held_time
-        sll     t0, a1, 2                   // t0 = port * 4
-        addu    t6, t6, t0                  // t6 = r_start_held_time + port
-        sw      r0, 0x0000(t6)              // r_start_held_time = 0
+        li      t6, r_start_held
+        addu    t6, t6, a1                  // t6 = r_start_held + port
+        sw      r0, 0x0000(t6)              // r_start_held = 0
 
         // Checking if R/Start being held
         _toggle_check:
-        li      t6, r_start_held_time
-        sll     t5, a1, 2                   // t5 = port * 4
-        addu    t6, t6, t5                  // t6 = r_start_held_time + port
-        lw      t5, 0x0000(t6)              // t6 = r_start_held_time
+        li      t6, r_start_held
+        addu    t6, t6, a1                  // t6 = r_start_held + port
+        lw      t5, 0x0000(t6)              // t6 = r_start_held
         beqz    t5, _no_toggle              // branch if not holding R
         andi    t5, t8, 0x000C              // t5 = c_up/c_down
+
+        // Checking if camera buttons being pressed
+        andi    t5, t8, 0x0F0F              // t5 = camera controls held
+        andi    t0, t1, 0x0F0F              // t0 = camera controls released
+        or      t5, t5, t0                  // t5 = camera controls held + released
+        beqz    t5, _end                    // if no camera controls pressed/released, skip
+        li      t5, 2                       // t5 = 2
+        sw      t5, 0x0000(t6)              // if camera controls, r_start_held = 2
 
         // Changing zoom if c-up/c-down held with R/Start held
         _c_up_down_check:
@@ -1620,7 +1620,7 @@ scope Camera {
         // if here, c-up or c-down pressed
         li      t0, Camera.camera_pan_offsets_  // a0 = camera offset array
         andi    t5, t8, 0x0004              // t5 = c-down or 0
-        beqz    at, _apply_zoom             // branch if not pressing c-down
+        beqz    t5, _apply_zoom             // branch if not pressing c-down
         lui     t5, 0x3D4C                  // t5 = -speed for camera
 
         // if here, camera zoom+=speed
@@ -1805,9 +1805,9 @@ scope Camera {
         mtc1    t5, f12                     // move to float
         c.le.s  f12, f0
         nop
-        bc1tl   _move_camera_fov
+        bc1tl   _dpad_u_check
         swc1    f12, 0x1464(t0)             // save clamped camera y
-        b       _move_camera_fov
+        b       _dpad_u_check
         swc1    f0, 0x1464(t0)              // or save new camera y
 
         // checking d-pad up
@@ -1826,9 +1826,9 @@ scope Camera {
         mtc1    t5, f12                     // move to float
         c.le.s  f0, f12
         nop
-        bc1tl   _move_camera_fov
+        bc1tl   _dpad_r_check
         swc1    f12, 0x1464(t0)             // save clamped camera y
-        b       _move_camera_fov
+        b       _dpad_r_check
         swc1    f0, 0x1464(t0)              // or save new camera y
 
         // checking d-pad right
@@ -1846,9 +1846,9 @@ scope Camera {
         mtc1    t5, f12                     // move to float
         c.le.s  f12, f0
         nop
-        bc1tl   _move_camera_fov
+        bc1tl   _dpad_l_check
         swc1    f12, 0x1468(t0)             // save clamped camera x
-        b       _move_camera_fov
+        b       _dpad_l_check
         swc1    f0, 0x1468(t0)              // or save new camera x
 
         // checking d-pad left
@@ -1940,8 +1940,12 @@ scope Camera {
         jr      ra
         nop
     }
-    r_start_held_time:
-    dw 0x0; dw 0x0; dw 0x0; dw 0x0;
+
+    // @ Description
+    // Determines if we should cancel R/Start input for camera controls.
+    // 0 = no input; 1 = R/Start input; 2 = R/Start + camera control input detected
+    r_start_held:
+    db 0x0; db 0x0; db 0x0; db 0x0;
 }
 
 } // __CAMERA__
