@@ -1501,6 +1501,7 @@ scope Camera {
     // R/Start + C-Up/C-Down    = change zoom
     // R/Start + C-Left/C-Right = change fov
     // R/Start + D-Pad Up       = change pov
+    // R/Start + D-Pad Down     = toggle hud
     scope third_person_view_controls: {
         // Checking if toggle is on
         li      t5, Toggles.entry_third_person_view
@@ -1696,7 +1697,7 @@ scope Camera {
         _pov_switch_check:
         // checking if d-pad up released
         andi    t5, t1, 0x0800              // t5 = d-pad up or 0
-        beqz    t5, _end
+        beqz    t5, _hud_check
 
         // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
         lui     at, 0x8013                  // at = current player pov pointer loc
@@ -1748,13 +1749,38 @@ scope Camera {
         li      t6, 0x8010C734              // t6 = camera fixed target to stage
         sw      t6, 0x14BC(at)              // setting camera fixed to stage
         sw      r0, 0x14F4(at)              // setting player camera is fixed to, to 0
-        b       _end
+        b       _hud_check
         nop
 
         // setting pov to character
         _set_pov:
         lui     at, 0x8013                  // setting at again
         sw      a3, 0x14F4(at)              // setting current pov to next player
+
+        // Toggle HUD if d-pad down released
+        _hud_check:
+        andi    t5, t1, 0x0400              // t5 = d-pad down or 0
+        beqz    t5, _end
+
+        li      t0, Toggles.entry_disable_hud
+        lw      t0, 0x0004(t0)              // t0 = entry_disable_hud (0 if OFF, 1 if PAUSE, 2 if ALL)
+        bnez    t0, _end                    // skip if HUD is already disabled
+
+        li      t0, 0x801315F8              // t0 = start of group head list for percent hud
+        lw      t0, 0x0000(t0)              // ~
+        beqz    t0, _end                    // if no object, end
+        lw      t5, 0x007C(t0)              // t0 = display state (0 = shown, 1 = hidden)
+        bnezl   t5, pc() + 12               // if pause HUD wasn't drawn, show
+        addiu   a3, r0, r0                  // a3 = 0 (show)
+        addiu   a3, r0, 1                   // a3 = 1 (hide)
+
+        // setting percentage hud objects to shown/hidden
+        _next_linked_list_object:
+        sw      a3, 0x007C(t0)              // update first object
+        lw      t0, 0x0004(t0)              // t0 = next object
+        bnez    t0, _next_linked_list_object // if there is another object ahead, loop
+        nop
+
         b       _end
         nop
 
@@ -1770,7 +1796,6 @@ scope Camera {
 
         li      t6, 0x3CA3D70A              // t6 = .02, floating point
         mtc1    t6, f4                      // f4 = 1
-        // lwc1    f0, 0x0004(a3)              // f0 = y offset
         lwc1    f0, 0x1464(t0)              // f0 = y offset
         add.s   f0, f0, f4                  // f0 = new y coordinate
         nop
@@ -1844,7 +1869,6 @@ scope Camera {
         swc1    f12, 0x1468(t0)             // save clamped camera x
         b       _move_camera_fov
         swc1    f0, 0x1468(t0)              // or save new camera x
-
         
         // move camera
         _move_camera_fov:
