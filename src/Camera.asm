@@ -661,6 +661,12 @@ scope Camera {
         beq     t6, t7, _original                   // skip clearing if scene
         // yes, delay slot
 
+        // keeping camera_pan_offsets_ if in third person view
+        li      t6, Pause.camera_control            // t6 = address of camera_control
+        lbu     t6, 0x0000(t6)                      // t6 = camera_control
+        li      t7, 2                               // t7 = 2
+        beq     t6, t7, _original                   // skip if in third person view
+
         li      v0, camera_pan_offsets_
         sw      r0, 0x0000(v0)                      // clear x
         sw      r0, 0x0004(v0)                      // clear y
@@ -1801,8 +1807,8 @@ scope Camera {
         nop
 
         // clamp y coordinate
-        lui     t5, 0x42C8                  // clamp zoom value
-        mtc1    t5, f12                     // move to float
+        lui     t6, 0x42C8                  // clamp zoom value
+        mtc1    t6, f12                     // move to float
         c.le.s  f12, f0
         nop
         bc1tl   _dpad_u_check
@@ -1822,8 +1828,8 @@ scope Camera {
         swc1    f0, 0x1464(t0)              // save new y coordinate
 
         // clamp y coordinate
-        lui     t5, 0xC2C8                  // clamp value
-        mtc1    t5, f12                     // move to float
+        lui     t6, 0xC2C8                  // clamp value
+        mtc1    t6, f12                     // move to float
         c.le.s  f0, f12
         nop
         bc1tl   _dpad_r_check
@@ -1842,8 +1848,8 @@ scope Camera {
         nop
 
         // clamp x coordinate
-        lui     t5, 0x42C8                  // clamp zoom value
-        mtc1    t5, f12                     // move to float
+        lui     t6, 0x42C8                  // clamp zoom value
+        mtc1    t6, f12                     // move to float
         c.le.s  f12, f0
         nop
         bc1tl   _dpad_l_check
@@ -1861,8 +1867,8 @@ scope Camera {
         nop
         
         // clamp x coordinate
-        lui     t5, 0xC2C8                  // clamp value
-        mtc1    t5, f12                     // move to float
+        lui     t6, 0xC2C8                  // clamp value
+        mtc1    t6, f12                     // move to float
         c.le.s  f0, f12
         nop
         bc1tl   _move_camera_fov
