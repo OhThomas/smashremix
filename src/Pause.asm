@@ -217,6 +217,10 @@ scope Pause {
         bnez    v0, _end                    // skip if HUD is already disabled
         nop
 
+        lh      t0, 0x0000(a1)              // t0 = players current input (held)
+        andi    v0, t0, Joypad.Z            // v0 = Joypad.Z
+        bnez    v0, _end                    // skip if holding Z
+
         lh      t0, 0x0002(a1)              // t0 = players current input (pressed)
         lli     v0, Joypad.DL               // v0 = Joypad.DL
         bne     t0, v0, _end                // skip if not pressing Dpad Left
@@ -409,50 +413,75 @@ scope Pause {
         lw      v0, 0x0004(v0)              // v0 = entry_third_person_view (0 if OFF)
         beqz    v0, _end                    // skip if third person view is off
 
-        // checking if d-pad up released
-        lh      t0, 0x0006(a1)              // t0 = players current input (released)
-        lli     v0, Joypad.DU               // v0 = Joypad.DU
-        bne     t0, v0, _end                // skip if not pressing D-pad Up
+        // checking if Z held
+        lh      t0, 0x0000(a1)              // t0 = players current input (held)
+        andi    v0, t0, Joypad.Z            // v0 = Joypad.Z
+        beqz    v0, _end                    // skip if not holding Z
+
+        // checking if d-pad right released
+        lh      a1, 0x0006(a1)              // a1 = players current input (released)
+        andi    v0, a1, Joypad.DR           // v0 = Joypad.DR
+        bnez    v0, _switch_player_pov      // change pov if releasing D-pad Right
+        ori     a3, r0, 0x0074              // increment to next port
+
+        // checking if d-pad left released
+        andi    v0, a1, Joypad.DL           // v0 = Joypad.DL
+        lui     a3, 0xFFFFFFFF              // setting upper bits
+        beqz    v0, _end                    // skip if not pressing D-pad Left
+        addiu   a3, r0, -0x0074             // increment to previous port
 
         // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
+        _switch_player_pov:
         lui     v0, 0x8013
         li      t1, 0x8010CAE0              // t1 = camera fixed to player
         sw      t1, 0x14BC(v0)              // setting camera fixed to players
         lw      a0, 0x14F4(v0)              // a0 = current player pov pointer
         li      t1, r0                      // t1 = 0
-        beqz    a0, _find_next_player       // if no player set then start searching at beginning of ports
-        lui     a1, 0x800A
-        lw      t0, 0x4D80(a1)              // t0 = 1st port pov pointer
-        beq     a0, t0, _find_next_player
-        addiu   t1, t1, 1                   // t1 = 1
-        lw      t0, 0x4DF4(a1)              // t0 = next port pov pointer
-        beq     a0, t0, _find_next_player
-        addiu   t1, t1, 1                   // t1 = 2
-        lw      t0, 0x4E68(a1)              // t0 = next port pov pointer
-        beq     a0, t0, _find_next_player
-        addiu   t1, t1, 1                   // t1 = 3
-        lw      t0, 0x4EDC(a1)              // t0 = next port pov pointer
-        beq     a0, t0, _set_to_stage
-        li      t1, r0                      // t1 = 0
+        beqz    a0, _d_left_setup           // if no player set then start searching at beginning of ports
+        lui     a2, 0x800A
+        lw      t0, 0x4D80(a2)              // t0 = 1st port pov pointer
+        beq     a0, t0, _d_left_setup
+        addiu   t1, t1, 1                   // t1 = 2nd port
+        lw      t0, 0x4DF4(a2)              // t0 = next port pov pointer
+        beq     a0, t0, _d_left_setup
+        addiu   t1, t1, 1                   // t1 = 3rd port
+        lw      t0, 0x4E68(a2)              // t0 = next port pov pointer
+        beq     a0, t0, _d_left_setup
+        addiu   t1, t1, 1                   // t1 = 4th port
+        // here at port 4, checking if right pressed, going to stage if so and port 3 if not
+        andi    t0, a1, Joypad.DL           // t0 = Joypad.DL
+        beqz    t0, _set_to_stage           // if D-Pad right released, set to stage
+        ori     t1, r0, 4                   // t1 = 4, this will turn into 2, starting search at port 3
         
+        // changing which port to start at if d-pad left is released
+        _d_left_setup:
+        andi    t0, a1, Joypad.DL           // t0 = Joypad.DL
+        beqz    t0, _find_next_player       // if D-Pad right released, skip
+        addiu   t0, r0, 0x0074              // t0 = offset for next port pov pointer
+        beqzl   a0, _find_next_player       // if D-pad left released and no player pov set, start from end of pov pointers
+        ori     t1, r0, 3                   // t1 = port 4
+        addi    t1, t1, -2                  // subtracting 2 to go to previous pointer instead of next
+
         // looking for first available port in player struct list to set camera to
         // (just looking at character pointer locations and assuming the
         // first location we see that starts with an 8 to be a proper address)
         _find_next_player:
-        li      a1, 8                       // a1 = 8
-        li      t0, 0x0074                  // t0 = offset for next port pov pointer
+        li      at, 0x800A4D80              // at = beginning of port pov pointers
         multu   t1, t0
         mflo    t0                          // t0 = port * 0x74
-        li      t1, 0x800A4D80              // t1 = port pov pointer location
-        addu    t1, t1, t0                  // t1 = current port pov pointer
+        addu    t1, at, t0                  // t1 = current port pov pointer
         li      a2, 0x800A4EDC              // a2 = end of port pov pointers
         lw      t0, 0x0000(t1)              // t0 = next port pov pointer
         _loop:
+        slt     a0, t1, at                  // if t1 < at
+        bne     a0, r0, _set_to_stage       // if at beginning of port pov pointers then set camera to stage
+        nop
         srl     a0, t0, 28                  // a0 = leftmost byte
-        andi    a0, a0, 0xF                 // a0 = leftmost bit
-        beq     a0, a1, _set_pov            // if a0 = 8 then set camera to this port
-        addiu   t1, t1, 0x0074              // incrementing to next port pov pointer
-        blt     a2, t1, _set_to_stage       // if at end of port pov pointers then set camera to stage
+        addi    a0, a0, -8                  // a0 = a0 - 8
+        beqz    a0, _set_pov                // if a0 = 8 then set to this character
+        add     t1, t1, a3                  // incrementing to next/previous port pov pointer
+        slt     a0, a2, t1                  // if a2 < t1
+        bne     a0, r0, _set_to_stage       // if at end of port pov pointers then set camera to stage
         nop
         b       _loop                       // otherwise continue looping from where we're at
         lw      t0, 0x0000(t1)              // t0 = next port pov pointer
@@ -589,11 +618,15 @@ scope Pause {
         lw      a1, 0x0004(a1)              // a1 = entry_third_person_view (0 if OFF)
         beqz    a1, _toggle_camera_controls // skip if third person view is off
         nop
-        Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.L, Render.NOOP, 0x42240000, 0x43380000, 0x848484FF, 0x303030FF, 0x3F800000)
-        Render.draw_string(0x18, 0x10, string_third_person_view, Render.NOOP, 0x42700000, 0x43380000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
-        Render.draw_texture_at_offset(0x18, 0xF, css_images_file_pointer, 0x0218, Render.NOOP, 0x43300000, 0x430C0000, 0x848484FF, 0x303030FF, 0x3F800000)
-        Render.draw_rectangle(0x18, 0xF, 183, 143, 2, 2, Color.high.YELLOW, OS.FALSE)
-        Render.draw_string(0x18, 0x10, string_change_view, Render.NOOP, 0x43420000, 0x430C0000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
+        
+        Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.Z, Render.NOOP, 0x42240000, 0x43380000, 0x848484FF, 0x303030FF, 0x3F800000)
+        Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.PLUS, Render.NOOP, 0x42540000, 0x433B0000, 0xFFFFFFFF, 0x303030FF, 0x3F700000)
+        Render.draw_texture_at_offset(0x18, 0xF, css_images_file_pointer, 0x0218, Render.NOOP, 0x42800000, 0x43370000, 0x848484FF, 0x303030FF, 0x3F800000)
+        Render.draw_rectangle(0x18, 0xF, 67, 190, 2, 2, Color.high.YELLOW, OS.FALSE)
+        Render.draw_rectangle(0x18, 0xF, 75, 190, 2, 2, Color.high.YELLOW, OS.FALSE)
+        Render.draw_string(0x18, 0x10, string_change_view, Render.NOOP, 0x42A40000, 0x43380000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
+        Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.L, Render.NOOP, 0x43340000, 0x430C0000, 0x848484FF, 0x303030FF, 0x3F800000)
+        Render.draw_string(0x18, 0x10, string_third_person_view, Render.NOOP, 0x43460000, 0x430C0000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
 
         _toggle_camera_controls:
         b       _toggle_display_camera_controls
@@ -697,6 +730,10 @@ scope Pause {
         nop
 
         lh      t0, 0x0000(a1)              // t0 = players current input
+
+        andi    v0, t0, Joypad.Z            // v0 = Joypad.Z
+        bnez    v0, _end                    // skip if holding Z
+
         andi    v0, t0, 0x0500              // bitflag for dpad right or down
         bnez    v0, _check_override_track
         nop

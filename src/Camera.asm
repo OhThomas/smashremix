@@ -1502,27 +1502,16 @@ scope Camera {
     // @ Description
     // Continues InputDelay.asm controller hijacking (0x4BF8, 0x80003FF8) to check for camera controls.
     // This controls the camera when the game isn't paused.
-    // C-Buttons                = transposing camera
-    // D-Pad                    = panning camera
-    // R/Start + C-Up/C-Down    = change zoom
-    // R/Start + C-Left/C-Right = change fov
-    // R/Start + D-Pad Up       = change pov
-    // R/Start + D-Pad Down     = toggle hud
+    // C-Buttons                    = transposing camera
+    // D-Pad                        = panning camera
+    // R/Start + C-Up/C-Down        = change zoom
+    // R/Start + C-Left/C-Right     = change fov
+    // R/Start + D-Pad Left/Right   = change pov
+    // R/Start + D-Pad Down         = toggle hud
     scope third_person_view_controls: {
-        // Checking if toggle is on
-        li      t5, Toggles.entry_third_person_view
-        lw      t5, 0x0004(t5)              // t5 = entry_third_person_view (0 if OFF)
-        beqz    t5, _end                    // skip if third person view is off
-        
-        // checking if third person view set
-        li      at, Pause.camera_control
-        lbu     at, 0x0000(at)
-        li      t5, 2
-        bne     at, t5, _end
-
-        // checking if any input even here        
+        // Checking if any input even here        
         or      t5, t8, t1                  // t5 = t8 & t1 (any held or released input)
-        beqz    t5, _end
+        beqz    t5, _end_skip               // return, no registers needed
 
         // If pov is on stage, remove c-button input (until fov/zoom/trans can be applied to stage)
         lui     t5, 0x8013
@@ -1699,51 +1688,74 @@ scope Camera {
         swc1    f12, 0x000C(a3)             // save clamped camera distance
         swc1    f6, 0x000C(a3)              // or save new camera distance
 
-        // Switch to next character if d-pad up released with R/Start held
+        // Switch to next character if d-pad right/left released with R/Start held
         _pov_switch_check:
-        // checking if d-pad up released
-        andi    t5, t1, 0x0800              // t5 = d-pad up or 0
+        // checking if d-pad right/left released
+        andi    t5, t1, 0x0300              // t5 = d-pad left and/or right or 0
         beqz    t5, _hud_check
 
+        // checking if d-pad right released
+        andi    t5, t1, Joypad.DR           // t5 = Joypad.DR
+        bnez    t5, _find_current_player    // change pov if releasing D-pad Right
+        ori     t0, r0, 0x0074              // increment to next port
+
+        // checking if d-pad left released
+        andi    t5, t1, Joypad.DL           // t5 = Joypad.DL
+        lui     t0, 0xFFFFFFFF              // setting upper bits
+        beqz    t5, _end                    // skip if not pressing D-pad Left
+        addiu   t0, r0, -0x0074             // increment to previous port
+
         // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
+        _find_current_player:
         lui     at, 0x8013                  // at = current player pov pointer loc
         li      t5, 0x8010CAE0              // t5 = camera fixed to player
         sw      t5, 0x14BC(at)              // setting camera fixed to players
         lw      t6, 0x14F4(at)              // t6 = current player pov pointer
         li      t5, r0                      // t5 = 0
-        beqz    t6, _find_next_player       // if no player set then start searching at beginning of ports
-        lui     t0, 0x800A
-        lw      a3, 0x4D80(t0)              // a3 = 1st port pov pointer
-        beq     t6, a3, _find_next_player
-        addiu   t5, t5, 1                   // t5 = 1
-        lw      a3, 0x4DF4(t0)              // a3 = next port pov pointer
-        beq     t6, a3, _find_next_player
-        addiu   t5, t5, 1                   // t5 = 2
-        lw      a3, 0x4E68(t0)              // a3 = next port pov pointer
-        beq     t6, a3, _find_next_player
-        addiu   t5, t5, 1                   // t5 = 3
-        lw      a3, 0x4EDC(t0)              // a3 = next port pov pointer
-        beq     t6, a3, _set_to_stage
-        li      t5, r0                      // t5 = 0
+        beqz    t6, _d_left_setup           // if no player set then start searching at beginning of ports
+        lui     at, 0x800A
+        lw      a3, 0x4D80(at)              // a3 = 1st port pov pointer
+        beq     t6, a3, _d_left_setup
+        addiu   t5, t5, 1                   // t5 = 2nd port
+        lw      a3, 0x4DF4(at)              // a3 = next port pov pointer
+        beq     t6, a3, _d_left_setup
+        addiu   t5, t5, 1                   // t5 = 3rd port
+        lw      a3, 0x4E68(at)              // a3 = next port pov pointer
+        beq     t6, a3, _d_left_setup
+        addiu   t5, t5, 1                   // t5 = 4th port
+        // here at port 4, checking if right pressed, going to stage if so and port 3 if not
+        andi    a3, t1, Joypad.DL           // a3 = Joypad.DL
+        beqz    a3, _set_to_stage           // if D-Pad right released, set to stage
+        ori     t5, r0, 4                   // t5 = 4, this will turn into 2, starting search at port 3
+
+        // changing which port to start at if d-pad left is released
+        _d_left_setup:
+        andi    a3, t1, Joypad.DL           // a3 = Joypad.DL
+        beqz    a3, _find_next_player       // if D-Pad right released, skip
+        addiu   a3, r0, 0x0074              // a3 = offset for next port pov pointer
+        beqzl   t6, _find_next_player       // if no player pov set and D-pad left pressed, start from end of pov pointers
+        ori     t5, r0, 3                   // t5 = port 4
+        addi    t5, t5, -2                  // subtracting 2 to go to previous pointer instead of next
 
         // looking for first available port in player struct list to set camera to
         // (just looking at character pointer locations and assuming the
         // first location we see that starts with an 8 to be a proper address)
         _find_next_player:
-        li      t0, 8                       // t0 = 8
-        li      a3, 0x0074                  // a3 = offset for next port pov pointer
+        li      at, 0x800A4D80              // at = beginning port pov pointers
         multu   t5, a3
         mflo    a3                          // a3 = port * 0x74
-        li      t5, 0x800A4D80              // t5 = port pov pointer location
-        addu    t5, t5, a3                  // t5 = current port pov pointer
-        li      at, 0x800A4EDC              // at = end of port pov pointers
+        addu    t5, at, a3                  // t5 = current port pov pointer
         lw      a3, 0x0000(t5)              // a3 = next port pov pointer
         _loop:
+        slt     t6, t5, at                  // if current location < beginning pov pointers
+        bne     t6, r0, _set_to_stage       // if at beginning of port pov pointers then set camera to stage
+        nop
         srl     t6, a3, 28                  // t6 = leftmost byte
-        andi    t6, t6, 0xF                 // t6 = leftmost bit
-        beq     t6, t0, _set_pov            // if t6 = 8 then set camera to this port
-        addiu   t5, t5, 0x0074              // incrementing to next port pov pointer
-        slt     t6, at, t5
+        addi    t6, t6, -8                  // t6 = t6 - 8
+        beqz    t6, _set_pov                // if t6 = 8 then set to this character
+        add     t5, t5, t0                  // incrementing to next port pov pointer
+        li      t6, 0x800A4EDC              // t6 = end of port pov pointers
+        slt     t6, t6, t5
         bnez    t6, _set_to_stage           // if at end of port pov pointers then set to stage
         nop
         b       _loop                       // otherwise continue looping from where we're at
@@ -1943,7 +1955,10 @@ scope Camera {
         swc1    f6, 0x0000(t0)              // save new x coordinate
 
         _end:
-        jr      ra
+        li      a3, Joypad.struct           // restore a3
+        li      t0, 10                      // restore t0
+        _end_skip:
+        jr      ra                          // returning to InputDelay.apply_input_delay_
         nop
     }
 

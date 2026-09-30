@@ -34,16 +34,21 @@ scope InputDelay {
         // t4 = ypos
 
         // Checking camera controls with this hijacking
+        li      t5, Pause.camera_control    // t5 = camera_control address
+        lbu     t5, 0x0000(t5)              // t5 = camera_control
+        addi    t5, t5, -0x0002             // t5 - 2 (2 = third person view)
+        bnez    t5, _no_third_person        // if third person view not set, skip
+        nop
+
         addiu   sp, sp, -0x0010             // allocate stack space
         sw      ra, 0x0004(sp)              // save registers
         jal     Camera.third_person_view_controls
         nop
-        li      a3, Joypad.struct           // restore a3
-        li      t0, 10                      // restore t0
         lw      ra, 0x0004(sp)              // restore registers
         addiu   sp, sp, 0x0010              // deallocate stack space
 
         // Get port's input delay
+        _no_third_person:
         li      t5, delay_table
         sll     t6, a1, 0x0002                  // t6 = port * 4 = offset to delay value
         addu    t5, t5, t6                      // t5 = address of delay value
