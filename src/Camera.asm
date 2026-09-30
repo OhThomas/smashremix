@@ -1533,12 +1533,12 @@ scope Camera {
         andi    t9, t9, 0xEFFF              // remove pressed Start input
         li      t6, r_start_held            // t6 = r_start_held
         addu    t6, t6, a1                  // t6 = r_start_held + port
-        lw      t0, 0x0000(t6)              // t0 = r_start_held
+        lbu     t0, 0x0000(t6)              // t0 = r_start_held
         beqzl   t0, _start_save             // if r_start_held = 0, set to 1
         addiu   t0, r0, 1 
 
         _start_save:
-        sw      t0, 0x0000(t6)              // r_start_held = t0
+        sb      t0, 0x0000(t6)              // r_start_held = t0
         b       _r_check
         nop
 
@@ -1549,8 +1549,8 @@ scope Camera {
         nop
         li      t0, r_start_held
         addu    t0, t0, a1                  // t0 = r_start_held + port
-        lw      t6, 0x0000(t0)              // t6 = r_start_held
-        sw      r0, 0x0000(t0)              // r_start_held = 0
+        lbu     t6, 0x0000(t0)              // t6 = r_start_held
+        sb      r0, 0x0000(t0)              // r_start_held = 0
         li      t5, 2                       // t5 = 2
         beq     t6, t5, _r_check            // if camera input has happened then don't do start input
         nop
@@ -1566,12 +1566,12 @@ scope Camera {
         // here if R held, r_start_held = 1 if 0
         li      t6, r_start_held
         addu    t6, t6, a1                  // t6 = r_start_held + port
-        lw      t0, 0x0000(t6)              // t0 = r_start_held
+        lbu     t0, 0x0000(t6)              // t0 = r_start_held
         beqzl   t0, r_save                  // if r_start_held = 0, set to 1
         addiu   t0, r0, 1
 
         r_save:
-        sw      t0, 0x0000(t6)              // r_start_held = t0
+        sb      t0, 0x0000(t6)              // r_start_held = t0
         // b       _toggle_check
         // nop
 
@@ -1590,13 +1590,13 @@ scope Camera {
         nop
         li      t6, r_start_held
         addu    t6, t6, a1                  // t6 = r_start_held + port
-        sw      r0, 0x0000(t6)              // r_start_held = 0
+        sb      r0, 0x0000(t6)              // r_start_held = 0
 
         // Checking if R/Start being held
         _toggle_check:
         li      t6, r_start_held
         addu    t6, t6, a1                  // t6 = r_start_held + port
-        lw      t5, 0x0000(t6)              // t6 = r_start_held
+        lbu     t5, 0x0000(t6)              // t6 = r_start_held
         beqz    t5, _no_toggle              // branch if not holding R
         andi    t5, t8, 0x000C              // t5 = c_up/c_down
 
@@ -1606,7 +1606,7 @@ scope Camera {
         or      t5, t5, t0                  // t5 = camera controls held + released
         beqz    t5, _end                    // if no camera controls pressed/released, skip
         li      t5, 2                       // t5 = 2
-        sw      t5, 0x0000(t6)              // if camera controls, r_start_held = 2
+        sb      t5, 0x0000(t6)              // if camera controls, r_start_held = 2
 
         // Changing zoom if c-up/c-down held with R/Start held
         _c_up_down_check:
