@@ -1,12 +1,19 @@
 # Smash Remix
 *A Super Smash Bros. 64 Mod Organized by The_Smashfather*
 
-## Blank Stage
-This branch adds 4 stages that are completely 1 color for machinima purposes (recording animations, taking pictures, etc). They can be found on the first page of the stage select screen, as the last stage before Random (using N64 logo for portrait).
-
+## Machinima
 ![](blankstage_ssspic.png)
-![](blankstage_blackpic.png)
-![](blankstage_bluepic.png)
+
+This branch combines the [third_person_view](https://github.com/OhThomas/smashremix/tree/third_person_view) and [blank_stage](https://github.com/OhThomas/smashremix/tree/blank_stage) branches. You can set the camera to whichever view you want while following the player. To use third person view, pause the game and set the camera how you want, then press the L button. Reset the camera by pausing and then unpausing. While paused, D-pad left/right changes which character the camera follows. Toggle available in Remix Settings. Blank stages can be found as the last stage before Random with an N64 logo as the image. You can change the camera while in third person view (press L on pause screen) with the controls below.
+
+| Input | Use |
+| :---- | :-- |
+| C-Buttons | Transposing camera |
+| D-Pad | Panning camera |
+| R/Start + C-Up/C-Down | Change zoom |
+| R/Start + C-Left/C-Right | Change FOV |
+| R/Start + D-Pad Left/Right | Change POV |
+| R/Start + D-Pad Down | Toggle HUD |
 
 ## Building
 ### THIS IS ONLY FOR THOSE INTERESTED IN THE SOURCE CODE OF THE MOD. PLEASE DOWNLOAD THE RELEASE VERSION BY CLICKING THE RELEASE TAB.

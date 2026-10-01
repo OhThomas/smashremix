@@ -661,6 +661,12 @@ scope Camera {
         beq     t6, t7, _original                   // skip clearing if scene
         // yes, delay slot
 
+        // keeping camera_pan_offsets_ if in third person view
+        li      t6, Pause.camera_control            // t6 = address of camera_control
+        lbu     t6, 0x0000(t6)                      // t6 = camera_control
+        li      t7, 2                               // t7 = 2
+        beq     t6, t7, _original                   // skip if in third person view
+
         li      v0, camera_pan_offsets_
         sw      r0, 0x0000(v0)                      // clear x
         sw      r0, 0x0004(v0)                      // clear y
@@ -1491,6 +1497,476 @@ scope Camera {
         jr      ra
         addiu   sp, sp, 0x0080              // allocate stack space
     }
+
+    
+    // @ Description
+    // Continues InputDelay.asm controller hijacking (0x4BF8, 0x80003FF8) to check for camera controls.
+    // This controls the camera when the game isn't paused.
+    // C-Buttons                    = transposing camera
+    // D-Pad                        = panning camera
+    // R/Start + C-Up/C-Down        = change zoom
+    // R/Start + C-Left/C-Right     = change fov
+    // R/Start + D-Pad Left/Right   = change pov
+    // R/Start + D-Pad Down         = toggle hud
+    scope third_person_view_controls: {
+        // Checking if any input even here        
+        or      t5, t8, t1                  // t5 = t8 & t1 (any held or released input)
+        beqz    t5, _end_skip               // return, no registers needed
+
+        // If pov is on stage, remove c-button input (until fov/zoom/trans can be applied to stage)
+        lui     t5, 0x8013
+        lw      t5, 0x14BC(t5)              // t5 = pov target
+        li      t0, 0x8010C734              // stage pov
+        bne     t0, t5, _start_check        // if pov not on stage, skip removing c input
+        andi    t5, t8, 0x1000              // t5 = Start button held 
+
+        andi    t8, t8, 0xFFF0              // remove held c input
+        andi    t9, t9, 0xFFF0              // remove pressed c input
+
+        // Checking if controller toggles (R/Start) are being pressed for more controls
+        _start_check:
+        beqz    t5, _start_release_check
+        nop
+
+        // removing Start input
+        andi    t8, t8, 0xEFFF              // remove held Start input
+        andi    t9, t9, 0xEFFF              // remove pressed Start input
+        li      t6, r_start_held            // t6 = r_start_held
+        addu    t6, t6, a1                  // t6 = r_start_held + port
+        lw      t0, 0x0000(t6)              // t0 = r_start_held
+        beqzl   t0, _start_save             // if r_start_held = 0, set to 1
+        addiu   t0, r0, 1 
+
+        _start_save:
+        sw      t0, 0x0000(t6)              // r_start_held = t0
+        b       _r_check
+        nop
+
+        // If any camera controls occur, we ignore pausing the game, remove Start input
+        _start_release_check:
+        andi    t5, t1, 0x1000              // t5 = Start button held 
+        beqz    t5, _r_check                // skip if Start not released
+        nop
+        li      t0, r_start_held
+        addu    t0, t0, a1                  // t0 = r_start_held + port
+        lw      t6, 0x0000(t0)              // t6 = r_start_held
+        sw      r0, 0x0000(t0)              // r_start_held = 0
+        li      t5, 2                       // t5 = 2
+        beq     t6, t5, _r_check            // if camera input has happened then don't do start input
+        nop
+        ori     t8, t8, 0x1000              // add held Start input
+        ori     t9, t9, 0x1000              // add pressed Start input
+
+        // If any camera controls occur, remove R input
+        _r_check:
+        andi    t5, t8, 0x0010              // checking R button
+        beqz    t5, _r_release_check
+        nop
+
+        // here if R held, r_start_held = 1 if 0
+        li      t6, r_start_held
+        addu    t6, t6, a1                  // t6 = r_start_held + port
+        lw      t0, 0x0000(t6)              // t0 = r_start_held
+        beqzl   t0, r_save                  // if r_start_held = 0, set to 1
+        addiu   t0, r0, 1
+
+        r_save:
+        sw      t0, 0x0000(t6)              // r_start_held = t0
+        // b       _toggle_check
+        // nop
+
+        // removing R input if any camera control input occurred
+        _r_time_check:
+        li      t5, 2                       // t5 = 2
+        bne     t0, t5, _toggle_check       // if camera input has happened then don't do R input
+        nop
+        andi    t8, t8, 0xFFEF              // remove held R input
+        andi    t9, t9, 0xFFEF              // remove pressed R input
+
+        // when R is released, r_start_held = 0
+        _r_release_check:
+        andi    t5, t1, 0x0010              // checking R button release
+        beqz    t5, _toggle_check           // if R released, set r_start_held to 0
+        nop
+        li      t6, r_start_held
+        addu    t6, t6, a1                  // t6 = r_start_held + port
+        sw      r0, 0x0000(t6)              // r_start_held = 0
+
+        // Checking if R/Start being held
+        _toggle_check:
+        li      t6, r_start_held
+        addu    t6, t6, a1                  // t6 = r_start_held + port
+        lw      t5, 0x0000(t6)              // t6 = r_start_held
+        beqz    t5, _no_toggle              // branch if not holding R
+        andi    t5, t8, 0x000C              // t5 = c_up/c_down
+
+        // Checking if camera buttons being pressed
+        andi    t5, t8, 0x0F0F              // t5 = camera controls held
+        andi    t0, t1, 0x0F0F              // t0 = camera controls released
+        or      t5, t5, t0                  // t5 = camera controls held + released
+        beqz    t5, _end                    // if no camera controls pressed/released, skip
+        li      t5, 2                       // t5 = 2
+        sw      t5, 0x0000(t6)              // if camera controls, r_start_held = 2
+
+        // Changing zoom if c-up/c-down held with R/Start held
+        _c_up_down_check:
+        beqz    t5, _c_lr_check             // branch if not holding c-up or c-down
+
+        // if here, c-up or c-down pressed
+        li      t0, Camera.camera_pan_offsets_  // a0 = camera offset array
+        andi    t5, t8, 0x0004              // t5 = c-down or 0
+        beqz    t5, _apply_zoom             // branch if not pressing c-down
+        lui     t5, 0x3D4C                  // t5 = -speed for camera
+
+        // if here, camera zoom+=speed
+        lui     t5, 0xBD4C                  // t5 = +speed for camera
+        lw      at, 0x0008(t0)              // at = current zoom offset
+        beqz    at, _c_lr_check             // skip if value already is 0
+        nop
+
+        _apply_zoom:
+        lwc1    f6, 0x0008(t0)              // f6 = current zoom offset
+        mtc1    t5, f12                     // f12 = zoom variable
+        add.s   f3, f6, f12                 // f6 = new zoom offset
+        nop
+        swc1    f6, 0x0008(t0)              // save new zoom offset
+
+        // Changing fov if c-up/c-down held with R/Start held
+        _c_lr_check:
+        andi    at, t8, 0x0006              // check if c-down or c-left held
+        bnezl   at, apply_z_distance        // branch if player pressing c-down or c-left
+        lui     t6, 0x42A0                  // t6 = - camera distance
+
+        andi    at, t8, 0x0009
+        beqz    at, _pov_switch_check       // branch if player not pressing c-up or c-right
+        lui     t6, 0xC2A0                  // t6 = + camera distance
+
+        // changing zoom
+        apply_z_distance:
+        li      a3, Camera.camera_pan_offsets_  // a3 = camera offset array
+        andi    t0, t8, 0x0003              // t0 = c-left or c-right
+        andi    t8, t8, 0xFFF0              // remove held c input
+        andi    t9, t9, 0xFFF0              // remove pressed c input
+        bnezl   t0, apply_fov               // branch if c-left or c-right is held
+        lwc1    f6, 0x0008(a3)              // f6 = current fov offset
+        lwc1    f6, 0x0008(a3)              // f6 = current z offset
+        mtc1    t6, f12                     // move camera distance value to float
+        add.s   f6, f6, f12                 // f6 = amount to change z by + current z distance offset
+        nop
+        lui     t6, max_zoom_offset         // clamp zoom value
+        mtc1    t6, f12                     // move to float
+        c.le.s  f6, f12
+        nop
+        bc1tl   _pov_switch_check
+        swc1    f12, 0x0008(a3)             // save clamped camera distance
+        b       _pov_switch_check
+        swc1    f6, 0x0008(a3)              // or save new camera distance
+
+        // changing fov
+        apply_fov:
+        // li      a3, Camera.camera_pan_offsets_  // a3 = camera offset array
+        lwc1    f6, 0x000C(a3)              // f6 = current fov offset
+        mtc1    t6, f12                     // move camera distance value to float
+
+        lui     at, 0x3C23                  // at = some value
+        mtc1    at, f4                      // move to float
+        mul.s   f12, f12, f4                // multiply amount so its not too fast
+        nop
+        add.s   f6, f6, f12                 // f6 = amount to change fov by + current fov offset
+        nop
+        lui     t6, min_fov                 // clamp fov value
+        mtc1    t6, f12                     // move to float
+        c.le.s  f6, f12
+        nop
+        bc1tl   _pov_switch_check
+        swc1    f12, 0x000C(a3)             // save clamped camera distance
+        lui     t6, max_fov                 // clamp fov value
+        mtc1    t6, f12                     // move to float
+        c.le.s  f12, f6
+        nop
+        bc1tl   _pov_switch_check
+        swc1    f12, 0x000C(a3)             // save clamped camera distance
+        swc1    f6, 0x000C(a3)              // or save new camera distance
+
+        // Switch to next character if d-pad right/left released with R/Start held
+        _pov_switch_check:
+        // checking if d-pad right/left released
+        andi    t5, t1, 0x0300              // t5 = d-pad left and/or right or 0
+        beqz    t5, _hud_check
+
+        // checking if d-pad right released
+        andi    t5, t1, Joypad.DR           // t5 = Joypad.DR
+        bnez    t5, _find_current_player    // change pov if releasing D-pad Right
+        ori     t0, r0, 0x0074              // increment to next port
+
+        // checking if d-pad left released
+        andi    t5, t1, Joypad.DL           // t5 = Joypad.DL
+        lui     t0, 0xFFFFFFFF              // setting upper bits
+        beqz    t5, _end                    // skip if not pressing D-pad Left
+        addiu   t0, r0, -0x0074             // increment to previous port
+
+        // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
+        _find_current_player:
+        lui     at, 0x8013                  // at = current player pov pointer loc
+        li      t5, 0x8010CAE0              // t5 = camera fixed to player
+        sw      t5, 0x14BC(at)              // setting camera fixed to players
+        lw      t6, 0x14F4(at)              // t6 = current player pov pointer
+        li      t5, r0                      // t5 = 0
+        beqz    t6, _d_left_setup           // if no player set then start searching at beginning of ports
+        lui     at, 0x800A
+        lw      a3, 0x4D80(at)              // a3 = 1st port pov pointer
+        beq     t6, a3, _d_left_setup
+        addiu   t5, t5, 1                   // t5 = 2nd port
+        lw      a3, 0x4DF4(at)              // a3 = next port pov pointer
+        beq     t6, a3, _d_left_setup
+        addiu   t5, t5, 1                   // t5 = 3rd port
+        lw      a3, 0x4E68(at)              // a3 = next port pov pointer
+        beq     t6, a3, _d_left_setup
+        addiu   t5, t5, 1                   // t5 = 4th port
+        // here at port 4, checking if right pressed, going to stage if so and port 3 if not
+        andi    a3, t1, Joypad.DL           // a3 = Joypad.DL
+        beqz    a3, _set_to_stage           // if D-Pad right released, set to stage
+        ori     t5, r0, 4                   // t5 = 4, this will turn into 2, starting search at port 3
+
+        // changing which port to start at if d-pad left is released
+        _d_left_setup:
+        andi    a3, t1, Joypad.DL           // a3 = Joypad.DL
+        beqz    a3, _find_next_player       // if D-Pad right released, skip
+        addiu   a3, r0, 0x0074              // a3 = offset for next port pov pointer
+        beqzl   t6, _find_next_player       // if no player pov set and D-pad left pressed, start from end of pov pointers
+        ori     t5, r0, 3                   // t5 = port 4
+        addi    t5, t5, -2                  // subtracting 2 to go to previous pointer instead of next
+
+        // looking for first available port in player struct list to set camera to
+        // (just looking at character pointer locations and assuming the
+        // first location we see that starts with an 8 to be a proper address)
+        _find_next_player:
+        li      at, 0x800A4D80              // at = beginning port pov pointers
+        multu   t5, a3
+        mflo    a3                          // a3 = port * 0x74
+        addu    t5, at, a3                  // t5 = current port pov pointer
+        lw      a3, 0x0000(t5)              // a3 = next port pov pointer
+        _loop:
+        slt     t6, t5, at                  // if current location < beginning pov pointers
+        bne     t6, r0, _set_to_stage       // if at beginning of port pov pointers then set camera to stage
+        nop
+        srl     t6, a3, 28                  // t6 = leftmost byte
+        addi    t6, t6, -8                  // t6 = t6 - 8
+        beqz    t6, _set_pov                // if t6 = 8 then set to this character
+        add     t5, t5, t0                  // incrementing to next port pov pointer
+        li      t6, 0x800A4EDC              // t6 = end of port pov pointers
+        slt     t6, t6, t5
+        bnez    t6, _set_to_stage           // if at end of port pov pointers then set to stage
+        nop
+        b       _loop                       // otherwise continue looping from where we're at
+        lw      a3, 0x0000(t5)              // a3 = next port pov pointer
+
+        // setting pov to stage
+        _set_to_stage:
+        lui     at, 0x8013                  // setting at again
+        li      t6, 0x8010C734              // t6 = camera fixed target to stage
+        sw      t6, 0x14BC(at)              // setting camera fixed to stage
+        sw      r0, 0x14F4(at)              // setting player camera is fixed to, to 0
+        b       _hud_check
+        nop
+
+        // setting pov to character
+        _set_pov:
+        lui     at, 0x8013                  // setting at again
+        sw      a3, 0x14F4(at)              // setting current pov to next player
+
+        // Toggle HUD if d-pad down released
+        _hud_check:
+        andi    t5, t1, 0x0400              // t5 = d-pad down or 0
+        beqz    t5, _end
+
+        li      t0, Toggles.entry_disable_hud
+        lw      t0, 0x0004(t0)              // t0 = entry_disable_hud (0 if OFF, 1 if PAUSE, 2 if ALL)
+        bnez    t0, _end                    // skip if HUD is already disabled
+
+        li      t0, 0x801315F8              // t0 = start of group head list for percent hud
+        lw      t0, 0x0000(t0)              // ~
+        beqz    t0, _end                    // if no object, end
+        lw      t5, 0x007C(t0)              // t0 = display state (0 = shown, 1 = hidden)
+        bnezl   t5, pc() + 12               // if pause HUD wasn't drawn, show
+        addiu   a3, r0, r0                  // a3 = 0 (show)
+        addiu   a3, r0, 1                   // a3 = 1 (hide)
+
+        // setting percentage hud objects to shown/hidden
+        _next_linked_list_object:
+        sw      a3, 0x007C(t0)              // update first object
+        lw      t0, 0x0004(t0)              // t0 = next object
+        bnez    t0, _next_linked_list_object // if there is another object ahead, loop
+        nop
+
+        b       _end
+        nop
+
+        // Using d-pad for panning (everything below here is input without R/Start held)
+        _no_toggle:
+        // checking d-pad buttons
+        li      a3, camera_pan_offsets_     // a0 = pause cam offset table
+        lui     t0, 0x8013                  // at might be 0x8013 here
+
+        andi    t5, t8, 0x0400              // isolating 2nd leftmost digit
+        beqz    t5, _dpad_u_check           // skip if not pressing D-pad down
+        andi    t5, t8, 0x0800              // t5 = d-pad up check
+
+        li      t6, 0x3CA3D70A              // t6 = .02, floating point
+        mtc1    t6, f4                      // f4 = 1
+        lwc1    f0, 0x1464(t0)              // f0 = y offset
+        add.s   f0, f0, f4                  // f0 = new y coordinate
+        nop
+
+        // clamp y coordinate
+        lui     t6, 0x42C8                  // clamp zoom value
+        mtc1    t6, f12                     // move to float
+        c.le.s  f12, f0
+        nop
+        bc1tl   _dpad_u_check
+        swc1    f12, 0x1464(t0)             // save clamped camera y
+        b       _dpad_u_check
+        swc1    f0, 0x1464(t0)              // or save new camera y
+
+        // checking d-pad up
+        _dpad_u_check:
+        beqz    t5, _dpad_r_check           // skip if not pressing D-pad up
+        andi    t5, t8, 0x0100              // t5 = d-pad right check
+        li      t6, 0xBCA3D70A              // t6 = -.02, floating point
+        mtc1    t6, f4                      // f4 = 1
+        lwc1    f0, 0x1464(t0)              // f0 = y offset
+        add.s   f0, f0, f4                  // f0 = new y coordinate
+        nop
+        swc1    f0, 0x1464(t0)              // save new y coordinate
+
+        // clamp y coordinate
+        lui     t6, 0xC2C8                  // clamp value
+        mtc1    t6, f12                     // move to float
+        c.le.s  f0, f12
+        nop
+        bc1tl   _dpad_r_check
+        swc1    f12, 0x1464(t0)             // save clamped camera y
+        b       _dpad_r_check
+        swc1    f0, 0x1464(t0)              // or save new camera y
+
+        // checking d-pad right
+        _dpad_r_check:
+        beqz    t5, _dpad_l_check           // skip if not pressing D-pad right
+        andi    t5, t8, 0x0200              // t5 = d-pad left check
+        li      t6, 0x3CA3D70A              // t6 = .02, floating point
+        mtc1    t6, f4                      // f4 = 1
+        lwc1    f0, 0x1468(t0)              // f0 = x offset
+        add.s   f0, f0, f4                  // f0 = new x coordinate
+        nop
+
+        // clamp x coordinate
+        lui     t6, 0x42C8                  // clamp zoom value
+        mtc1    t6, f12                     // move to float
+        c.le.s  f12, f0
+        nop
+        bc1tl   _dpad_l_check
+        swc1    f12, 0x1468(t0)             // save clamped camera x
+        b       _dpad_l_check
+        swc1    f0, 0x1468(t0)              // or save new camera x
+
+        // checking d-pad left
+        _dpad_l_check:
+        beqz    t5, _move_camera_fov        // skip if not pressing D-pad left
+        li      t6, 0xBCA3D70A              // t6 = -.02, floating point
+        mtc1    t6, f4                      // f4 = 1
+        lwc1    f0, 0x1468(t0)              // f0 = x offset
+        add.s   f0, f0, f4                  // f0 = new x coordinate
+        nop
+        
+        // clamp x coordinate
+        lui     t6, 0xC2C8                  // clamp value
+        mtc1    t6, f12                     // move to float
+        c.le.s  f0, f12
+        nop
+        bc1tl   _move_camera_fov
+        swc1    f12, 0x1468(t0)             // save clamped camera x
+        b       _move_camera_fov
+        swc1    f0, 0x1468(t0)              // or save new camera x
+        
+        // move camera
+        _move_camera_fov:
+        // skip if pov set to stage (until fov/zoom/trans can be applied to stage)
+        lui     t5, 0x8013
+        lw      t5, 0x14BC(t5)              // t5 = pov target
+        li      t6, 0x8010C734              // stage pov
+        beq     t6, t5, _end                // if pov not on stage, skip
+
+        lwc1    f2, 0x0008(a3)              // f2 = z offset from custom struct
+        add.s   f10, f10, f2                // original z offset + custom z offset
+        nop
+
+        lw      at, 0x000C(a3)              // f2 = fov offset from custom struct
+        beqz    at, _extended_movement_c    // branch if fov is unchanged
+        lwc1    f2, 0x000C(a3)              // f2 = fov offset from custom struct
+        add.s   f12, f12, f2                // original fov += custom fov
+        nop
+        swc1    f12, 0x14F0(t0)
+
+        // Using c-buttons to transpose camera
+        _extended_movement_c:
+        andi    t5, t8, 0x000C              // checking c-up and c-down buttons
+        beqz    t5, _check_CPAD_LR
+        nop
+
+        // if here, c-up or c-down is pressed
+        andi    t5, t8, 0x0008              // checking if c-up
+        beqz    t5, apply_y_speed           // branch if not pressing up
+        lui     t6, 0xc200                  // v1 = -speed for camera
+
+        // if here, camera y+=speed
+        lui     t6, 0x4200                  // v1 = +speed for camera
+
+        apply_y_speed:
+        andi    t8, t8, 0xFFF0              // remove held c input
+        andi    t9, t9, 0xFFF0              // remove pressed c input
+        li      t0, Camera.camera_pan_offsets_ // t0 = camera offset array
+        lwc1    f6, 0x0004(t0)              // f6 = current y offset
+        mtc1    t6, f12                     // f12 = y speed
+        add.s   f6, f6, f12                 // f6 = new y offset
+        nop
+        swc1    f6, 0x0004(t0)              // save new y coordinate
+
+        _check_CPAD_LR:
+        andi    t5, t8, 0x0003              // checking c-left and c-right buttons
+        beqz    t5, _end
+        nop
+
+        // if here, c-left or c-right is pressed
+        andi    t5, t8, 0x0002              // checking if c-left
+        beql    t5, r0, apply_x_speed       // branch if not pressing left
+        lui     t6, 0x4200                  // t6 = -speed for camera
+
+        // if here, camera x-=speed
+        lui     t6, 0xc200                  // t6 = +speed for camera
+
+        apply_x_speed:
+        andi    t8, t8, 0xFFF0              // remove held c input
+        andi    t9, t9, 0xFFF0              // remove pressed c input
+        li      t0, Camera.camera_pan_offsets_ // t0 = camera offset array
+        lwc1    f6, 0x0000(t0)              // f6 = current x offset
+        mtc1    t6, f12                     // f12 = x speed
+        add.s   f6, f6, f12                 // f6 = new x offset
+        nop
+        swc1    f6, 0x0000(t0)              // save new x coordinate
+
+        _end:
+        li      a3, Joypad.struct           // restore a3
+        li      t0, 10                      // restore t0
+        _end_skip:
+        jr      ra                          // returning to InputDelay.apply_input_delay_
+        nop
+    }
+
+    // @ Description
+    // Determines if we should cancel R/Start input for camera controls.
+    // 0 = no input; 1 = R/Start input; 2 = R/Start + camera control input detected
+    r_start_held:
+    db 0x0; db 0x0; db 0x0; db 0x0;
 }
 
 } // __CAMERA__

@@ -2407,7 +2407,8 @@ scope Toggles {
     entry_pk_thunder_reflect_crash_fix:;entry_bool("PK Thunder Reflect Crash Fix", OS.TRUE, OS.TRUE, OS.TRUE, OS.TRUE, entry_flash_guard)
     entry_flash_guard:;                 entry_bool("Flash Guard", OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, entry_screenshake)
     entry_screenshake:;                 entry("Screenshake", Menu.type.INT, OS.FALSE, OS.FALSE, OS.FALSE, OS.FALSE, 0, 2, OS.NULL, string_table_screenshake, OS.NULL, entry_blastzone_gfx)
-    entry_blastzone_gfx:;               entry("BlastZone GFX", Menu.type.INT, 0, 0, 0, 0, 0, 2, OS.NULL, string_table_blastzone_gfx, OS.NULL, OS.NULL)
+    entry_blastzone_gfx:;               entry("BlastZone GFX", Menu.type.INT, 0, 0, 0, 0, 0, 2, OS.NULL, string_table_blastzone_gfx, OS.NULL, entry_third_person_view)
+    entry_third_person_view:;           entry_bool("'L' Sets Third Person View", OS.TRUE, OS.FALSE, OS.FALSE, OS.FALSE, OS.NULL)
 
     evaluate num_remix_toggles(num_toggles)
     evaluate remix_toggles_block_size(block_size)
