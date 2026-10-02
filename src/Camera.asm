@@ -1696,7 +1696,7 @@ scope Camera {
 
         // checking if d-pad right released
         andi    t5, t1, Joypad.DR           // t5 = Joypad.DR
-        bnez    t5, _find_current_player    // change pov if releasing D-pad Right
+        bnez    t5, _check_mode             // change pov if releasing D-pad Right
         ori     t0, r0, 0x0074              // increment to next port
 
         // checking if d-pad left released
@@ -1705,15 +1705,30 @@ scope Camera {
         beqz    t5, _end                    // skip if not pressing D-pad Left
         addiu   t0, r0, -0x0074             // increment to previous port
 
-        // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
-        _find_current_player:
-        lui     at, 0x8013                  // at = current player pov pointer loc
+        // setting camera to be fixed to players
+        _check_mode:
+        lui     at, 0x8013
         li      t5, 0x8010CAE0              // t5 = camera fixed to player
         sw      t5, 0x14BC(at)              // setting camera fixed to players
         lw      t6, 0x14F4(at)              // t6 = current player pov pointer
+        lui     at, 0x800A
+
+        // checking if in 1p/remix mode, need to change player struct offset if so
+        li      t5, Global.current_screen
+        lbu     t5, 0x0000(t5)              // t5 = screen_id
+        addi    a3, t5, -0x0001             
+        beqz    a3, _1p_remix_mode_switch   // if screen_id = 1p battle, change offset
+        addi    a3, t5, -0x0077             
+        bnez    a3, _find_current_player    // if screen_id != Remix modes, skip changing offset
+        nop
+
+        _1p_remix_mode_switch:
+        addi    at, at, -0x01F0             // at = offset for 800A4B90 to work instead of 800A4D80
+
+        // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80; or 0xA4B90 if 1p/remix mode)
+        _find_current_player:
         li      t5, r0                      // t5 = 0
         beqz    t6, _d_left_setup           // if no player set then start searching at beginning of ports
-        lui     at, 0x800A
         lw      a3, 0x4D80(at)              // a3 = 1st port pov pointer
         beq     t6, a3, _d_left_setup
         addiu   t5, t5, 1                   // t5 = 2nd port
@@ -1741,7 +1756,7 @@ scope Camera {
         // (just looking at character pointer locations and assuming the
         // first location we see that starts with an 8 to be a proper address)
         _find_next_player:
-        li      at, 0x800A4D80              // at = beginning port pov pointers
+        addi    at, at, 0x4D80              // at = beginning of port pov pointers (adding 4D80 to consider offset for 1p/bonus modes)
         multu   t5, a3
         mflo    a3                          // a3 = port * 0x74
         addu    t5, at, a3                  // t5 = current port pov pointer
@@ -1754,7 +1769,7 @@ scope Camera {
         addi    t6, t6, -8                  // t6 = t6 - 8
         beqz    t6, _set_pov                // if t6 = 8 then set to this character
         add     t5, t5, t0                  // incrementing to next port pov pointer
-        li      t6, 0x800A4EDC              // t6 = end of port pov pointers
+        addi    t6, at, 0x015C              // t6 = end of pov pointers (0x015C = player struct size, 0x74*3)
         slt     t6, t6, t5
         bnez    t6, _set_to_stage           // if at end of port pov pointers then set to stage
         nop
@@ -1782,7 +1797,8 @@ scope Camera {
 
         li      t0, Toggles.entry_disable_hud
         lw      t0, 0x0004(t0)              // t0 = entry_disable_hud (0 if OFF, 1 if PAUSE, 2 if ALL)
-        bnez    t0, _end                    // skip if HUD is already disabled
+        addi    t0, t0, -0x0002             // t0 = t0 - 2 (checking if ALL)
+        beqz    t0, _end                    // skip if entry_disable_hud = 2
 
         li      t0, 0x801315F8              // t0 = start of group head list for percent hud
         lw      t0, 0x0000(t0)              // ~

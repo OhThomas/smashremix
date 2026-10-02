@@ -4,7 +4,7 @@
 ## Third Person View
 ![](example.webp)
 
-This branch gives the ability to set the camera to whichever view you want while following the player. To use third person view, pause the game and set the camera how you want, then press the L button. Reset the camera by pausing and then unpausing. D-pad left/right changes which character the camera follows. Toggle available in Remix Settings. This is great for machinima purposes. You can change the camera while in third person view (press L on pause screen) with the controls below.
+This branch gives the ability to control the camera while the game is running. To use third person view, pause the game and then press the D-pad up button. Reset the camera by pausing and then unpausing. Toggle available in Remix Settings. This is great for machinima purposes. You can change the camera while in third person view (press D-pad up on pause screen) with the controls below.
 
 | Input | Use |
 | :---- | :-- |

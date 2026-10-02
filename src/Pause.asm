@@ -261,36 +261,66 @@ scope Pause {
         beqz    v0, _end                    // skip if third person view is off
         nop
 
+        // making sure we're not on HRC or other fixed camera remix modes
+        lui     a1, 0x8013
+        lbu     t1, 0x1828(a1)              // t1 = camera control flag
+        bnez    t1, _check_camera_fixed     // if camera control = 1, continue checking for remix mode
+        li      a2, Global.current_screen
+        lbu     a2, 0x0000(a2)              // a2 = current screen
+        addi    a2, a2, -0x0077             // a2 = 0 if remix mode
+        beqz    a2, _end                    // end if in fixed camera remix mode
+
+        // making sure camera can be fixed by checking if it's already fixed to battle stage / character
+        _check_camera_fixed:
+        li      a2, 0x8010C734              // a2 = camera fixed to stage
+        lw      v0, 0x14BC(a1)              // v0 = loading current fixed camera target
+        beq     v0, a2, _camera_lock_check  // if camera fixed to normal battle stage, continue
+        addi    a2, a2, 0x03AC              // a2 = camera fixed to player (8010CAE0)
+        beq     v0, a2, _camera_lock_check  // if camera fixed to player, continue
+        nop
+        b       _end
+        nop
+
         // checking if camera is locked
+        _camera_lock_check:
         li      v0, camera_control          // setting camera_control to 1 no matter what
         lli     a0, OS.TRUE
         sb      a0, 0x0000(v0)              // camera_control = 1
         li      v0, Camera.r_start_held     // setting r_start_held to 0
-        sw      r0, 0x0000(v0)              // r_start_held port 1-4 = 0
-        lui     a1, 0x8013
-        lbu     t1, 0x1828(a1)              // t1 = camera control flag
         bnez    t1, _end                    // if you have control then skip, aka character is alive/playable
-        li      v0, 0x8010CAE0              // v0 = camera fixed target to player
+        sw      r0, 0x0000(v0)              // r_start_held port 1-4 = 0
 
         sb      a0, 0x1828(a1)              // camera control flag = 1
-        sw      v0, 0x14BC(a1)              // setting camera fixed target to player
+        sw      a2, 0x14BC(a1)              // setting camera fixed target to player
+
+        // checking if on 1p/remix screen to change player struct offsets
+        li      t0, -0x01F0                 // t0 = difference between 1p/remix character structs and vs character structs
+        li      a2, Global.current_screen
+        lbu     a2, 0x0000(a2)              // a2 = current screen
+        addi    t1, a2, -0x0077             // t1 = 0 if remix mode
+        beqz    t1, _player_struct_setup    // if remix mode, t0 = -0x01F0
+        addi    t1, a2, -0x0001             // t1 = 0 if 1p mode
+        bnezl   t1, _player_struct_setup    // if not 1p mode, t0 = 0
+        addiu   t0, r0, r0                  // t0 = 0
 
         // looking for first available port in player struct list to set camera to
         // (just looking at character pointer locations and assuming the
         // first location we see that starts with an 8 to be a proper address)
+        _player_struct_setup:
         li      t1, 0x800A4D80              // t1 = port pov pointer location
         li      a2, 0x800A4EDC              // a2 = end of port pov pointers
-        li      v0, 8                       // v0 = 8
-        _search:
+        add     t1, t1, t0
+        add     a2, a2, t0
         lw      t0, 0x0000(t1)              // t0 = next port pov pointer
+        _search:
         srl     a0, t0, 28                  // a0 = t0 leftmost byte
-        andi    a0, a0, 0xF                 // a0 = a0 leftmost bit
-        beq     a0, v0, _set_fixed_cam      // if a0 = 8 then set camera to this port
+        addi    a0, a0, -8                  // a0 = a0 - 8
+        beqz    a0, _set_fixed_cam          // if a0 = 8 then set camera to this port
         addiu   t1, t1, 0x0074              // t1 increment to next port pov pointer
         blt     a2, t1, _end                // if at the end of 4 ports, skip setting anything
         nop
         b       _search
-        nop
+        lw      t0, 0x0000(t1)              // t0 = next port pov pointer
 
         _set_fixed_cam:
         sw      t0, 0x14F4(a1)              // setting which port/player to lock the camera to
@@ -309,7 +339,7 @@ scope Pause {
     }
 
     // @ Description
-    // Checks if L is released and disables HUD while unpausing with camera in current third person view
+    // Checks if D-pad up is released and disables HUD while unpausing with camera in current third person view
     scope check_toggle_third_person_view_: {
         addiu   sp, sp,-0x0020              // allocate stack space
         sw      ra, 0x00014(sp)             // ~
@@ -317,17 +347,36 @@ scope Pause {
         li      v0, Toggles.entry_third_person_view
         lw      v0, 0x0004(v0)              // v0 = entry_third_person_view (0 if OFF)
         beqz    v0, _end                    // skip if third person view is off
-        nop
-
-        li      v0, Toggles.entry_disable_hud
-        lw      v0, 0x0004(v0)              // v0 = entry_disable_hud (0 if OFF, 1 if PAUSE, 2 if ALL)
-        bnez    v0, _unpause                // skip if HUD is already disabled
-        nop
 
         lh      t0, 0x0006(a1)              // t0 = players current input (released)
-        lli     v0, Joypad.L                // v0 = Joypad.L
-        bne     t0, v0, _end                // skip if not releasing L button
+        lli     v0, Joypad.DU               // v0 = Joypad.DU
+        bne     t0, v0, _end                // skip if not releasing D-pad up button
+
+        // making sure we're not on HRC or other fixed camera remix modes
+        lui     v0, 0x8013
+        lbu     t0, 0x1828(v0)              // t0 = camera control flag
+        bnez    t0, _check_camera_fixed     // if camera control = 1, continue
+        li      a2, Global.current_screen
+        lbu     a2, 0x0000(a2)              // a2 = current screen
+        addi    a2, a2, -0x0077             // a2 = 0 if remix mode
+        beqz    a2, _end                    // end if in fixed camera remix mode
+
+        // making sure camera can be fixed by checking if it's already fixed to battle stage / character
+        _check_camera_fixed:
+        li      a2, 0x8010C734              // a2 = camera fixed to stage
+        lw      t0, 0x14BC(v0)              // t0 = loading current fixed camera target
+        beq     t0, a2, _continue           // if camera fixed to normal battle stage, continue
+        addi    a2, a2, 0x03AC              // a2 = camera fixed to player (8010CAE0)
+        beq     t0, a2, _continue           // if camera fixed to player, continue
         nop
+        b       _end
+        nop
+
+        // Removing HUD
+        _continue:
+        li      t0, Toggles.entry_disable_hud
+        lw      t0, 0x0004(t0)              // t0 = entry_disable_hud (0 if OFF, 1 if PAUSE, 2 if ALL)
+        bnez    t0, _unpause                // skip if HUD is already disabled
 
         li      t0, 0x80046728              // t0 = group 0xE head
         lw      t0, 0x0000(t0)              // ~
@@ -346,10 +395,28 @@ scope Pause {
 
         // Game will continue running while current player is technically paused which holds the camera view
         _unpause:
-        li      a0, 0x800A4D18              // a0 = pause byte
+        li      t0, Global.current_screen
+        lbu     t0, 0x0000(t0)              // t0 = screen_id
         addiu   a1, r0, 1                   // a1 = 1
+        addi    a0, t0, -0x0001             
+        beqz    a0, _1p_unpause             // branch if screen_id != 1p battle
+        addi    a0, t0, -0x0077             
+        bnez    a0, _vs_unpause             // branch if screen_id != Remix modes
+        lui     a0, 0x800A
+
+        // 1p/remix mode unpause
+        // 0x800A4B29 as a byte; 00 = starting; 01 = running; 02 = paused; 03 = unpausing; 07 = end/loading;
+        _1p_unpause:
+        li      a0, 0x800A4B29              // a0 = pause byte
+        b       _set_camera_control
+        sb      a1, 0x0000(a0)              // unpause
+
+        // vs unpause
+        _vs_unpause:
+        ori     a0, a0, 0x4D18              // a0 = pause byte
         sh      a1, 0x0000(a0)              // unpause
 
+        _set_camera_control:
         li      v0, camera_control          // setting camera to be controlled while game is running
         addiu   a1, a1, 1                   // a1 = 2
         sb      a1, 0x0000(v0)              // camera_control = 2
@@ -370,14 +437,27 @@ scope Pause {
         li      v0, Toggles.entry_third_person_view
         lw      v0, 0x0004(v0)              // v0 = entry_third_person_view (0 if OFF)
         beqz    v0, _end                    // skip if third person view is off
-        nop
 
         lh      t0, 0x0002(a1)              // t0 = players current input (pressed)
         lli     v0, Joypad.START            // v0 = Joypad.Start
         bne     t0, v0, _end                // skip if not pressing Start
+
+        // may need to check for HRC / Remix modes if they change camera states
+        // leaving the check out for now
+
+        // making sure camera can be fixed by checking if it's already fixed to battle stage / character
+        lui     v0, 0x8013
+        li      a1, 0x8010C734              // camera fixed to stage
+        lw      t0, 0x14BC(v0)              // loading current fixed camera target
+        beq     t0, a1, _set_camera_back    // if camera fixed to normal battle stage, continue
+        addi    a1, a1, 0x03AC              // camera fixed to player (8010CAE0)
+        beq     t0, a1, _set_camera_back    // if camera fixed to player, continue
+        nop
+        b       _end
         nop
 
         // if camera was locked when first paused, then we need to set it back
+        _set_camera_back:
         li      v0, camera_control          // checking if player camera control is set
         lbu     a0, 0x0000(v0)
         beqz    a0, _player_alive           // skip if not set
@@ -403,7 +483,7 @@ scope Pause {
     }
 
     // @ Description
-    // Checks if DU is pressed and changes current third person view to the next player
+    // Checks if Z + D-pad left/right is pressed and changes current third person view to the next player
     scope check_toggle_player_change_: {
         addiu   sp, sp,-0x0020              // allocate stack space
         sw      ra, 0x00014(sp)             // ~
@@ -418,10 +498,31 @@ scope Pause {
         andi    v0, t0, Joypad.Z            // v0 = Joypad.Z
         beqz    v0, _end                    // skip if not holding Z
 
+        // making sure we're not on HRC or other fixed camera remix modes
+        lui     v0, 0x8013
+        lbu     t0, 0x1828(v0)              // t0 = camera control flag
+        bnez    t0, _check_camera_fixed     // if camera control = 1, continue
+        li      a2, Global.current_screen
+        lbu     a2, 0x0000(a2)              // a2 = current screen
+        addi    a2, a2, -0x0077             // a2 = 0 if remix mode
+        beqz    a2, _end                    // end if in fixed camera remix mode
+
+        // making sure camera can be fixed by checking if it's already fixed to battle stage / character
+        _check_camera_fixed:
+        li      a2, 0x8010C734              // a2 = camera fixed to stage
+        lw      t0, 0x14BC(v0)              // t0 = current fixed camera target
+        beq     t0, a2, _continue           // if camera fixed to normal battle stage, continue
+        addi    a2, a2, 0x03AC              // a2 = camera fixed to players (8010CAE0)
+        beq     t0, a2, _continue           // if camera fixed to player, continue
+        nop
+        b       _end
+        nop
+
         // checking if d-pad right released
+        _continue:
         lh      a1, 0x0006(a1)              // a1 = players current input (released)
         andi    v0, a1, Joypad.DR           // v0 = Joypad.DR
-        bnez    v0, _switch_player_pov      // change pov if releasing D-pad Right
+        bnez    v0, _check_mode             // change pov if releasing D-pad Right
         ori     a3, r0, 0x0074              // increment to next port
 
         // checking if d-pad left released
@@ -430,15 +531,29 @@ scope Pause {
         beqz    v0, _end                    // skip if not pressing D-pad Left
         addiu   a3, r0, -0x0074             // increment to previous port
 
-        // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80)
-        _switch_player_pov:
+        // checking if in 1p/remix mode, need to change player struct offset if so
+        _check_mode:
         lui     v0, 0x8013
+        lui     a2, 0x800A
+
+        li      t1, Global.current_screen
+        lbu     t1, 0x0000(t1)              // t1 = screen_id
+        addi    a0, t1, -0x0001             
+        beqz    a0, _1p_remix_mode_switch   // if screen_id = 1p battle, change offset
+        addi    a0, t1, -0x0077             
+        bnez    a0, _switch_player_pov      // if screen_id != Remix modes, skip changing offset
+        nop
+
+        _1p_remix_mode_switch:
+        addi    a2, a2, -0x01F0             // a2 = offset for 800A4B90 to work instead of 800A4D80
+
+        // checking which port the camera is fixed to (0x74 offset for next player after 0xA4D80; or 0xA4B90 if 1p/remix mode)
+        _switch_player_pov:
         li      t1, 0x8010CAE0              // t1 = camera fixed to player
         sw      t1, 0x14BC(v0)              // setting camera fixed to players
         lw      a0, 0x14F4(v0)              // a0 = current player pov pointer
         li      t1, r0                      // t1 = 0
         beqz    a0, _d_left_setup           // if no player set then start searching at beginning of ports
-        lui     a2, 0x800A
         lw      t0, 0x4D80(a2)              // t0 = 1st port pov pointer
         beq     a0, t0, _d_left_setup
         addiu   t1, t1, 1                   // t1 = 2nd port
@@ -466,21 +581,21 @@ scope Pause {
         // (just looking at character pointer locations and assuming the
         // first location we see that starts with an 8 to be a proper address)
         _find_next_player:
-        li      at, 0x800A4D80              // at = beginning of port pov pointers
+        addi    a2, a2, 0x4D80              // a2 = beginning of port pov pointers
         multu   t1, t0
         mflo    t0                          // t0 = port * 0x74
-        addu    t1, at, t0                  // t1 = current port pov pointer
-        li      a2, 0x800A4EDC              // a2 = end of port pov pointers
+        addu    t1, a2, t0                  // t1 = current port pov pointer
+        addi    at, a2, 0x015C              // at = end of pov pointers (0x015C = player struct size, 0x74*3)
         lw      t0, 0x0000(t1)              // t0 = next port pov pointer
         _loop:
-        slt     a0, t1, at                  // if t1 < at
+        slt     a0, t1, a2                  // if t1 < a2
         bne     a0, r0, _set_to_stage       // if at beginning of port pov pointers then set camera to stage
         nop
         srl     a0, t0, 28                  // a0 = leftmost byte
         addi    a0, a0, -8                  // a0 = a0 - 8
         beqz    a0, _set_pov                // if a0 = 8 then set to this character
         add     t1, t1, a3                  // incrementing to next/previous port pov pointer
-        slt     a0, a2, t1                  // if a2 < t1
+        slt     a0, at, t1                  // if at < t1
         bne     a0, r0, _set_to_stage       // if at end of port pov pointers then set camera to stage
         nop
         b       _loop                       // otherwise continue looping from where we're at
@@ -621,11 +736,12 @@ scope Pause {
         
         Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.Z, Render.NOOP, 0x42240000, 0x43380000, 0x848484FF, 0x303030FF, 0x3F800000)
         Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.PLUS, Render.NOOP, 0x42540000, 0x433B0000, 0xFFFFFFFF, 0x303030FF, 0x3F700000)
-        Render.draw_texture_at_offset(0x18, 0xF, css_images_file_pointer, 0x0218, Render.NOOP, 0x42800000, 0x43370000, 0x848484FF, 0x303030FF, 0x3F800000)
-        Render.draw_rectangle(0x18, 0xF, 67, 190, 2, 2, Color.high.YELLOW, OS.FALSE)
-        Render.draw_rectangle(0x18, 0xF, 75, 190, 2, 2, Color.high.YELLOW, OS.FALSE)
+        Render.draw_texture_at_offset(0x18, 0x10, css_images_file_pointer, 0x0218, Render.NOOP, 0x42800000, 0x43370000, 0x848484FF, 0x303030FF, 0x3F800000)
+        Render.draw_rectangle(0x18, 0x10, 67, 190, 2, 2, Color.high.YELLOW, OS.FALSE)
+        Render.draw_rectangle(0x18, 0x10, 75, 190, 2, 2, Color.high.YELLOW, OS.FALSE)
         Render.draw_string(0x18, 0x10, string_change_view, Render.NOOP, 0x42A40000, 0x43380000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
-        Render.draw_texture_at_offset(0x18, 0x10, 0x80130D54, Render.file_c5_offsets.L, Render.NOOP, 0x43340000, 0x430C0000, 0x848484FF, 0x303030FF, 0x3F800000)
+        Render.draw_texture_at_offset(0x18, 0x10, css_images_file_pointer, 0x0218, Render.NOOP, 0x43340000, 0x430C0000, 0x848484FF, 0x303030FF, 0x3F800000)
+        Render.draw_rectangle(0x18, 0x10, 187, 143, 2, 2, Color.high.YELLOW, OS.FALSE)
         Render.draw_string(0x18, 0x10, string_third_person_view, Render.NOOP, 0x43460000, 0x430C0000, 0xFFFFFFFF, Render.FONTSIZE_DEFAULT, Render.alignment.LEFT)
 
         _toggle_camera_controls:
