@@ -166,7 +166,7 @@ scope Boot {
         nop
     }
 
-    string_version:; String.insert("Smash Remix v2.0.1")
+    string_version:; String.insert("Smash Remix: Machinima v2.0.1")
 
     // @ Description
     // Use larger logo black backsplash

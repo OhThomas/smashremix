@@ -2,9 +2,37 @@
 *A Super Smash Bros. 64 Mod Organized by The_Smashfather*
 
 ## Machinima
-![](blankstage_ssspic.png)
+<div align="center">
 
-This branch combines the [third_person_view](https://github.com/OhThomas/smashremix/tree/third_person_view) and [blank_stage](https://github.com/OhThomas/smashremix/tree/blank_stage) branches. You can set the camera to whichever view you want while following the player. To use third person view, pause the game and set the camera how you want, then press the L button. Reset the camera by pausing and then unpausing. While paused, D-pad left/right changes which character the camera follows. Toggle available in Remix Settings. Blank stages can be found as the last stage before Random with an N64 logo as the image. You can change the camera while in third person view (press L on pause screen) with the controls below.
+<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+    <td><strong>Record footage</td>
+    <td><strong>Play like you've never played before</td>
+    <td><strong>Watch CPUs with control</td>
+    <tr>
+        <td width="30%" style="padding: 0px; margin: 0px; border: none;"><img width="100%" height="200" src="pics/donkeykongteeterloop.webp">
+        <td width="40%" style="padding: 0px; margin: 0px; border: none;"><img height="200" src="pics/foxloop.webp">
+        <td width="30%" style="padding: 0px; margin: 0px; border: none;"><img width="100%" height="200" src="pics/cpuwatching.webp">
+        </td>
+    </tr>
+</table>
+<div align="left">
+
+This branch combines the [third_person_view](https://github.com/OhThomas/smashremix/tree/third_person_view) and [blank_stage](https://github.com/OhThomas/smashremix/tree/blank_stage) branches. You can control the camera while the game is running. To use third person view, pause the game and then press the D-pad up button. Reset the camera by pausing and then unpausing. Toggle available in Remix Settings. Blank stages can be found as the last stage before Random with an N64 logo as the image. You can change the camera while in third person view (press D-pad up on pause screen) with the controls below.
+
+<div align="center">
+<table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+    <tr>
+        <td width="30%" style="padding: 0px; margin: 0px; border: none;"><img width="100%" height="200" src="pics/kirbyloop.webp">
+        <td width="40%" style="padding: 0px; margin: 0px; border: none;"><img height="200" src="pics/blankstage_ssspic.png">
+        <td width="30%" style="padding: 0px; margin: 0px; border: none;"><img width="100%" height="200" src="pics/donkeykongloop.webp">
+        </td>
+    </tr>
+</table>
+<div align="left">
+
+## Controls
+
+<div align="center">
 
 | Input | Use |
 | :---- | :-- |
@@ -14,6 +42,8 @@ This branch combines the [third_person_view](https://github.com/OhThomas/smashre
 | R/Start + C-Left/C-Right | Change FOV |
 | R/Start + D-Pad Left/Right | Change POV |
 | R/Start + D-Pad Down | Toggle HUD |
+
+</div>
 
 ## Building
 ### THIS IS ONLY FOR THOSE INTERESTED IN THE SOURCE CODE OF THE MOD. PLEASE DOWNLOAD THE RELEASE VERSION BY CLICKING THE RELEASE TAB.
