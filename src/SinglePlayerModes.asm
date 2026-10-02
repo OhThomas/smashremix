@@ -677,6 +677,15 @@ scope SinglePlayerModes: {
         nop
         _return:
         OS.patch_end()
+        
+        // setting 1p/bonus character structs to 0 (may be better in _initial_screen_set)
+        lui     t9, 0x800A                  // t9 = port pov pointer location
+        sw      r0, 0x4B90(t9)              // set all 1p/bonus character structs to 0
+        sw      r0, 0x4C04(t9)
+        sw      r0, 0x4C78(t9)
+        sw      r0, 0x4CEC(t9)
+        li      t9, Pause.camera_control    // resetting camera_control
+        sb      r0, 0x0000(t9)              // camera_control = 0
 
         li      at, Practice_1P.practice_active // load practice flag location
         lw      at, 0x0000(at)

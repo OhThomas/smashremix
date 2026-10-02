@@ -116,7 +116,7 @@ scope GameEnd {
         // end
         li      t1, update_screen_          // check skip results
         lui     t0, 0x800A                  // t0 = port pov pointer location
-        sw      r0, 0x4D80(t0)              // set all character structs to 0
+        sw      r0, 0x4D80(t0)              // set all vs character structs to 0
         sw      r0, 0x4DF4(t0)
         sw      r0, 0x4E68(t0)
         sw      r0, 0x4EDC(t0)
