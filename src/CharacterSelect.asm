@@ -2651,7 +2651,8 @@ scope CharacterSelect {
 
         // variant_2_show port = 0 so we can update the variant and character ID
         li      t0, variant_2_show
-        addu    t0, t0, a1                  // t0 = variant_2_show + offset for port
+        lw      a0, 0x0080(v1)              // a0 = currently held token port
+        addu    t0, t0, a0                  // t0 = variant_2_show + currently held token port
         sb      r0, 0x0000(t0)              // variant_2_show current port = 0
         b       _variant_refresh
         nop
@@ -2697,7 +2698,8 @@ scope CharacterSelect {
         _variant_2_show:
         // variant_2_show port = 1 so we can update the variant and character ID
         li      t1, variant_2_show
-        addu    t1, t1, a1                  // t1 = variant_2_show + offset for port
+        lw      a0, 0x0080(v1)              // a0 = currently held token port
+        addu    t1, t1, a0                  // t1 = variant_2_show + currently held token port
         lli     t0, OS.TRUE
         sb      t0, 0x0000(t1)              // variant_2_show current port = 1
 
@@ -2708,6 +2710,7 @@ scope CharacterSelect {
         nop
         lw      a0, 0x0038(sp)              // a0 = character id
         OS.save_registers()
+        lw      a1, 0x0080(v1)              // a1 = currently held token port
         jal     draw_variant_indicator_
         nop
         OS.restore_registers()
