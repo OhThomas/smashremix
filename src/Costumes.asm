@@ -1083,6 +1083,7 @@ scope Costumes {
         db 0x04                             // Donkey Kong Jr
         db 0x05                             // Boshi
         db 0x03                             // Raichu
+        db 0x05                             // Armored Mewtwo
         // Polygons
         db 0x05                             // Polygon Wario
         db 0x05                             // Polygon Lucas

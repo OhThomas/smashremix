@@ -361,6 +361,13 @@ scope Mewtwo {
     dw      set_rapid_jab_ending_action_
     OS.patch_end()
 
+	Character.table_patch_start(variants, Character.id.MTWO, 0x4)
+    db      Character.id.AMTWO
+    db      Character.id.NMTWO
+    db      Character.id.NONE
+    db      Character.id.NONE
+    OS.patch_end()
+
     // Set menu zoom size.
     Character.table_patch_start(menu_zoom, Character.id.MTWO, 0x4)
     float32 0.9
@@ -526,8 +533,10 @@ scope Mewtwo {
         lw      t6, 0x0008(t6)              // t6 = character ID
         lli     at, Character.id.MTWO       // at = id.MTWO
         beq     t6, at, _mewtwo             // branch if character = MTWO
-        lli     at, Character.id.NMTWO       // at = id.NMTWO
+        lli     at, Character.id.NMTWO      // at = id.NMTWO
         beq     t6, at, _mewtwo             // branch if character = NMTWO
+        lli     at, Character.id.AMTWO      // at = id.AMTWO
+        beq     t6, at, _mewtwo             // branch if character = AMTWO
         nop
 
         // if the character is not mewtwo

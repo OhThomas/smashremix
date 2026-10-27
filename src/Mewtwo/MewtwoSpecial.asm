@@ -1088,11 +1088,16 @@ scope MewtwoNSP {
         lli     t0, Character.id.JKIRBY     // t0 = id.JKIRBY
         beql    a0, t0, pc() + 8            // if J Kirby, get held power character_id
         lw      a0, 0x0ADC(at)              // t1 = character id of copied power
+        lli     t0, Character.id.AMTWO      // t0 = id.AMTWO
+        beq     a0, t0, _charge_level_check // check charge level if character == AMTWO
+        lhu     a1, 0x8F2A(a1)              // a1 = charge fgm (Samus)
         lli     t0, Character.id.MTWO       // t0 = id.MTWO
         bne     a0, t0, _end                // skip if character !=MTWO
-        lhu     a1, 0x8F2A(a1)              // a1 = charge fgm (Samus)
+        nop
+        // lhu     a1, 0x8F2A(a1)              // a1 = charge fgm (Samus) (can delete this)
 
         // if character is Mewtwo
+        _charge_level_check:
         li      a1, charge_level_array      // ~
         addu    a1, a1, t1                  // a1 = struct for current charge level (charge_level_array + offset)
         lw      a1, 0x0018(a1)              // a1 = charge fgm (Mewtwo)
@@ -1113,9 +1118,13 @@ scope MewtwoNSP {
 
         // s0 = player struct
         lw      t1, 0x0008(s0)              // t1 = character id
+        addiu   t9, t8, 0x0001              // original line 2
+        lli     at, Character.id.AMTWO      // at = id.AMTWO
+        beq     t1, at, _mewtwo             // check if character == AMTWO
         lli     at, Character.id.MTWO       // at = id.MTWO
         bne     t1, at, _original           // skip if character !=MTWO
-        addiu   t9, t8, 0x0001              // original line 2
+        // addiu   t9, t8, 0x0001              // original line 2
+        nop
 
         _mewtwo:
         // if the character is Mewtwo, use an alternate calculation for x velocity
@@ -1151,9 +1160,13 @@ scope MewtwoNSP {
 
         // s0 = player struct
         lw      t1, 0x0ADC(s0)              // t1 = character id of copied power
+        addiu   t9, t8, 0x0001              // original line 2
+        lli     at, Character.id.AMTWO      // at = id.AMTWO
+        beq     t1, at, _mewtwo             // skip if copied character !=MTWO
         lli     at, Character.id.MTWO       // at = id.MTWO
         bne     t1, at, _original           // skip if copied character !=MTWO
-        addiu   t9, t8, 0x0001              // original line 2
+        // addiu   t9, t8, 0x0001              // original line 2
+        nop
 
         _mewtwo:
         // if the copied character is Mewtwo, use an alternate calculation for x velocity
@@ -1192,6 +1205,8 @@ scope MewtwoNSP {
         lw      at, 0x0008(a0)              // at = current character id
         lli     t6, Character.id.MTWO       // t6 = id.MTWO
         beq     at, t6, _mewtwo             // branch if character id = MTWO
+        lli     t6, Character.id.AMTWO      // t6 = id.AMTWO
+        beq     at, t6, _mewtwo             // branch if character id = AMTWO
         lli     t6, Character.id.KIRBY      // t6 = id.KIRBY
         beq     at, t6, _kirby              // branch if character id = KIRBY
         lli     t6, Character.id.JKIRBY     // t6 = id.JKIRBY

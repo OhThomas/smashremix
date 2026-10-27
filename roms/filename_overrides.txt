@@ -3374,6 +3374,14 @@
 156D Yoshi Boshi Character
 156E Raichu Main
 156F Raichu Character
+1570 Donkey Kong Jr Victory Image Bottom
+1571 Donkey Kong Jr Victory Image Top
+1572 Boshi Victory Image Bottom
+1573 Boshi Victory Image Top
+1574 Raichu Victory Image Bottom
+1575 Raichu Victory Image Top
+1576 Mewtwo Armored Main
+1577 Mewtwo Armored Character
 
 0611 CAPTAIN DeadU
 0611 CAPTAIN ScreenKO

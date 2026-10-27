@@ -813,6 +813,7 @@ scope ResultsScreen {
     add_to_results_screen(Character.id.DKJR,     FGM.announcer.names.DK,                     DONKEY_KONG,     Character.id.DK,      180,     DK JR.,          35,     1,         {MIDI.id.DK_JR_VICTORY})
     add_to_results_screen(Character.id.BOSHI,    FGM.announcer.names.BOSHI,                  YOSHI,           Character.id.YOSHI,   180,     BOSHI,           35,     1,         {MIDI.id.BOSHI_VICTORY})
     add_to_results_screen(Character.id.RAICHU,   FGM.announcer.names.RAICHU,                 POKEMON,         Character.id.PIKACHU, 185,     RAICHU,          25,     1,         {MIDI.id.RAICHU_VICTORY})
+    add_to_results_screen(Character.id.AMTWO,    FGM.announcer.names.MEWTWO,                 POKEMON,         Character.id.SAMUS,   185,     MEWTWO,          20,     0.8,       {MIDI.id.MEWTWO_VICTORY})
 
     // REMIX POLYGONS
     add_to_results_screen(Character.id.NFALCO,   FGM.announcer.names.NFIGHTER,               SMASH,           Character.id.FOX,     185,     POLY FALCO,      20,     0.6,       0x0B)

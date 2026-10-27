@@ -126,6 +126,8 @@ scope DKMode {
     // mewtwo
     Character.table_patch_start(fighter_DK_mode, Character.id.MTWO, 0x4)
     db 0x7, 0x4, 0xC, 0x0;   OS.patch_end();   // copy of yoshi
+    Character.table_patch_start(fighter_DK_mode, Character.id.AMTWO, 0x4)
+    db 0x7, 0x4, 0xC, 0x0;   OS.patch_end();   // copy of yoshi
     Character.table_patch_start(fighter_DK_mode, Character.id.NMTWO, 0x4)
     db 0x7, 0x4, 0xC, 0x0;   OS.patch_end();   // copy of yoshi
     // marina

@@ -524,6 +524,13 @@ scope Kirby {
     dw      MewtwoNSP.air_begin_initial_
     OS.patch_end()
 
+    Character.table_patch_start(kirby_ground_nsp, Character.id.AMTWO, 0x4)
+    dw      MewtwoNSP.ground_begin_initial_
+    OS.patch_end()
+    Character.table_patch_start(kirby_air_nsp, Character.id.AMTWO, 0x4)
+    dw      MewtwoNSP.air_begin_initial_
+    OS.patch_end()
+
     Character.table_patch_start(kirby_ground_nsp, Character.id.MARTH, 0x4)
     dw      MarthNSP.ground_1_initial_
     OS.patch_end()
@@ -806,6 +813,8 @@ scope Kirby {
         //// beq     t0, at, _check_ammo         // branch if match
         //// lli     at, Character.id.MTWO       // at = id.MTWO
         //// beq     t0, at, _check_ammo         // branch if match
+        //// lli     at, Character.id.AMTWO      // at = id.AMTWO
+        //// beq     t0, at, _check_ammo         // branch if match
         //// lli     at, Character.id.SHEIK      // at = id.SHEIK
         //// beq     t0, at, _check_ammo         // branch if match
         //// lli     at, Character.id.PEPPY      // at = id.PEPPY
@@ -916,9 +925,11 @@ scope Kirby {
     // Keeps track of each port's per-Hat stored charge, and what that the maximum charge value is for that Character
     magic_kirby_hat_charge:
     db 0, 0, 0, 0; dh Character.id.DONKEY;  dh 10
+    db 0, 0, 0, 0; dh Character.id.DKJR;    dh 10
     db 0, 0, 0, 0; dh Character.id.SAMUS;   dh 7
     db 0, 0, 0, 0; dh Character.id.DSAMUS;  dh 7
     db 0, 0, 0, 0; dh Character.id.MTWO;    dh 7
+    db 0, 0, 0, 0; dh Character.id.AMTWO;   dh 7
     db 0, 0, 0, 0; dh Character.id.SHEIK;   dh 6
     db 0, 0, 0, 0; dh Character.id.PEPPY;   dh 5
     db 0, 0, 0, 0; dh Character.id.CBPEPPY; dh 5

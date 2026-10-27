@@ -81,6 +81,10 @@ scope SamusShared {
         li      a1, MewtwoNSP.projectile_struct     // a1 = projectile struct
         beq     t1, t2, _end                // end if character id = MTWO
         nop
+        ori     t2, r0, Character.id.AMTWO   // t2 = id.AMTWO
+        li      a1, MewtwoNSP.projectile_struct     // a1 = projectile struct
+        beq     t1, t2, _end                // end if character id = AMTWO
+        nop
         li      a1, 0x80189030              // original line (load charge animation struct)
 
         _end:
@@ -110,6 +114,8 @@ scope SamusShared {
         beq     v0, at, j_0x800EAC44        // if ESAMUS, take Samus branch
         lli     at, Character.id.MTWO       // at = MTWO
         beq     v0, at, j_0x800EAC44        // if MTWO, take Samus branch
+        lli     at, Character.id.AMTWO      // at = AMTWO
+        beq     v0, at, j_0x800EAC44        // if AMTWO, take Samus branch
         nop
 
         jr      ra
@@ -139,6 +145,8 @@ scope SamusShared {
         beq     v1, at, j_0x800E99D4        // if ESAMUS, take Samus branch
         lli     at, Character.id.MTWO       // at = MTWO
         beq     v1, at, _mewtwo             // if MTWO, take Mewtwo branch
+        lli     at, Character.id.AMTWO      // at = AMTWO
+        beq     v1, at, _mewtwo             // if AMTWO, take Mewtwo branch
         lli     at, Character.id.SHEIK      // at = SHEIK
         beq     v1, at, _sheik              // if SHEIK, take Mewtwo branch
         lli     at, Character.id.DEDEDE     // at = DEDEDE
@@ -225,6 +233,8 @@ scope SamusShared {
         beq     v0, at, j_0x80161EE4        // if ESAMUS, take Samus branch
         lli     at, Character.id.MTWO       // at = MTWO
         beq     v0, at, j_0x80161EE4        // if MTWO, take Samus branch (Mewtwo uses 0xAE0 as well)
+        lli     at, Character.id.AMTWO      // at = AMTWO
+        beq     v0, at, j_0x80161EE4        // if AMTWO, take Samus branch (Mewtwo uses 0xAE0 as well)
         lli     at, Character.id.MARTH      // at = MARTH
         beq     v0, at, j_0x80161EE4        // if MARTH, take Samus branch (Marth uses 0xAE0 as well)
         lli     at, Character.id.ISAAC      // at = ISAAC

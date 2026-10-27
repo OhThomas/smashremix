@@ -3155,6 +3155,7 @@ scope Training {
     string_dkjr:; char_0x59:; db "Donkey Kong Jr.", 0x00
     string_boshi:; char_0x5A:; db "Boshi", 0x00
     string_raichu:; char_0x5B:; db "Raichu", 0x00
+    string_amtwo:; char_0x5C:; db "Armored Mewtwo", 0x00
     OS.align(4)
 
     string_table_char:
@@ -3233,6 +3234,7 @@ scope Training {
     dw char_0x59            // DONKEY KONG JR
     dw char_0x5A            // BOSHI
     dw char_0x5B            // RAICHU
+    dw char_0x5C            // ARMORED MEWTWO
     dw char_0x0D            // METAL MARIO
     dw char_0x45            // METAL LUIGI
     dw char_0x1A            // GIANT DK
@@ -3367,6 +3369,7 @@ scope Training {
         register_character_id(DKJR);
         register_character_id(BOSHI);
         register_character_id(RAICHU);
+        register_character_id(AMTWO);
         // ADD BONUS CHARACTERS HERE
 
         // bosses and polygons
@@ -3486,6 +3489,7 @@ scope Training {
     db Character.id.DKJR
     db Character.id.BOSHI
     db Character.id.RAICHU
+    db Character.id.AMTWO
 
     db Character.id.METAL
     db Character.id.MLUIGI
@@ -3623,6 +3627,7 @@ scope Training {
     db id.DKJR
     db id.BOSHI
     db id.RAICHU
+    db id.AMTWO
 
     // REMIX POLYGONS
     db id.NWARIO

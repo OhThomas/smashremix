@@ -296,6 +296,7 @@ scope CharacterSelect {
     dw  0xE2C0 + 0x200                      // 0x59 - DONKEY KONG JR
     dw  0xD7E0 + 0x200                      // 0x5A - BOSHI
     dw  0xC380 + 0x200                      // 0x5B - RAICHU
+    dw  0x22B00 + 0x200                     // 0x5C - ARMORED MEWTWO
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -453,6 +454,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.DKJR, req/DKJR_MODEL)
     add_alt_req_list(Character.id.BOSHI, req/BOSHI_MODEL)
     add_alt_req_list(Character.id.RAICHU, req/RAICHU_MODEL)
+    add_alt_req_list(Character.id.AMTWO, req/AMTWO_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -5317,6 +5319,7 @@ scope CharacterSelect {
         constant DKJR(0x6B18 + 0x10)
         constant BOSHI(0x6BF0 + 0x10)
         constant RAICHU(0x6CC8 + 0x10)
+        constant AMTWO(0x6DA0 + 0x10)
     }
 
     // @ Description
@@ -5444,6 +5447,9 @@ scope CharacterSelect {
         lli     t2, Character.id.RAICHU
         beql    a1, t2, _draw_icon          // If RAICHU, then draw RAICHU stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.RAICHU // a1 = RAICHU footer struct
+        lli     t2, Character.id.AMTWO
+        beql    a1, t2, _draw_icon          // If AMTWO, then draw AMTWO stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.AMTWO // a1 = AMTWO footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7498,6 +7504,7 @@ scope CharacterSelect {
     add_to_css(Character.id.DKJR,   FGM.announcer.names.DONKEY_KONG,    2,            0x00010001, DONKEY_KONG,  name_texture.DKJR,           portrait_offsets.DKJR,           4)
     add_to_css(Character.id.BOSHI,  FGM.announcer.names.BOSHI,          1.50,         0x00010002, YOSHI,        name_texture.BOSHI,          portrait_offsets.BOSHI,          13)
     add_to_css(Character.id.RAICHU, FGM.announcer.names.RAICHU,         1.50,         0x00010001, POKEMON,      name_texture.RAICHU,         portrait_offsets.RAICHU,         16)
+    add_to_css(Character.id.AMTWO,  FGM.announcer.names.MEWTWO,         1.50,         0x00010004, POKEMON,      name_texture.MEWTWO,         portrait_offsets.MTWO,           27)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

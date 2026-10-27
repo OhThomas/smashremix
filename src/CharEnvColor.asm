@@ -1047,6 +1047,9 @@ scope CharEnvColor {
         lli     t9, Character.id.MTWO
         li      v0, custom_display_lists_struct_mewtwo
         beq     t2, t9, _fix_mtwo           // skip to fixing MTWO
+        // lli     t9, Character.id.AMTWO
+        // li      v0, custom_display_lists_struct_mewtwo
+        // beq     t2, t9, _fix_mtwo           // skip to fixing AMTWO
         lli     t9, Character.id.MARINA
         li      v0, custom_display_lists_struct_marina
         beq     t2, t9, _fix_marina         // skip to fixing MARINA
@@ -1465,6 +1468,9 @@ scope CharEnvColor {
         lli     a2, Character.id.MTWO
         beq     a0, a2, _clear              // if MTWO, clear MTWO's custom display lists
         nop
+        // lli     a2, Character.id.AMTWO
+        // beq     a0, a2, _clear              // if AMTWO, clear AMTWO's custom display lists
+        // nop
         li      a1, custom_display_lists_struct_marina
         lli     a2, Character.id.MARINA
         beq     a0, a2, _clear_marina       // if MARINA, clear MARINA's custom display lists

@@ -107,6 +107,18 @@ scope CaptainShared {
     dw  0x00000000
     dw  0x0000021C
 
+    usmash_anim_struct_AMTWO:
+    dw  0x020F0000
+    dw  Character.AMTWO_file_7_ptr
+    dw  0x501A0000
+    dw  0x00000000
+    dw  0x800FD5D8
+    dw  0x800CB4B0
+    dw  0x00000040
+    dw  0x000001E8
+    dw  0x00000000
+    dw  0x0000021C
+
     entry_anim_struct_LMGND:
     dw  0x060A0000
     dw  Character.LMGND_file_7_ptr
@@ -231,6 +243,11 @@ scope CaptainShared {
         ori     t1, r0, Character.id.MTWO   // t1 = id.MTWO
         li      a0, usmash_anim_struct_MTWO // a0 = usmash_anim_struct
         beq     t0, t1, _end                // end if character id = MTWO
+        nop
+
+        ori     t1, r0, Character.id.AMTWO  // t1 = id.AMTWO
+        li      a0, usmash_anim_struct_AMTWO // a0 = usmash_anim_struct
+        beq     t0, t1, _end                // end if character id = AMTWO
         nop
 
         jal     PokemonAnnouncer.firepunch_announcement_
@@ -410,6 +427,9 @@ scope CaptainShared {
         lw      v1, 0x0928(a0)              // v1 = wolf hand bone struct
         ori     at, r0, Character.id.MTWO
         beq     a1, at, _end                // end if character id = MTWO
+        lw      v1, 0x0930(a0)              // v1 = mewtwo hand bone struct
+        ori     at, r0, Character.id.AMTWO
+        beq     a1, at, _end                // end if character id = AMTWO
         lw      v1, 0x0930(a0)              // v1 = mewtwo hand bone struct
 
         lw      v1, 0x0960(a0)              // v1 = other bone struct (used for kirby presumably)
