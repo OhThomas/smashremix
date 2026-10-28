@@ -1979,6 +1979,11 @@ scope CharacterSelect {
         nop
         OS.patch_end()
 
+        // Resetting variant_2_show; v1 = current player port taking action
+        li      t6, variant_2_show          // t6 = variant_2_show
+        addu    t6, t6, v1                  // t6 = variant_2_show + current port
+        sb      r0, 0x0000(t6)              // clearing current port to not show extra variants
+
         // a0 = character id
         sll     t6, a0, 0x2                 // t6 = character id * 4
         li      at, selection_action_table  // at = selection_action_table
