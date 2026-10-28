@@ -2398,6 +2398,7 @@ scope SinglePlayer {
     set_ending_image(Character.id.DKJR, File.DONKEY_KONG_JR_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.BOSHI, File.BOSHI_VICTORY_IMAGE_BOTTOM)
     set_ending_image(Character.id.RAICHU, File.RAICHU_VICTORY_IMAGE_BOTTOM)
+    set_ending_image(Character.id.AMTWO, File.MTWO_VICTORY_IMAGE_BOTTOM)
 
     // @ Description
     // Patch which substitutes the victory picture with a custom one for all non-original characters.
@@ -2829,4 +2830,5 @@ scope SinglePlayer {
     add_to_single_player(Character.id.DKJR,    name_texture.DKJR,          name_delay.JDK)
     add_to_single_player(Character.id.BOSHI,   name_texture.BOSHI,         name_delay.YOSHI)
     add_to_single_player(Character.id.RAICHU,  name_texture.RAICHU,        name_delay.PIKACHU)
+    add_to_single_player(Character.id.AMTWO,   name_texture.MTWO,          name_delay.MTWO)
 } // __SINGLE_PLAYER__

@@ -12,7 +12,7 @@ include "OS.asm"
 
 scope Character {
     // number of character slots to add
-    constant ADD_CHARACTERS(83)
+    constant ADD_CHARACTERS(84)
     // number of vanilla characters in base game
     constant NUM_VANILLA_CHARACTERS(27)
     // start and end offset for the main character struct table (RAM 0x80116E10)
@@ -4032,7 +4032,9 @@ scope Character {
     define_character(BOSHI, YOSHI, File.BOSHI_MAIN, 0x0F6, 0, File.BOSHI_CHARACTER, 0x154, 0, 0x162, 0x153, 0, 0x47C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_YOSHI, Stages.id.BTP_YOSHI, Stages.id.BTT_FALCON, Stages.id.BTP_GND, sound_type.U, variant_type.SPECIAL)
     // 0x5B - RAICHU
     define_character(RAICHU, PIKACHU, File.RAICHU_MAIN, 0x0F2, 0, File.RAICHU_CHARACTER, 0x157, 0x0F4, 0x15B, 0x156, File.PIKACHU_HEADBAND_CHARACTER, 0x41C, 0x0, OS.TRUE, OS.TRUE, Stages.id.BTT_PIKACHU, Stages.id.BTP_PIKACHU, Stages.id.BTT_JIGGLYPUFF, Stages.id.BTP_JIGGLYPUFF, sound_type.U, variant_type.SPECIAL)
-
+    // 0x5C - AMTWO
+    define_character(AMTWO, YOSHI, File.ARMORED_MEWTWO_MAIN, 0x0F6, 0, File.ARMORED_MEWTWO_CHARACTER, File.MTWO_SHIELD_POSE, 0, File.MTWO_USMASH_GRAPHIC, File.MTWO_SBALL_PROJECTILE_HITBOX, 0, 0x548, 6, OS.FALSE, OS.TRUE, Stages.id.BTT_MTWO, Stages.id.BTP_MTWO, Stages.id.BTT_DS, Stages.id.BTP_SAMUS, sound_type.U, variant_type.SPECIAL)
+    
     // REMIX POLYGONS
     // NWARIO
     define_character(NWARIO, MARIO, File.NWARIO_MAIN, 0x0CA, 0, File.NWARIO_CHARACTER, 0x12A, 0x0CC, 0x164, 0x129, 0, 0x2B0, 2, OS.FALSE, OS.FALSE, Stages.id.BTT_STG1, Stages.id.BTP_POLY, Stages.id.BTT_STG1, Stages.id.BTP_POLY, sound_type.U, variant_type.POLYGON)

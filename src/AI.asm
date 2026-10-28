@@ -255,6 +255,8 @@ scope AI {
         beq     t6, at, _peppy
         addiu   at, r0, Character.id.MTWO
         beq     t6, at, _mewtwo
+        addiu   at, r0, Character.id.AMTWO
+        beq     t6, at, _mewtwo
         addiu   at, r0, Character.id.WOLF
         beq     t6, at, _wolf
         addiu   at, r0, Character.id.BANJO
@@ -778,6 +780,8 @@ scope AI {
         // beq     t1, at, _nair_check
         // addiu   at, Character.id.MTWO
         // beq     t1, at, _nair_check
+        // addiu   at, Character.id.AMTWO
+        // beq     t1, at, _nair_check
         // //addiu   at, Character.id.NMTWO
         // //beq     t1, at, _nair_check
         // //addiu   at, Character.id.NDSAMUS
@@ -934,6 +938,8 @@ scope AI {
         // check if DSAMUS or MEWTWO
         lli     at, Character.id.MTWO
         beq     at, v0, _check_charge_shot
+        lli     at, Character.id.AMTWO
+        beq     at, v0, _check_charge_shot
         lli     at, Character.id.DSAMUS
         beq     at, v0, _check_charge_shot
         lli     at, Character.id.ESAMUS
@@ -1049,6 +1055,9 @@ scope AI {
         beq     v1, at, sheik
         nop
         lli     at, Character.id.MTWO
+        beq     v1, at, mewtwo
+        nop
+        lli     at, Character.id.AMTWO
         beq     v1, at, mewtwo
         nop
 
@@ -1218,6 +1227,8 @@ scope AI {
         beq      a0, at, _sheik_action_check    // branch if SHEIK
         addiu    at, r0, Character.id.MTWO
         beq      a0, at, _mewtwo_action_check   // branch if MEWTWO
+        addiu    at, r0, Character.id.AMTWO
+        beq      a0, at, _mewtwo_action_check   // branch if AMEWTWO
         addiu    at, r0, Character.id.DSAMUS
         beq      a0, at, _dsamus_action_check   // branch if DSAMUS
         addiu    at, r0, Character.id.JSAMUS

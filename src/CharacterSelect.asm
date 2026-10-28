@@ -297,6 +297,7 @@ scope CharacterSelect {
     dw  0xE2C0 + 0x200                      // 0x59 - DONKEY KONG JR
     dw  0xD7E0 + 0x200                      // 0x5A - BOSHI
     dw  0xC380 + 0x200                      // 0x5B - RAICHU
+    dw  0x22B00 + 0x200                     // 0x5C - ARMORED MEWTWO
 
     // REMIX POLYGONS
     dw  0x4550 + 0x200                      // NWARIO
@@ -454,6 +455,7 @@ scope CharacterSelect {
     add_alt_req_list(Character.id.DKJR, req/DKJR_MODEL)
     add_alt_req_list(Character.id.BOSHI, req/BOSHI_MODEL)
     add_alt_req_list(Character.id.RAICHU, req/RAICHU_MODEL)
+    add_alt_req_list(Character.id.AMTWO, req/AMTWO_MODEL)
 
     // POLYGONS
     add_alt_req_list(Character.id.NWARIO, req/NWARIO_MODEL)
@@ -1978,6 +1980,11 @@ scope CharacterSelect {
         nop
         OS.patch_end()
 
+        // Resetting variant_2_show; v1 = current player port taking action
+        li      t6, variant_2_show          // t6 = variant_2_show
+        addu    t6, t6, v1                  // t6 = variant_2_show + current port
+        sb      r0, 0x0000(t6)              // clearing current port to not show extra variants
+
         // a0 = character id
         sll     t6, a0, 0x2                 // t6 = character id * 4
         li      at, selection_action_table  // at = selection_action_table
@@ -2647,7 +2654,8 @@ scope CharacterSelect {
 
         // variant_2_show port = 0 so we can update the variant and character ID
         li      t0, variant_2_show
-        addu    t0, t0, a1                  // t0 = variant_2_show + offset for port
+        lw      a0, 0x0080(v1)              // a0 = currently held token port
+        addu    t0, t0, a0                  // t0 = variant_2_show + currently held token port
         sb      r0, 0x0000(t0)              // variant_2_show current port = 0
         b       _variant_refresh
         nop
@@ -2693,7 +2701,8 @@ scope CharacterSelect {
         _variant_2_show:
         // variant_2_show port = 1 so we can update the variant and character ID
         li      t1, variant_2_show
-        addu    t1, t1, a1                  // t1 = variant_2_show + offset for port
+        lw      a0, 0x0080(v1)              // a0 = currently held token port
+        addu    t1, t1, a0                  // t1 = variant_2_show + currently held token port
         lli     t0, OS.TRUE
         sb      t0, 0x0000(t1)              // variant_2_show current port = 1
 
@@ -2704,6 +2713,7 @@ scope CharacterSelect {
         nop
         lw      a0, 0x0038(sp)              // a0 = character id
         OS.save_registers()
+        lw      a1, 0x0080(v1)              // a1 = currently held token port
         jal     draw_variant_indicator_
         nop
         OS.restore_registers()
@@ -5315,6 +5325,7 @@ scope CharacterSelect {
         constant DKJR(0x6B18 + 0x10)
         constant BOSHI(0x6BF0 + 0x10)
         constant RAICHU(0x6CC8 + 0x10)
+        constant AMTWO(0x6DA0 + 0x10)
     }
 
     // @ Description
@@ -5442,6 +5453,9 @@ scope CharacterSelect {
         lli     t2, Character.id.RAICHU
         beql    a1, t2, _draw_icon          // If RAICHU, then draw RAICHU stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.RAICHU // a1 = RAICHU footer struct
+        lli     t2, Character.id.AMTWO
+        beql    a1, t2, _draw_icon          // If AMTWO, then draw AMTWO stock icon
+        addiu   a1, at, VARIANT_ICON_OFFSET.AMTWO // a1 = AMTWO footer struct
         lli     t2, Character.id.BOSS
         bne     a1, t2, _gdk                // If not Master Hand, then skip... otherwise, draw Master Hand stock icon
         addiu   a1, at, VARIANT_ICON_OFFSET.MASTER_HAND // a1 = Master Hand footer struct
@@ -7510,6 +7524,7 @@ scope CharacterSelect {
     add_to_css(Character.id.DKJR,   FGM.announcer.names.DONKEY_KONG,    2,            0x00010001, DONKEY_KONG,  name_texture.DKJR,           portrait_offsets.DKJR,           4)
     add_to_css(Character.id.BOSHI,  FGM.announcer.names.BOSHI,          1.50,         0x00010002, YOSHI,        name_texture.BOSHI,          portrait_offsets.BOSHI,          13)
     add_to_css(Character.id.RAICHU, FGM.announcer.names.RAICHU,         1.50,         0x00010001, POKEMON,      name_texture.RAICHU,         portrait_offsets.RAICHU,         16)
+    add_to_css(Character.id.AMTWO,  FGM.announcer.names.MEWTWO,         1.50,         0x00010004, POKEMON,      name_texture.MEWTWO,         portrait_offsets.MTWO,           27)
 
     // REMIX POLYGONS
                // id                 fgm                                 circle size   action      series logo   name texture                 portrait offset                  portrait override

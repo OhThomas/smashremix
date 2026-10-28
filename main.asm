@@ -336,6 +336,8 @@ include "src/MSSonic/MSSonic.asm"
 include "src/Boshi/Boshi.asm"
 // RAICHU
 include "src/Raichu/Raichu.asm"
+// ARMORED MEWTWO
+include "src/AMewtwo/AMewtwo.asm"
 
 // KIRBY
 include "src/Kirby/Kirby.asm"
