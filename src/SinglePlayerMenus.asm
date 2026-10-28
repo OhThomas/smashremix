@@ -19,6 +19,11 @@ scope SinglePlayerMenus: {
         _return:
         OS.patch_end()
 
+        // Setting variant_2_show to 0, needs to be done when entering 1p screens
+        // (resets on character actions so vs mode is fine)
+        li      v0, CharacterSelect.variant_2_show 
+        sw      r0, 0x0000(v0)          // clears extra variants
+
         li      v0, SinglePlayerModes.singleplayer_mode_flag
         sw      r0, 0x0000(v0)
         li      v0, SinglePlayerEnemy.enemy_port
